@@ -159,7 +159,7 @@ input.addEventListener('keydown', function(e) {
 		if (words.indexOf(word) > -1 && wordsUsed.indexOf(word) === -1) {
 
 		// Scans each letter against the selected letters. Not matching even once skips the rest of the scan.
-		while (x < (word.length - 1)) {
+		while (x < word.length) {
 		if (lettersToUse.indexOf(word[x]) === -1 && vowelToUse.indexOf(word[x]) === -1) {
 			incorrect = 1;
 			x = word.length;
@@ -211,8 +211,8 @@ function resetGame() {
 	startTimer();
 	}
 	timer = 45;
-	seconds = timer % 60;
-	document.querySelector('#timer').innerHTML = seconds + ':00';
+	minutes = Math.floor(timer / 60);
+	document.querySelector('#timer').innerHTML = minutes + ':00';
 	results.innerHTML = '';
 	input.value = '';
 	score = 0;
