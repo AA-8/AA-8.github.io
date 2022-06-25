@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<style>
+@font-face { font-family: Timer; src: url('digital-7.ttf'); } 
+</style>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bomb Defuser</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+   <h1 align="center" id="title" style="font-size: 3vw">Bomb Defusal</h1>
+   
+   <div id="timer" align="center" style="font-family: Timer; font-size: 3vw">0:05</div>
+   <br>
+   
+   <p align="center" style="font-size: 1vw" id="tutorial">Enter the sum of the two numbers below:</p>
+   
+   <div id="problem" align="center" style="font-size: 3vw"></div>
+   
+   <form align="center" style="text-align: center; font-size: 1vw">
+       <input type="text" id="answer">
+       <input type="submit" value="Submit">
+   </form>
+   <br>
+   
+   <div id="result" align="center" style="font-size: 1vw"></div>
+   <br>
+   <div id="score" align="center" style="font-size: 1vw">Score: 0</div>
+   
+   <script>
+       //set time limit
+       var timeLeft = 5;
+       var timerId = setInterval(countdown, 1000);
+       
+       function countdown(){
+           if(timeLeft == 0){
+               clearTimeout(timerId);
+               document.write("<!DOCTYPE html><h1 align='center' style='font-size: 3vw'>Time's up!</h1><p align='center' style='font-size: 1vw'>You scored " + document.getElementById("score").innerHTML.split(" ")[1] + " points</p><center><button onclick='window.location.reload()'>Restart</button></center><p align='center' style='font-size: 0.8vw'>Credits: GPT-3 (made most of this game), AAAAAAAAAAAAAAAA (pronounced loudly), and Style-7 (the timer font).</p>");
+               var audio = new Audio("explosion.mp3");
+               audio.play();
+           } else {
+               document.getElementById("timer").innerHTML = "0:0" + timeLeft;
+               timeLeft--;
+               document.getElementById("title").style.color = "rgb(" + (255 - (timeLeft * 51)) + ", 0, 0)";
+           }
+       }
+       
+       //set difficulty
+       var difficulty = 0;
+       
+       //generate random numbers
+       var num1 = Math.floor(Math.random() * 10);
+       var num2 = Math.floor(Math.random() * 10);
+       var num3 = 0;
+       
+       //display random numbers
+       var problem = document.getElementById("problem");
+       problem.innerHTML = num1 + " + " + num2;
+       
+       //get answer from user
+       var answer = document.getElementById("answer");
+       var form = document.querySelector("form");
+       
+       form.onsubmit = function(){
+           if ( (answer.value == num1 + num2 && difficulty < 25) || (answer.value == num1 + num2 + num3 && difficulty > 24) ){
+               var result = document.getElementById("result");
+               result.innerHTML = "Correct!";
+               
+               difficulty += 1;
+               
+               //generate new problem
+               num1 = Math.floor(Math.random() * (10 + difficulty) );
+               num2 = Math.floor(Math.random() * (10 + difficulty) );
+               
+               if (difficulty < 25) {
+                   //display new problem
+                   problem.innerHTML = num1 + " + " + num2;
+               } else {
+                   //display new harder problem
+                   num3 = Math.floor(Math.random() * (0.1 * difficulty) );
+                   problem.innerHTML = num1 + " + " + num2 + " + " + num3;
+               }
+               
+               //clear answer input
+               answer.value = "";
+               
+               //add time
+               timeLeft += 3;
+               
+               //make sure time doesn't exceed 5 seconds
+               if (timeLeft > 5) {
+               timeLeft = 5;
+               }
+               
+               //increase score
+               var score = document.getElementById("score");
+               score.innerHTML = "Score: " + (parseInt(score.innerHTML.split(" ")[1]) + 1);
+               
+               //make tutorial white
+               document.getElementById("tutorial").style.color = "white";
+               
+           } else {
+               var result = document.getElementById("result");
+               result.innerHTML = "Incorrect";
+               
+               //clear answer input
+               answer.value;
+           }
+           
+           return false;
+           
+       }
+   </script>
+</body>
+</html>
