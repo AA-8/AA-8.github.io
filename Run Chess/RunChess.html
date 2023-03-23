@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<style>
+body {
+
+	background-color: #222222;
+	color: #DDDDDD;
+	font-family: Comfortaa;
+
+}
+td {
+	border: 1px solid gray;
+	width: 9vh;
+	height: 9vh;
+	transition: width 0.2s ease, height 0.2s ease, background-color 0.85s ease;
+}
+
+h1 {
+
+	font-size: 4vh;
+
+}
+
+/* Neutral movement speed. */
+.piece {
+
+	transition: left 0.6s, bottom 0.6s;
+
+}
+
+/* Slow movement speed. */
+.piece.Child,.piece.Student,.piece.Lizard {
+
+	transition: left 1.2s, bottom 1.2s;
+
+}
+
+/* Fast movement speed. */
+.piece.Angel,.piece.Skater,.piece.Gentleman {
+
+	transition: left 0.3s, bottom 0.3s;
+
+}
+
+.enabled {
+
+	background-image: url("./highlight.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+
+}
+.lightbridge,.duplication {
+
+	background-image: url("./highlightspecial.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+
+}
+
+#options {
+
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+	height: 8vh;
+
+}
+
+#options img {
+
+	height: 5.5vh;
+	
+	position: absolute;
+	z-index: 200;
+
+}
+
+#container {
+
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+}
+
+#board {
+
+	position: relative;
+	margin-left: 3vh;
+	margin-right: 3vh;
+	
+}
+
+#players_info_box {
+
+	border: 3px solid gray;
+	width: 50vh;
+	height: 76vh;
+	
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+
+}
+
+#timer_player1, #timer_player2, #horizontal_hud_workaround {
+
+	margin: 2vh auto;
+	font-size: 2vw;
+	text-align: center;
+
+}
+
+#menu_player2 {
+
+	order: 1;
+	border: 2px solid gray;
+
+}
+
+#horizontal_hud_workaround {
+
+	order: 2;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	
+	width: 90%;
+	height: 100%;
+
+}
+
+#menu_player1 {
+
+	order: 3;
+	border: 2px solid gray;
+
+}
+
+#chess_gamers {
+
+	border: 3px solid gray;
+	width: 100%;
+	height: 90%;
+	order: 1;
+}
+
+#endgameCover {
+
+	background-image: url('./boarddone.png');
+	
+	z-index: 100;
+	position: absolute;
+	
+	top: 0;
+	height: 100%;
+	
+	opacity: 0;
+	transition: opacity 2s;
+
+}
+
+#thisgameswinneris {
+
+	position: absolute;
+	
+	background-color: #DDDDDD;
+	color: #222222;
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+}
+
+/*
+#move_history {
+
+	border: 3px solid gray;
+	width: 30%;
+	height: 90%;
+	order: 2;
+}
+*/
+
+</style>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Chess - (Beta)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div id="options" align="center"><a href=""><img src="./StoryMode.png" id="Story"></a></img><a href=""><img src="./InfiniteMode.png" id="Infinite"></img></a><a href=""><img src="./Freeplay.png" id="Freedom"></img></a><a href=""><img src="./Settings.png" id="Settings"></img></a></div>
+	<div id="container">
+		<div id="board" align="center">
+		<table>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		</table>
+		</div>
+		<div id="players_info_box">
+			<div id="menu_player2">
+				<div id="timer_player2">5:00</div>
+			</div>
+			
+			<div id="horizontal_hud_workaround">
+				<div id="chess_gamers"></div><!-- <div id="move_history"></div> -->
+			</div>
+			
+			<div id="menu_player1">
+				<div id="timer_player1">5:00</div>
+			</div>
+		</div>
+	</div>
+	<div id="endgameCover" style="visibility:hidden;">
+		<div id="thisgameswinneris"></div>
+	</div>
+</body>
+
+<script>
+var EndGame=document.querySelector("#endgameCover"),WinStripe=document.querySelector("#thisgameswinneris"),playersName=["P_1","P_2"],timeLeft_player1=300,timeCache_player1=30,secondsLeft_player1=0,timeLeft_player2=300,timeCache_player2=30,secondsLeft_player2=0,timerId=0,currentPlayer=0;function countdown(){if(1==current){if((secondsLeft_player1=--timeLeft_player1-60*Math.floor(timeLeft_player1/60))/10<1){if(document.querySelector("#timer_player1").innerHTML=Math.floor(timeLeft_player1/60)+":0"+secondsLeft_player1,0==timeLeft_player1){currentPlayer=0,clearInterval(timerId),EndGame.style.visibility="visible",EndGame.style.opacity=1,WinStripe.innerHTML="<h1>Time's up! "+playersName[1]+" wins!</h1>";return}}else document.querySelector("#timer_player1").innerHTML=Math.floor(timeLeft_player1/60)+":"+secondsLeft_player1}else if((secondsLeft_player2=--timeLeft_player2-60*Math.floor(timeLeft_player2/60))/10<1){if(document.querySelector("#timer_player2").innerHTML=Math.floor(timeLeft_player2/60)+":0"+secondsLeft_player2,0==timeLeft_player2){currentPlayer=0,clearInterval(timerId),EndGame.style.visibility="visible",EndGame.style.opacity=1,WinStripe.innerHTML="<h1>Time's up! "+playersName[0]+" wins!</h1>";return}}else document.querySelector("#timer_player2").innerHTML=Math.floor(timeLeft_player2/60)+":"+secondsLeft_player2}var board=document.querySelector("table"),cells=board.querySelectorAll("td"),activepiece=-1,current=1,currentClass="_1",notcurrentClass="_-1",duplicates=5,pastafarianBridgesUsed=0,bridgeChange=0,lightbridge=0,VitalPieces1=[1,1],VitalPieces2=[1,1],CPUpossibleMoves=[];function AI_Player(){}var playersType=[2,2];currentPlayer=playersType[0];var playerPlayerplayerPlayer=0,playerSwitcher=1;function endTurn(){if(playerPlayerplayerPlayer+=playerSwitcher,currentPlayer=playersType[playerPlayerplayerPlayer],playerSwitcher*=-1,pastafarianBridgesUsed>0){(c=board.getElementsByClassName("broken1")).length>0&&(c[0].classList.remove("broken1"),pastafarianBridgesUsed--,bridgeChange++);for(let e=2;e<4;e++){var c=board.getElementsByClassName("broken"+e);if(c.length>0){let s=c[0];s.classList.remove("broken"+e),s.classList.add("broken"+(e-1)),bridgeChange++}bridgeChange==pastafarianBridgesUsed&&(e=4)}bridgeChange=0}if(1==current){if(0==VitalPieces2[0]&0==VitalPieces2[1]){currentPlayer=0,clearInterval(timerId),EndGame.style.visibility="visible",EndGame.style.opacity=1,WinStripe.innerHTML="<h1>You suck! "+playersName[0]+" wins!</h1>";return}timeCache_player1>timeLeft_player1%5?(timeLeft_player1+=5,timeCache_player1-=5):timeCache_player1>0&&(timeLeft_player1+=timeCache_player1,timeCache_player1=0),(secondsLeft_player1=timeLeft_player1-60*Math.floor(timeLeft_player1/60))/10<1?document.querySelector("#timer_player1").innerHTML=Math.floor(timeLeft_player1/60)+":0"+secondsLeft_player1:document.querySelector("#timer_player1").innerHTML=Math.floor(timeLeft_player1/60)+":"+secondsLeft_player1}else{if(0==VitalPieces1[0]&0==VitalPieces1[1]){currentPlayer=0,clearInterval(timerId),EndGame.style.visibility="visible",EndGame.style.opacity=1,WinStripe.innerHTML="<h1>You suck! "+playersName[1]+" wins!</h1>";return}timeCache_player2>timeLeft_player2%5?(timeLeft_player2+=5,timeCache_player2-=5):timeCache_player2>0&&(timeLeft_player2+=timeCache_player2,timeCache_player2=0),(secondsLeft_player2=timeLeft_player2-60*Math.floor(timeLeft_player2/60))/10<1?document.querySelector("#timer_player2").innerHTML=Math.floor(timeLeft_player2/60)+":0"+secondsLeft_player2:document.querySelector("#timer_player2").innerHTML=Math.floor(timeLeft_player2/60)+":"+secondsLeft_player2}if(current*=-1,currentClass="_"+current,notcurrentClass="_"+-1*current,1==currentPlayer){CPUpossibleMoves=[];let i=board.querySelectorAll("."+currentClass);for(let l=0;l<i.length;l++){parseInt(i[l].id);let t=i[l].classList;t=t[0].length<5?t[1]:t[0]}activepiece=CPUpossibleMoves[testPENIS=Math.floor(Math.random()*CPUpossibleMoves.length)][0],BustAMove(CPUpossibleMoves[testPENIS][1])}}function ThePiecePlacer(e,c,s){cells[e].classList.add(c,s),document.body.insertAdjacentHTML("beforeend","<div id='piece"+e+"' style='position:absolute;pointer-events:none;z-index:"+(Math.floor(e/10)+1)+"' class='piece "+s+" "+c+"'><img src='./"+s+c+".png' style='width:10vh;'></img></div>");let i=document.querySelector("#piece"+e),l=cells[e].getBoundingClientRect();i.style.bottom=window.innerHeight-l.bottom+l.bottom/100+"px",i.style.left=l.left-(l.right-l.left)/50+"px"}function BustAMove(e){if(cells[e].classList.contains(notcurrentClass)){if(cells[e].classList.contains("Duplicator"))for(enemyduplicates=board.getElementsByClassName("Duplicate "+notcurrentClass),enemyduplicatesVisual=document.getElementsByClassName("piece Duplicate "+notcurrentClass);0<enemyduplicates.length;)enemyduplicates[0].removeAttribute("class"),enemyduplicatesVisual[0].remove();else cells[e].classList.contains("Runner")?1==current?VitalPieces2[0]=0:VitalPieces1[0]=0:cells[e].classList.contains("Angel")&&(1==current?VitalPieces2[1]=0:VitalPieces1[1]=0),cells[e].classList.contains("broken2")&&pastafarianBridgesUsed--;cells[e].removeAttribute("class");document.querySelector("#piece"+e).remove()}if(activepiece>80)return ThePiecePlacer(TargetCell,currentClass,"Duplicate"),duplicates++,activepiece=-1,endTurn(),!0;var c=document.querySelector("#piece"+activepiece);let s=cells[e].getBoundingClientRect();return c.style.bottom=window.innerHeight-s.bottom+s.bottom/100+"px",c.style.left=s.left-(s.right-s.left)/50+"px",c.style.zIndex=Math.floor(e/10)+1,c.id="piece"+e,cells[e].classList.add(...Array.from(cells[activepiece].classList)),cells[activepiece].removeAttribute("class"),activepiece=-1,1==lightbridge&&(cells[e].classList.add("broken3"),lightbridge=0),endTurn(),!0}function cell(){if(!(currentPlayer<2)){if(TargetCell=event.target.id,event.target.classList.contains(currentClass)){for(removeenabled=board.getElementsByClassName("enabled"),removeduplication=board.getElementsByClassName("duplication"),removelightbridge=board.getElementsByClassName("lightbridge");0<removeenabled.length;)removeenabled[0].classList.remove("enabled");for(;0<removeduplication.length;)removeduplication[0].classList.remove("duplication");for(;0<removelightbridge.length;)removelightbridge[0].classList.remove("lightbridge");if((activepiece=activepiece==parseInt(TargetCell)?-1:parseInt(TargetCell))>-1){let e=activepiece%10%2,c=activepiece-activepiece%10;switch(event.target.classList[1]){case"Runner":for(let s=1;activepiece+s<10+c&&s<3;s++)cells[activepiece+s].classList.length>0?(cells[activepiece+s].classList.contains(notcurrentClass)&&cells[activepiece+s].classList.add("enabled"),s=10):cells[activepiece+s].classList.add("enabled");for(let i=1;activepiece-i>c-1&&i<3;i++)cells[activepiece-i].classList.length>0?(cells[activepiece-i].classList.contains(notcurrentClass)&&cells[activepiece-i].classList.add("enabled"),i=10):cells[activepiece-i].classList.add("enabled");for(let l=1;activepiece-10*l>-1&&l<3;l++)cells[activepiece-10*l].classList.length>0?(cells[activepiece-10*l].classList.contains(notcurrentClass)&&cells[activepiece-10*l].classList.add("enabled"),l=10):cells[activepiece-10*l].classList.add("enabled");for(let t=1;activepiece+10*t<80&&t<3;t++)cells[activepiece+10*t].classList.length>0?(cells[activepiece+10*t].classList.contains(notcurrentClass)&&cells[activepiece+10*t].classList.add("enabled"),t=10):cells[activepiece+10*t].classList.add("enabled");for(let a=1;activepiece+a<c+10&&activepiece-9*a>-1&&a<3;a++)cells[activepiece-9*a].classList.length>0?(cells[activepiece-9*a].classList.contains(notcurrentClass)&&cells[activepiece-9*a].classList.add("enabled"),a=10):cells[activepiece-9*a].classList.add("enabled");for(let n=1;activepiece-n>c-1&&activepiece-11*n>-1&&n<3;n++)cells[activepiece-11*n].classList.length>0?(cells[activepiece-11*n].classList.contains(notcurrentClass)&&cells[activepiece-11*n].classList.add("enabled"),n=10):cells[activepiece-11*n].classList.add("enabled");for(let p=1;activepiece+p<c+10&&activepiece+11*p<80&&p<3;p++)cells[activepiece+11*p].classList.length>0?(cells[activepiece+11*p].classList.contains(notcurrentClass)&&cells[activepiece+11*p].classList.add("enabled"),p=10):cells[activepiece+11*p].classList.add("enabled");for(let d=1;activepiece-d>c-1&&activepiece+9*d<80&&d<3;d++)cells[activepiece+9*d].classList.length>0?(cells[activepiece+9*d].classList.contains(notcurrentClass)&&cells[activepiece+9*d].classList.add("enabled"),d=10):cells[activepiece+9*d].classList.add("enabled");break;case"Skater":for(let r=1;activepiece+r<10+c;r++)cells[activepiece+r].classList.length<1?cells[activepiece+r].classList.add("enabled"):r=10;for(let _=1;activepiece-_>c-1;_++)cells[activepiece-_].classList.length<1?cells[activepiece-_].classList.add("enabled"):_=10;for(let v=1;activepiece-10*v>-1;v++)cells[activepiece-10*v].classList.length<1?cells[activepiece-10*v].classList.add("enabled"):v=10;for(let o=1;activepiece+10*o<80;o++)cells[activepiece+10*o].classList.length<1?cells[activepiece+10*o].classList.add("enabled"):o=10;for(let $=1;activepiece+$<c+10&&activepiece-9*$>-1;$++)cells[activepiece-9*$].classList.length<1?cells[activepiece-9*$].classList.add("enabled"):$=10;for(let L=1;activepiece-L>c-1&&activepiece-11*L>-1;L++)cells[activepiece-11*L].classList.length<1?cells[activepiece-11*L].classList.add("enabled"):L=10;for(let b=1;activepiece+b<c+10&&activepiece+11*b<80;b++)cells[activepiece+11*b].classList.length<1?cells[activepiece+11*b].classList.add("enabled"):b=10;for(let g=1;activepiece-g>c-1&&activepiece+9*g<80;g++)cells[activepiece+9*g].classList.length<1?cells[activepiece+9*g].classList.add("enabled"):g=10;activepiece-11>-1&&activepiece>c&&(cells[activepiece-11].classList.length>0?cells[activepiece-11].classList.contains(notcurrentClass)&&cells[activepiece-11].classList.add("enabled"):cells[activepiece-11].classList.add("enabled")),activepiece-10>-1&&(cells[activepiece-10].classList.length>0?cells[activepiece-10].classList.contains(notcurrentClass)&&cells[activepiece-10].classList.add("enabled"):cells[activepiece-10].classList.add("enabled")),activepiece-9>-1&&activepiece<c+9&&(cells[activepiece-9].classList.length>0?cells[activepiece-9].classList.contains(notcurrentClass)&&cells[activepiece-9].classList.add("enabled"):cells[activepiece-9].classList.add("enabled")),activepiece-1>-1&&activepiece>c&&(cells[activepiece-1].classList.length>0?cells[activepiece-1].classList.contains(notcurrentClass)&&cells[activepiece-1].classList.add("enabled"):cells[activepiece-1].classList.add("enabled")),activepiece+1<80&&activepiece<c+9&&(cells[activepiece+1].classList.length>0?cells[activepiece+1].classList.contains(notcurrentClass)&&cells[activepiece+1].classList.add("enabled"):cells[activepiece+1].classList.add("enabled")),activepiece+11<80&&activepiece<c+9&&(cells[activepiece+11].classList.length>0?cells[activepiece+11].classList.contains(notcurrentClass)&&cells[activepiece+11].classList.add("enabled"):cells[activepiece+11].classList.add("enabled")),activepiece+10<80&&(cells[activepiece+10].classList.length>0?cells[activepiece+10].classList.contains(notcurrentClass)&&cells[activepiece+10].classList.add("enabled"):cells[activepiece+10].classList.add("enabled")),activepiece+9<80&&activepiece>c&&(cells[activepiece+9].classList.length>0?cells[activepiece+9].classList.contains(notcurrentClass)&&cells[activepiece+9].classList.add("enabled"):cells[activepiece+9].classList.add("enabled"));break;case"Lizard":for(let u=1;activepiece+u<10+c;u++)cells[activepiece+u].classList.length>0?(cells[activepiece+u].classList.contains(notcurrentClass)&&cells[activepiece+u].classList.add("enabled"),u=10):cells[activepiece+u].classList.add("enabled");for(let h=1;activepiece-h>c-1;h++)cells[activepiece-h].classList.length>0?(cells[activepiece-h].classList.contains(notcurrentClass)&&cells[activepiece-h].classList.add("enabled"),h=10):cells[activepiece-h].classList.add("enabled");activepiece-20>-1&&(cells[activepiece-20].classList.length>0?cells[activepiece-20].classList.contains(notcurrentClass)&&cells[activepiece-20].classList.add("enabled"):cells[activepiece-20].classList.add("enabled")),activepiece+20<80&&(cells[activepiece+20].classList.length>0?cells[activepiece+20].classList.contains(notcurrentClass)&&cells[activepiece+20].classList.add("enabled"):cells[activepiece+20].classList.add("enabled")),activepiece-30>-1&&(cells[activepiece-30].classList.length>0?cells[activepiece-30].classList.contains(notcurrentClass)&&cells[activepiece-30].classList.add("enabled"):cells[activepiece-30].classList.add("enabled")),activepiece+30<80&&(cells[activepiece+30].classList.length>0?cells[activepiece+30].classList.contains(notcurrentClass)&&cells[activepiece+30].classList.add("enabled"):cells[activepiece+30].classList.add("enabled"));break;case"Bunny":for(let y=0;activepiece%20+y<80;y+=20)cells[activepiece%20+y].classList.length>0?cells[activepiece%20+y].classList.contains(notcurrentClass)&&cells[activepiece%20+y].classList.add("enabled"):cells[activepiece%20+y].classList.add("enabled");for(let f=0;e+c+f<10+c;f+=2)cells[e+c+f].classList.length>0?cells[e+c+f].classList.contains(notcurrentClass)&&cells[e+c+f].classList.add("enabled"):cells[e+c+f].classList.add("enabled");activepiece-10>-1&&(cells[activepiece-10].classList.length>0?cells[activepiece-10].classList.contains(notcurrentClass)&&cells[activepiece-10].classList.add("enabled"):cells[activepiece-10].classList.add("enabled")),activepiece+10<80&&(cells[activepiece+10].classList.length>0?cells[activepiece+10].classList.contains(notcurrentClass)&&cells[activepiece+10].classList.add("enabled"):cells[activepiece+10].classList.add("enabled")),activepiece-1>-1&&activepiece>c&&(cells[activepiece-1].classList.length>0?cells[activepiece-1].classList.contains(notcurrentClass)&&cells[activepiece-1].classList.add("enabled"):cells[activepiece-1].classList.add("enabled")),activepiece+1<80&&activepiece<c+9&&(cells[activepiece+1].classList.length>0?cells[activepiece+1].classList.contains(notcurrentClass)&&cells[activepiece+1].classList.add("enabled"):cells[activepiece+1].classList.add("enabled"));break;case"Child":activepiece-22>-1&&activepiece>c+1&&(cells[activepiece-22].classList.length>0?cells[activepiece-22].classList.contains(notcurrentClass)&&cells[activepiece-22].classList.add("enabled"):cells[activepiece-22].classList.add("enabled")),activepiece-20>-1&&(cells[activepiece-20].classList.length>0?cells[activepiece-20].classList.contains(notcurrentClass)&&cells[activepiece-20].classList.add("enabled"):cells[activepiece-20].classList.add("enabled")),activepiece-18>-1&&activepiece<c+8&&(cells[activepiece-18].classList.length>0?cells[activepiece-18].classList.contains(notcurrentClass)&&cells[activepiece-18].classList.add("enabled"):cells[activepiece-18].classList.add("enabled")),activepiece-2>-1&&activepiece>c+1&&(cells[activepiece-2].classList.length>0?cells[activepiece-2].classList.contains(notcurrentClass)&&cells[activepiece-2].classList.add("enabled"):cells[activepiece-2].classList.add("enabled")),activepiece+2>-1&&activepiece<c+8&&(cells[activepiece+2].classList.length>0?cells[activepiece+2].classList.contains(notcurrentClass)&&cells[activepiece+2].classList.add("enabled"):cells[activepiece+2].classList.add("enabled")),activepiece+18<80&&activepiece<c+8&&(cells[activepiece+18].classList.length>0?cells[activepiece+18].classList.contains(notcurrentClass)&&cells[activepiece+18].classList.add("enabled"):cells[activepiece+18].classList.add("enabled")),activepiece+20<80&&(cells[activepiece+20].classList.length>0?cells[activepiece+20].classList.contains(notcurrentClass)&&cells[activepiece+20].classList.add("enabled"):cells[activepiece+20].classList.add("enabled")),activepiece+22<80&&activepiece>c+1&&(cells[activepiece+22].classList.length>0?cells[activepiece+22].classList.contains(notcurrentClass)&&cells[activepiece+22].classList.add("enabled"):cells[activepiece+22].classList.add("enabled"));break;case"Gentleman":activepiece-10>-1&&(cells[activepiece-10].classList.length>0?cells[activepiece-10].classList.contains(notcurrentClass)&&cells[activepiece-10].classList.add("enabled"):cells[activepiece-10].classList.add("enabled")),activepiece+10<80&&(cells[activepiece+10].classList.length>0?cells[activepiece+10].classList.contains(notcurrentClass)&&cells[activepiece+10].classList.add("enabled"):cells[activepiece+10].classList.add("enabled")),activepiece-1>-1&&activepiece>c&&(cells[activepiece-1].classList.length>0?cells[activepiece-1].classList.contains(notcurrentClass)&&cells[activepiece-1].classList.add("enabled"):cells[activepiece-1].classList.add("enabled")),activepiece+1<80&&activepiece<c+9&&(cells[activepiece+1].classList.length>0?cells[activepiece+1].classList.contains(notcurrentClass)&&cells[activepiece+1].classList.add("enabled"):cells[activepiece+1].classList.add("enabled"));for(let C=1;activepiece+C<10+c;C++)cells[activepiece+C].classList.contains(notcurrentClass)&&(cells[activepiece+C].classList.add("enabled"),C=10);for(let m=1;activepiece-m>c-1;m++)cells[activepiece-m].classList.contains(notcurrentClass)&&(cells[activepiece-m].classList.add("enabled"),m=10);for(let P=1;activepiece-10*P>-1;P++)cells[activepiece-10*P].classList.contains(notcurrentClass)&&(cells[activepiece-10*P].classList.add("enabled"),P=10);for(let T=1;activepiece+10*T<80;T++)cells[activepiece+10*T].classList.contains(notcurrentClass)&&(cells[activepiece+10*T].classList.add("enabled"),T=10);for(let S=1;activepiece+S<c+10&&activepiece-9*S>-1;S++)cells[activepiece-9*S].classList.contains(notcurrentClass)&&(cells[activepiece-9*S].classList.add("enabled"),S=10);for(let B=1;activepiece-B>c-1&&activepiece-11*B>-1;B++)cells[activepiece-11*B].classList.contains(notcurrentClass)&&(cells[activepiece-11*B].classList.add("enabled"),B=10);for(let k=1;activepiece+k<c+10&&activepiece+11*k<80;k++)cells[activepiece+11*k].classList.contains(notcurrentClass)&&(cells[activepiece+11*k].classList.add("enabled"),k=10);for(let H=1;activepiece-H>c-1&&activepiece+9*H<80;H++)cells[activepiece+9*H].classList.contains(notcurrentClass)&&(cells[activepiece+9*H].classList.add("enabled"),H=10);break;case"Duplicator":activepiece-10>-1&&(cells[activepiece-10].classList.length>0?cells[activepiece-10].classList.contains(notcurrentClass)&&cells[activepiece-10].classList.add("enabled"):cells[activepiece-10].classList.add("enabled")),activepiece+10<80&&(cells[activepiece+10].classList.length>0?cells[activepiece+10].classList.contains(notcurrentClass)&&cells[activepiece+10].classList.add("enabled"):cells[activepiece+10].classList.add("enabled")),activepiece-1>-1&&activepiece>c&&(cells[activepiece-1].classList.length>0?cells[activepiece-1].classList.contains(notcurrentClass)&&cells[activepiece-1].classList.add("enabled"):cells[activepiece-1].classList.add("enabled")),activepiece+1<80&&activepiece<c+9&&(cells[activepiece+1].classList.length>0?cells[activepiece+1].classList.contains(notcurrentClass)&&cells[activepiece+1].classList.add("enabled"):cells[activepiece+1].classList.add("enabled")),(duplicates=board.getElementsByClassName("Duplicate "+currentClass).length)<5&&(activepiece-11>-1&&activepiece>c&&0==cells[activepiece-11].classList.length&&cells[activepiece-11].classList.add("duplication"),activepiece-9>-1&&activepiece<c+9&&0==cells[activepiece-9].classList.length&&cells[activepiece-9].classList.add("duplication"),activepiece+11<80&&activepiece<c+9&&0==cells[activepiece+11].classList.length&&cells[activepiece+11].classList.add("duplication"),activepiece+9<80&&activepiece>c&&0==cells[activepiece+9].classList.length&&cells[activepiece+9].classList.add("duplication"));break;case"Duplicate":1==current?(activepiece-11>-1&&activepiece>c&&(cells[activepiece-11].classList.length>0?cells[activepiece-11].classList.contains(notcurrentClass)&&cells[activepiece-11].classList.add("enabled"):cells[activepiece-11].classList.add("enabled")),activepiece-10>-1&&(cells[activepiece-10].classList.length>0?cells[activepiece-10].classList.contains(notcurrentClass)&&cells[activepiece-10].classList.add("enabled"):cells[activepiece-10].classList.add("enabled")),activepiece-9>-1&&activepiece<c+9&&(cells[activepiece-9].classList.length>0?cells[activepiece-9].classList.contains(notcurrentClass)&&cells[activepiece-9].classList.add("enabled"):cells[activepiece-9].classList.add("enabled"))):(activepiece+11<80&&activepiece<c+9&&(cells[activepiece+11].classList.length>0?cells[activepiece+11].classList.contains(notcurrentClass)&&cells[activepiece+11].classList.add("enabled"):cells[activepiece+11].classList.add("enabled")),activepiece+10<80&&(cells[activepiece+10].classList.length>0?cells[activepiece+10].classList.contains(notcurrentClass)&&cells[activepiece+10].classList.add("enabled"):cells[activepiece+10].classList.add("enabled")),activepiece+9<80&&activepiece>c&&(cells[activepiece+9].classList.length>0?cells[activepiece+9].classList.contains(notcurrentClass)&&cells[activepiece+9].classList.add("enabled"):cells[activepiece+9].classList.add("enabled"))),activepiece-1>-1&&activepiece>c&&(cells[activepiece-1].classList.length>0?cells[activepiece-1].classList.contains(notcurrentClass)&&cells[activepiece-1].classList.add("enabled"):cells[activepiece-1].classList.add("enabled")),activepiece+1<80&&activepiece<c+9&&(cells[activepiece+1].classList.length>0?cells[activepiece+1].classList.contains(notcurrentClass)&&cells[activepiece+1].classList.add("enabled"):cells[activepiece+1].classList.add("enabled"));break;case"Pastafarian":if(!cells[activepiece].classList.contains("broken1")){for(let E=2;activepiece+E<10+c&&E<5;E++)cells[activepiece+(E-1)].classList.length>1?E=6:cells[activepiece+E].classList.contains(currentClass)?E=6:cells[activepiece+E].classList.add("lightbridge");for(let x=2;activepiece-x>c-1&&x<5;x++)cells[activepiece-(x-1)].classList.length>1?x=6:cells[activepiece-x].classList.contains(currentClass)?x=6:cells[activepiece-x].classList.add("lightbridge");for(let M=2;activepiece-10*M>-1&&M<5;M++)cells[activepiece-10*(M-1)].classList.length>1?M=6:cells[activepiece-10*M].classList.contains(currentClass)?M=6:cells[activepiece-10*M].classList.add("lightbridge");for(let q=2;activepiece+10*q<80&&q<5;q++)cells[activepiece+10*(q-1)].classList.length>1?q=6:cells[activepiece+10*q].classList.contains(currentClass)?q=6:cells[activepiece+10*q].classList.add("lightbridge");for(let D=2;activepiece+D<c+10&&activepiece-9*D>-1&&D<5;D++)cells[activepiece-9*(D-1)].classList.length>1?D=6:cells[activepiece-9*D].classList.contains(currentClass)?D=6:cells[activepiece-9*D].classList.add("lightbridge");for(let N=2;activepiece-N>c-1&&activepiece-11*N>-1&&N<5;N++)cells[activepiece-11*(N-1)].classList.length>1?N=6:cells[activepiece-11*N].classList.contains(currentClass)?N=6:cells[activepiece-11*N].classList.add("lightbridge");for(let W=2;activepiece+W<c+10&&activepiece+11*W<80&&W<5;W++)cells[activepiece+11*(W-1)].classList.length>1?W=6:cells[activepiece+11*W].classList.contains(currentClass)?W=6:cells[activepiece+11*W].classList.add("lightbridge");for(let A=2;activepiece-A>c-1&&activepiece+9*A<80&&A<5;A++)cells[activepiece+9*(A-1)].classList.length>1?A=6:cells[activepiece+9*A].classList.contains(currentClass)?A=6:cells[activepiece+9*A].classList.add("lightbridge")}activepiece-11>-1&&activepiece>c&&(cells[activepiece-11].classList.length>0?cells[activepiece-11].classList.contains(notcurrentClass)&&cells[activepiece-11].classList.add("enabled"):cells[activepiece-11].classList.add("enabled")),activepiece-10>-1&&(cells[activepiece-10].classList.length>0?cells[activepiece-10].classList.contains(notcurrentClass)&&cells[activepiece-10].classList.add("enabled"):cells[activepiece-10].classList.add("enabled")),activepiece-9>-1&&activepiece<c+9&&(cells[activepiece-9].classList.length>0?cells[activepiece-9].classList.contains(notcurrentClass)&&cells[activepiece-9].classList.add("enabled"):cells[activepiece-9].classList.add("enabled")),activepiece-1>-1&&activepiece>c&&(cells[activepiece-1].classList.length>0?cells[activepiece-1].classList.contains(notcurrentClass)&&cells[activepiece-1].classList.add("enabled"):cells[activepiece-1].classList.add("enabled")),activepiece+1<80&&activepiece<c+9&&(cells[activepiece+1].classList.length>0?cells[activepiece+1].classList.contains(notcurrentClass)&&cells[activepiece+1].classList.add("enabled"):cells[activepiece+1].classList.add("enabled")),activepiece+11<80&&activepiece<c+9&&(cells[activepiece+11].classList.length>0?cells[activepiece+11].classList.contains(notcurrentClass)&&cells[activepiece+11].classList.add("enabled"):cells[activepiece+11].classList.add("enabled")),activepiece+10<80&&(cells[activepiece+10].classList.length>0?cells[activepiece+10].classList.contains(notcurrentClass)&&cells[activepiece+10].classList.add("enabled"):cells[activepiece+10].classList.add("enabled")),activepiece+9<80&&activepiece>c&&(cells[activepiece+9].classList.length>0?cells[activepiece+9].classList.contains(notcurrentClass)&&cells[activepiece+9].classList.add("enabled"):cells[activepiece+9].classList.add("enabled"));break;case"Student":activepiece-1>-1&&activepiece>c&&(cells[activepiece-1].classList.length>0?cells[activepiece-1].classList.contains(notcurrentClass)&&cells[activepiece-1].classList.add("enabled"):cells[activepiece-1].classList.add("enabled")),activepiece+1<80&&activepiece<c+9&&(cells[activepiece+1].classList.length>0?cells[activepiece+1].classList.contains(notcurrentClass)&&cells[activepiece+1].classList.add("enabled"):cells[activepiece+1].classList.add("enabled"));for(let R=1;R<5;R++)activepiece+10*R<80?cells[activepiece+10*R].classList.length>0?cells[activepiece+10*R].classList.contains(notcurrentClass)&&cells[activepiece+10*R].classList.add("enabled"):cells[activepiece+10*R].classList.add("enabled"):R=5;for(let w=1;w<5;w++)activepiece-10*w>-1?cells[activepiece-10*w].classList.length>0?cells[activepiece-10*w].classList.contains(notcurrentClass)&&cells[activepiece-10*w].classList.add("enabled"):cells[activepiece-10*w].classList.add("enabled"):w=5;break;case"Angel":activepiece-11>-1&&activepiece>c&&(cells[activepiece-11].classList.length>0?cells[activepiece-11].classList.contains(notcurrentClass)&&cells[activepiece-11].classList.add("enabled"):cells[activepiece-11].classList.add("enabled")),activepiece-10>-1&&(cells[activepiece-10].classList.length>0?cells[activepiece-10].classList.contains(notcurrentClass)&&cells[activepiece-10].classList.add("enabled"):cells[activepiece-10].classList.add("enabled")),activepiece-9>-1&&activepiece<c+9&&(cells[activepiece-9].classList.length>0?cells[activepiece-9].classList.contains(notcurrentClass)&&cells[activepiece-9].classList.add("enabled"):cells[activepiece-9].classList.add("enabled")),activepiece-1>-1&&activepiece>c&&(cells[activepiece-1].classList.length>0?cells[activepiece-1].classList.contains(notcurrentClass)&&cells[activepiece-1].classList.add("enabled"):cells[activepiece-1].classList.add("enabled")),activepiece+1<80&&activepiece<c+9&&(cells[activepiece+1].classList.length>0?cells[activepiece+1].classList.contains(notcurrentClass)&&cells[activepiece+1].classList.add("enabled"):cells[activepiece+1].classList.add("enabled")),activepiece+11<80&&activepiece<c+9&&(cells[activepiece+11].classList.length>0?cells[activepiece+11].classList.contains(notcurrentClass)&&cells[activepiece+11].classList.add("enabled"):cells[activepiece+11].classList.add("enabled")),activepiece+10<80&&(cells[activepiece+10].classList.length>0?cells[activepiece+10].classList.contains(notcurrentClass)&&cells[activepiece+10].classList.add("enabled"):cells[activepiece+10].classList.add("enabled")),activepiece+9<80&&activepiece>c&&(cells[activepiece+9].classList.length>0?cells[activepiece+9].classList.contains(notcurrentClass)&&cells[activepiece+9].classList.add("enabled"):cells[activepiece+9].classList.add("enabled")),activepiece-33>-1&&activepiece>c+2&&(cells[activepiece-33].classList.length>0?cells[activepiece-33].classList.contains(notcurrentClass)&&cells[activepiece-33].classList.add("enabled"):cells[activepiece-33].classList.add("enabled")),activepiece-30>-1&&(cells[activepiece-30].classList.length>0?cells[activepiece-30].classList.contains(notcurrentClass)&&cells[activepiece-30].classList.add("enabled"):cells[activepiece-30].classList.add("enabled")),activepiece-27>-1&&activepiece<c+7&&(cells[activepiece-27].classList.length>0?cells[activepiece-27].classList.contains(notcurrentClass)&&cells[activepiece-27].classList.add("enabled"):cells[activepiece-27].classList.add("enabled")),activepiece-3>-1&&activepiece>c+2&&(cells[activepiece-3].classList.length>0?cells[activepiece-3].classList.contains(notcurrentClass)&&cells[activepiece-3].classList.add("enabled"):cells[activepiece-3].classList.add("enabled")),activepiece+3>-1&&activepiece<c+7&&(cells[activepiece+3].classList.length>0?cells[activepiece+3].classList.contains(notcurrentClass)&&cells[activepiece+3].classList.add("enabled"):cells[activepiece+3].classList.add("enabled")),activepiece+33<80&&activepiece<c+7&&(cells[activepiece+33].classList.length>0?cells[activepiece+33].classList.contains(notcurrentClass)&&cells[activepiece+33].classList.add("enabled"):cells[activepiece+33].classList.add("enabled")),activepiece+30<80&&(cells[activepiece+30].classList.length>0?cells[activepiece+30].classList.contains(notcurrentClass)&&cells[activepiece+30].classList.add("enabled"):cells[activepiece+30].classList.add("enabled")),activepiece+27<80&&activepiece>c+2&&(cells[activepiece+27].classList.length>0?cells[activepiece+27].classList.contains(notcurrentClass)&&cells[activepiece+27].classList.add("enabled"):cells[activepiece+27].classList.add("enabled"))}}return!0}if(event.target.classList.contains("lightbridge")&&(lightbridge=1,pastafarianBridgesUsed++),event.target.classList.contains("enabled")||1==lightbridge){for(removeenabled=board.getElementsByClassName("enabled"),removeduplication=board.getElementsByClassName("duplication"),removelightbridge=board.getElementsByClassName("lightbridge");0<removeenabled.length;)removeenabled[0].classList.remove("enabled");for(;0<removeduplication.length;)removeduplication[0].classList.remove("duplication");for(;0<removelightbridge.length;)removelightbridge[0].classList.remove("lightbridge");return BustAMove(TargetCell),!0}if(event.target.classList.contains("duplication")){for(removeenabled=board.getElementsByClassName("enabled"),removeduplication=board.getElementsByClassName("duplication");0<removeenabled.length;)removeenabled[0].classList.remove("enabled");for(;0<removeduplication.length;)removeduplication[0].classList.remove("duplication");return activepiece=88,BustAMove(TargetCell),!0}}}ThePiecePlacer(14,"_-1","Duplicate"),ThePiecePlacer(13,"_-1","Duplicate"),ThePiecePlacer(12,"_-1","Duplicate"),ThePiecePlacer(11,"_-1","Duplicate"),ThePiecePlacer(10,"_-1","Duplicate"),ThePiecePlacer(9,"_-1","Skater"),ThePiecePlacer(8,"_-1","Runner"),ThePiecePlacer(7,"_-1","Lizard"),ThePiecePlacer(6,"_-1","Gentleman"),ThePiecePlacer(5,"_-1","Bunny"),ThePiecePlacer(4,"_-1","Child"),ThePiecePlacer(3,"_-1","Duplicator"),ThePiecePlacer(2,"_-1","Student"),ThePiecePlacer(1,"_-1","Angel"),ThePiecePlacer(0,"_-1","Pastafarian"),ThePiecePlacer(65,"_1","Duplicate"),ThePiecePlacer(66,"_1","Duplicate"),ThePiecePlacer(67,"_1","Duplicate"),ThePiecePlacer(68,"_1","Duplicate"),ThePiecePlacer(69,"_1","Duplicate"),ThePiecePlacer(70,"_1","Skater"),ThePiecePlacer(71,"_1","Runner"),ThePiecePlacer(72,"_1","Lizard"),ThePiecePlacer(73,"_1","Gentleman"),ThePiecePlacer(74,"_1","Bunny"),ThePiecePlacer(75,"_1","Child"),ThePiecePlacer(76,"_1","Duplicator"),ThePiecePlacer(77,"_1","Student"),ThePiecePlacer(78,"_1","Angel"),ThePiecePlacer(79,"_1","Pastafarian");var lightcolor="#F4F4F4",darkcolor="#4F7BFF";function colorBoard(){let e=1;for(let c=0;c<80;c++)c%10==0&&(e=-e),c%2==1&&1==e||c%2==0&&-1==e?cells[c].style.backgroundColor=lightcolor:cells[c].style.backgroundColor=darkcolor}function initializeBoard(){for(var e=0;e<cells.length;e++)cells[e].setAttribute("onclick","cell();"),cells[e].id=e;timerId=setInterval(countdown,1e3);let c=cells[30].getBoundingClientRect(),s=cells[49].getBoundingClientRect(),i=c.left-.0045*document.body.clientWidth,l=s.right-.004*document.body.clientWidth;WinStripe.style.left=i+"px",WinStripe.style.top=c.top+"px",WinStripe.style.width=l-i+"px",WinStripe.style.height=s.bottom-c.top+"px",EndGame.style.width=l/document.body.clientWidth*100+"%"}colorBoard();var Story=document.querySelector("#Story"),Infinite=document.querySelector("#Infinite"),Freedom=document.querySelector("#Freedom"),Settings=document.querySelector("#Settings");function manualResize(){let e=document.getElementsByClassName("piece");for(let c=0;c<e.length;c++){numbertile=(numbertile=e[c].id).substr(5);let s=cells[parseInt(numbertile)].getBoundingClientRect();e[c].style.bottom=window.innerHeight-s.bottom+s.bottom/100+"px",e[c].style.left=s.left-(s.right-s.left)/50+"px"}let i=cells[30].getBoundingClientRect(),l=cells[49].getBoundingClientRect(),t=i.left-.0045*document.body.clientWidth,a=l.right-.004*document.body.clientWidth;WinStripe.style.left=t+"px",WinStripe.style.top=i.top+"px",WinStripe.style.width=a-t+"px",WinStripe.style.height=l.bottom-i.top+"px",EndGame.style.width=a/document.body.clientWidth*100+"%"}Story.style.left=.02*document.body.clientHeight+"px",Infinite.style.left=.04*document.body.clientHeight+.4125*document.body.clientHeight+"px",Freedom.style.left=.06*document.body.clientHeight+.858*document.body.clientHeight+"px",Settings.style.right=.02*document.body.clientHeight+"px";var globalResizeTimer=null;window.addEventListener("resize",function(){null!=globalResizeTimer&&window.clearTimeout(globalResizeTimer),globalResizeTimer=window.setTimeout(function(){manualResize()},200),Story.style.left=.02*document.body.clientHeight+"px",Infinite.style.left=.04*document.body.clientHeight+.4125*document.body.clientHeight+"px",Freedom.style.left=.06*document.body.clientHeight+.858*document.body.clientHeight+"px",Settings.style.right=.02*document.body.clientHeight+"px"}),initializeBoard();
+</script>
+
+</html>

@@ -1,0 +1,350 @@
+				//Document the available moves of the given piece based on it's cell number and type.
+				
+					//horizontaloffset is for the Bunny's horizontal movement.
+					let horizontaloffset = (currentCell % 10) % 2;
+					let HorizontalBoundary = currentCell - (currentCell % 10);
+					
+					switch ( currentPiece ) {
+					
+						case "Runner":
+							//All Directions
+							if ( (currentCell - 11) > -1 && currentCell > HorizontalBoundary ) {
+								if ( cells[ currentCell - 11 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 11 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 11]);
+									}
+								} else {
+								
+									CPUpossibleMoves.push([currentCell, currentCell - 11]);
+								
+								}
+							}
+							if ( (currentCell - 10) > -1 ) {
+								if ( cells[ currentCell - 10 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 10 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 10]);
+									}
+								}
+							}
+							if ( (currentCell - 9) > -1 && currentCell < HorizontalBoundary + 9 ) {
+								if ( cells[ currentCell - 9 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 9 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 9]);
+									}
+								}
+							}
+							if ( (currentCell - 1) > -1 && currentCell > HorizontalBoundary ) {
+								if ( cells[ currentCell - 1 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 1 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 1]);
+									}
+								}
+							}
+							if ( (currentCell + 1) < 80 && currentCell < HorizontalBoundary + 9 ) {
+								if ( cells[ currentCell + 1 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 1 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 1]);
+									}
+								}
+							}
+							if ( (currentCell + 11) < 80 && currentCell < HorizontalBoundary + 9 ) {
+								if ( cells[ currentCell + 11 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 11 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 11]);
+									}
+								}
+							}
+							if ( (currentCell + 10) < 80 ) {
+								if ( cells[ currentCell + 10 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 10 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 10]);
+									}
+								}
+							}
+							if ( (currentCell + 9) < 80 && currentCell > HorizontalBoundary ) {
+								if ( cells[ currentCell + 9 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 9 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 9]);
+									}
+								}
+							}
+							break;
+							
+						case "Skater":
+							//Horizontal Skate Rightwards.
+							for (let i = 2; ( currentCell + i ) < ( 10 + HorizontalBoundary ); i++) {
+								if ( cells[ currentCell + i ].classList.length < 1 ) {
+									CPUpossibleMoves.push([currentCell, currentCell + i]);
+								} else {
+									i = 10;
+								}
+							}
+							//Horizontal Skate Leftwards.
+							for (let i = 2; ( currentCell - i ) > HorizontalBoundary - 1; i++) {
+								if ( cells[ currentCell - i ].classList.length < 1 ) {
+									CPUpossibleMoves.push([currentCell, currentCell - i]);
+								} else {
+									i = 10;
+								}
+							}
+							//Vertical Skate Upwards.
+							for (let i = 2; ( currentCell - 10*i ) > -1 ; i++) {
+								if ( cells[ currentCell - 10*i ].classList.length < 1 ) {
+									CPUpossibleMoves.push([currentCell, currentCell - 10*i]);
+								} else {
+									i = 10;
+								}
+							}
+							//Vertical Skate Downwards.
+							for (let i = 2; ( currentCell + 10*i ) < 80 ; i++) {
+								if ( cells[ currentCell + 10*i ].classList.length < 1 ) {
+									CPUpossibleMoves.push([currentCell, currentCell + 10*i]);
+								} else {
+									i = 10;
+								}
+							}
+							//Diagonal Skate Rightupwards.
+							for (let i = 2; ( currentCell + i ) < ( HorizontalBoundary + 10 ) && (currentCell - 9*i) > -1; i++) {
+								if ( cells[ currentCell - 9*i ].classList.length < 1 ) {
+									CPUpossibleMoves.push([currentCell, currentCell - 9*i]);
+								} else {
+									i = 10;
+								}
+							}
+							//Diagonal Skate Leftupwards.
+							for (let i = 2; ( currentCell - i ) > ( HorizontalBoundary - 1 ) && (currentCell - 11*i) > -1; i++) {
+								if ( cells[ currentCell - 11*i ].classList.length < 1 ) {
+									CPUpossibleMoves.push([currentCell, currentCell - 11*i]);
+								} else {
+									i = 10;
+								}
+							}
+							//Diagonal Skate Rightdownwards.
+							for (let i = 2; ( currentCell + i ) < ( HorizontalBoundary + 10 ) && (currentCell + 11*i) < 80; i++) {
+								if ( cells[ currentCell + 11*i ].classList.length < 1 ) {
+									CPUpossibleMoves.push([currentCell, currentCell + 11*i]);
+								} else {
+									i = 10;
+								}
+							}
+							//Diagonal Skate Leftdownwards.
+							for (let i = 2; ( currentCell - i ) > ( HorizontalBoundary - 1 ) && (currentCell + 9*i) < 80; i++) {
+								if ( cells[ currentCell + 9*i ].classList.length < 1 ) {
+									CPUpossibleMoves.push([currentCell, currentCell + 9*i]);
+								} else {
+									i = 10;
+								}
+							}
+							//All Directions
+							if ( (currentCell - 11) > -1 && currentCell > HorizontalBoundary ) {
+								if ( cells[ currentCell - 11 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 11 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 11]);
+									}
+								}
+							}
+							if ( (currentCell - 10) > -1 ) {
+								if ( cells[ currentCell - 10 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 10 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 10]);
+									}
+								}
+							}
+							if ( (currentCell - 9) > -1 && currentCell < HorizontalBoundary + 9 ) {
+								if ( cells[ currentCell - 9 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 9 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 9]);
+									}
+								}
+							}
+							if ( (currentCell - 1) > -1 && currentCell > HorizontalBoundary ) {
+								if ( cells[ currentCell - 1 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 1 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 1]);
+									}
+								}
+							}
+							if ( (currentCell + 1) < 80 && currentCell < HorizontalBoundary + 9 ) {
+								if ( cells[ currentCell + 1 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 1 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 1]);
+									}
+								}
+							}
+							if ( (currentCell + 11) < 80 && currentCell < HorizontalBoundary + 9 ) {
+								if ( cells[ currentCell + 11 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 11 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 11]);
+									}
+								}
+							}
+							if ( (currentCell + 10) < 80 ) {
+								if ( cells[ currentCell + 10 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 10 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 10]);
+									}
+								}
+							}
+							if ( (currentCell + 9) < 80 && currentCell > HorizontalBoundary ) {
+								if ( cells[ currentCell + 9 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 9 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 9]);
+									}
+								}
+							}
+							break;
+						
+						case "Lizard":
+							//Horizontal Walk Rightwards.
+							for (let i = 1; ( currentCell + i ) < ( 10 + HorizontalBoundary ); i++) {
+								if ( cells[ currentCell + i ].classList.length > 0 ) {
+									if ( cells[ currentCell + i ].classList.contains( notcurrentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + i]);
+									}
+									i = 10;
+								} else {
+									CPUpossibleMoves.push([currentCell, currentCell + i]);
+								}
+							}
+							//Horizontal Walk Leftwards.
+							for (let i = 1; ( currentCell - i ) > HorizontalBoundary - 1; i++) {
+								if ( cells[ currentCell - i ].classList.length > 0 ) {
+									if ( cells[ currentCell - i ].classList.contains( notcurrentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - i]);
+									}
+									i = 10;
+								} else {
+									CPUpossibleMoves.push([currentCell, currentCell - i]);
+								}
+							}
+							//Jump Two Spaces.
+							if ( (currentCell - 20) > -1 ) {
+								if ( cells[ currentCell - 20 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 20 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 20]);
+									}
+								} else {
+								
+									CPUpossibleMoves.push([currentCell, currentCell - 20]);
+								
+								}
+							}
+							if ( (currentCell + 20) < 80 ) {
+								if ( cells[ currentCell + 20 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 20 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 20]);
+									}
+								} else {
+								
+									CPUpossibleMoves.push([currentCell, currentCell + 20]);
+								
+								}
+							}
+							//Jump Three Spaces.
+							if ( (currentCell - 30) > -1 ) {
+								if ( cells[ currentCell - 30 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 30 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 30]);
+									}
+								} else {
+								
+									CPUpossibleMoves.push([currentCell, currentCell - 30]);
+								
+								}
+							}
+							if ( (currentCell + 30) < 80 ) {
+								if ( cells[ currentCell + 30 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 30 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 30]);
+									}
+								} else {
+								
+									CPUpossibleMoves.push([currentCell, currentCell + 30]);
+								
+								}
+							}
+							break;
+	
+						case "Bunny":
+							//Cardinals.
+							if ( (currentCell - 10) > -1 ) {
+								if ( cells[ currentCell - 10 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 10 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 10]);
+									}
+								}
+							}
+							if ( (currentCell - 1) > -1 && currentCell > HorizontalBoundary ) {
+								if ( cells[ currentCell - 1 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 1 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 1]);
+									}
+								}
+							}
+							if ( (currentCell + 1) < 80 && currentCell < HorizontalBoundary + 9 ) {
+								if ( cells[ currentCell + 1 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 1 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 1]);
+									}
+								}
+							}
+							if ( (currentCell + 10) < 80 ) {
+								if ( cells[ currentCell + 10 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 10 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 10]);
+									}
+								}
+							}
+							break;
+							
+						case "Gentleman":
+							//Cardinals.
+							if ( (currentCell - 10) > -1 ) {
+								if ( cells[ currentCell - 10 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 10 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 10]);
+									}
+								}
+							}
+							if ( (currentCell - 1) > -1 && currentCell > HorizontalBoundary ) {
+								if ( cells[ currentCell - 1 ].classList.length > 0 ) {
+									if ( !cells[ currentCell - 1 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell - 1]);
+									}
+								}
+							}
+							if ( (currentCell + 1) < 80 && currentCell < HorizontalBoundary + 9 ) {
+								if ( cells[ currentCell + 1 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 1 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 1]);
+									}
+								}
+							}
+							if ( (currentCell + 10) < 80 ) {
+								if ( cells[ currentCell + 10 ].classList.length > 0 ) {
+									if ( !cells[ currentCell + 10 ].classList.contains( currentClass ) ) {
+										CPUpossibleMoves.push([currentCell, currentCell + 10]);
+									}
+								}
+							}
+							//Vertical Magnet PL_Upwards.
+							for (let i = 1; ( currentCell - 10*i ) > -1 ; i++) {
+								if ( cells[ currentCell - 10*i ].classList.contains( notcurrentClass ) ) {
+									CPUpossibleMoves.push([currentCell, currentCell - 10*i]);
+									i = 10;
+								}
+							}
+							//Vertical Magnet Downwards.
+							for (let i = 1; ( currentCell + 10*i ) < 80 ; i++) {
+								if ( cells[ currentCell + 10*i ].classList.contains( notcurrentClass ) ) {
+									CPUpossibleMoves.push([currentCell, currentCell + 10*i]);
+									i = 10;
+								}
+							}
+							break;
+							
+						default:
+							//lol.
+							break;
+
+					}

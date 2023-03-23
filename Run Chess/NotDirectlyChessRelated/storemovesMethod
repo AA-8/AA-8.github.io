@@ -1,0 +1,21 @@
+		/*
+		//Store the current move for display.
+			SelectedPiece = cells[activepiece].classList;
+			
+			//Identify the type of the moved piece.
+			if ( SelectedPiece[0].length < 5 ) {
+
+				currentMove = [ SelectedPiece[1] ];
+			
+			} else {
+			
+				currentMove = [ SelectedPiece[0] ];
+			
+			}
+			
+			//Row.
+			currentMove.push( parseInt(TargetCell) % 10 );
+			
+			//Column.
+			currentMove.push( Math.floor(parseInt(TargetCell) / 10) );
+		*/
