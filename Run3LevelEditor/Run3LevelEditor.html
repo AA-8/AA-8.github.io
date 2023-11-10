@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html>
+<body>
+<title>Run 3 Level Viewer (And Editor But You Can't Save Or Change Your Tile Type)</title>
+<form id="imonlyheresotheformwillbecentered">
+	<input type="text" id="leveldatasubmission">
+	<input type="button" onclick="loadlevel()" value="Load">
+</form>
+<br>
+<div id="leveldisplay"></div>
+<div class="battery bounce box color-1 crumbling default fast glow ice left movable ramp right rotatedZBox ruined slow steepRamp" style="display:none;"></div>
+</body>
+</html>
+<style>
+#leveldatasubmission {
+
+	width: 90%;
+
+}
+#imonlyheresotheformwillbecentered {
+
+	text-align: center;
+	
+}
+#leveldisplay {
+
+	overflow-x: scroll;
+
+}
+.tile {
+
+	width: 2vw;
+	height: 2vw;
+	display: inline-block;
+	user-select: none;
+	opacity: 0%;
+
+}
+.battery {
+
+	background-image: url("battery.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.bouncy {
+
+	background-image: url("bounce.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.box {
+
+	background-image: url("box.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.color-1 {
+
+	opacity: 100%;
+
+}
+.custom1 {
+
+	background-image: url("custom.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.custom2 {
+
+	background-image: url("custom2.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.custom3,.custom4,.custom5,.custom6,.custom7,.custom8,.custom9 {
+
+	background-image: url("custom3.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.crumbling {
+
+	background-image: url("crumbling.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.default {
+
+	opacity: 100%;
+
+}
+.fast {
+
+	background-image: url("fast.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.glow {
+
+	background-image: url("glow.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.ice {
+
+	background-image: url("ice.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.left {
+
+	background-image: url("left.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.movable {
+
+	opacity: 100%;
+
+}
+.ramp {
+
+	background-image: url("ramp.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.right {
+
+	background-image: url("right.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.rotatedZBox {
+
+	background-image: url("rotatedZbox.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.ruined {
+
+	background-image: url("ruined.png");
+	background-size: cover;
+	opacity: 80%;
+
+}
+.slow {
+
+	background-image: url("slow.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+.steepRamp {
+
+	background-image: url("steepramp.png");
+	background-size: cover;
+	opacity: 100%;
+
+}
+hr {
+
+	position: absolute;
+	margin: 0px;
+	width: 100%;
+
+}
+body {
+
+	background-color: #333333;
+
+}
+input {
+
+	background-color: #888888;
+	color: #EEEEEE;
+
+}
+</style>
+<script>
+var datatomultiply = "";
+var multiplier = 1;
+
+function setmultiplier(datatomultiply) {
+
+	switch (datatomultiply) {
+		case ":":
+			multiplier = 9;
+			break;
+		case ";":
+			multiplier = 10;
+			break;
+		case "<":
+			multiplier = 11;
+			break;
+		case "=":
+			multiplier = 12;
+			break;
+		case ">":
+			multiplier = 13;
+			break;
+		case "?":
+			multiplier = 14;
+			break;
+		case "@":
+			multiplier = 15;
+			break;
+		case "A":
+			multiplier = 16;
+			break;
+		case "B":
+			multiplier = 17;
+			break;
+		case "C":
+			multiplier = 18;
+			break;
+		case "D":
+			multiplier = 19;
+			break;
+		case "E":
+			multiplier = 20;
+			break;
+		case "F":
+			multiplier = 21;
+			break;
+		case "G":
+			multiplier = 22;
+			break;
+		case "H":
+			multiplier = 23;
+			break;
+		case "I":
+			multiplier = 24;
+			break;
+		case "J":
+			multiplier = 25;
+			break;
+		case "K":
+			multiplier = 26;
+			break;
+		case "L":
+			multiplier = 27;
+			break;
+		case "M":
+			multiplier = 28;
+			break;
+		case "N":
+			multiplier = 29;
+			break;
+		case "O":
+			multiplier = 30;
+			break;
+		case "P":
+			multiplier = 31;
+			break;
+		case "Q":
+			multiplier = 32;
+			break;
+		case "R":
+			multiplier = 33;
+			break;
+		case "S":
+			multiplier = 34;
+			break;
+		case "T":
+			multiplier = 35;
+			break;
+		case "U":
+			multiplier = 36;
+			break;
+		case "V":
+			multiplier = 37;
+			break;
+		case "W":
+			multiplier = 38;
+			break;
+		case "X":
+			multiplier = 39;
+			break;
+		case "Y":
+			multiplier = 40;
+			break;
+		case "Z":
+			multiplier = 41;
+			break;
+		case "[":
+			multiplier = 42;
+			break;
+		case "/":
+			multiplier = 43;
+			break;
+		case "]":
+			multiplier = 44;
+			break;
+		case "^":
+			multiplier = 45;
+			break;
+		case "_":
+			multiplier = 46;
+			break;
+		case "`":
+			multiplier = 47;
+			break;
+		case "a":
+			multiplier = 48;
+			break;
+		case "b":
+			multiplier = 49;
+			break;
+		case "c":
+			multiplier = 50;
+			break;
+		case "d":
+			multiplier = 51;
+			break;
+		case "e":
+			multiplier = 52;
+			break;
+		case "f":
+			multiplier = 53;
+			break;
+		case "g":
+			multiplier = 54;
+			break;
+		case "h":
+			multiplier = 55;
+			break;
+		case "i":
+			multiplier = 56;
+			break;
+		case "j":
+			multiplier = 57;
+			break;
+		case "k":
+			multiplier = 58;
+			break;
+		case "l":
+			multiplier = 59;
+			break;
+		case "m":
+			multiplier = 60;
+			break;
+		case "n":
+			multiplier = 61;
+			break;
+		case "o":
+			multiplier = 62;
+			break;
+		default:
+			multiplier = parseInt(datatomultiply) - 1;
+			break;
+	};
+};
+
+function settile(newtiletype) {
+
+	editortiletype = newtiletype;
+
+};
+
+var editortiletype = "";
+var customTypes;
+
+var color0 = "";
+var color1 = "";
+
+function changetile() {
+
+	//Set tile class.
+	if ( event.target.classList.contains(editortiletype) ) {
+
+		event.target.classList.remove(editortiletype);
+	
+	} else {
+	
+		event.target.className = "tile";
+		event.target.classList.add(editortiletype);
+	
+	};
+
+	//Set tile background color.
+	if ( event.target.classList.contains("default") || event.target.classList.contains("box") ) {
+	
+		event.target.setAttribute("style", "background-color:#" + color0 + ";" );
+	
+	} else {
+	
+	if ( event.target.classList.contains("rotatedZBox") ) {
+
+		event.target.setAttribute("style", "background-color:transparent;" );
+
+	} else {
+
+	if ( event.target.classList.contains("color-1") ) {
+	
+		event.target.setAttribute("style", "background-color:#" + color1 + ";" );
+	
+	};
+	};
+	};
+
+};
+
+function loadlevel() {
+
+	var leveldata = "";
+
+	var dimensionbegin = 0;
+	var dimensionend = 0;
+	var dimensions = "";
+	
+	color0 = "";
+	color1 = "";
+	var coloroffset = 9;
+
+	var terrainbegin = 0;
+	var terrain = "";
+	var terrainraw = "";
+	var rawterrain = [];
+	var terraintypes = [];
+	
+	var highestlength = 0;
+	var longestterrain = 0;
+	var currenttiletype = "";
+
+	var skipdeobfuscation = 0;
+	
+	var normal = 1;
+	
+	editortiletype = "bouncy";
+	customTypes = [];
+	var currentCustom = 1;
+
+	var invalid = 0;
+
+	leveldisplay.innerHTML = "";
+	leveldata = document.getElementById("leveldatasubmission").value.toString();
+	leveldata = leveldata.replace(/\\/g, "/");
+	dimensionbegin = leveldata.search("tunnel") + 6;
+	dimensionend = leveldata.slice(dimensionbegin);
+	//Thank you, Javascript. I didn't like convenience anyways.
+	dimensionend = dimensionend.search("\\|") + dimensionbegin;
+	dimensions = leveldata.slice(dimensionbegin,dimensionend);
+	dimensions = dimensions.split(",");
+	
+	if ( !dimensions[0] || !dimensions[1] ) {
+		
+		document.getElementById("leveldatasubmission").value = "";
+		
+		alert("Try using a Run 3 level this time.");
+		
+		invalid = 1;
+	
+	};
+	
+	if ( invalid == 0 ) {
+	
+	//Parsing tile colors:
+	
+		color0 = leveldata.search("color0");
+		color1 = leveldata.search("color1");
+		
+		//If "color0" isn't present then the level likely came from an earlier version of Run 3 - where there was only one color per level.
+		if ( color0 == -1 ) {
+		
+			color0 = leveldata.search("color");
+			coloroffset--;
+
+			//If there's no color tag at all, then the level likely came from an even earlier version of Run 3. Nothing can be done about this, sadly.
+			//The placeholder color in modern Run 3 is maximum white. For your eyes, I went with slightly-less-than-maximum white.
+			if ( color0 == -1 ) {
+
+				color0 = "DDDDDD";
+
+			} else {
+
+				color0 = leveldata.slice( (color0 + coloroffset), (color0 + coloroffset) + 6);
+
+			};
+
+			color1 = "DDDDDD";
+
+		} else {
+
+			color0 = leveldata.slice( (color0 + coloroffset), (color0 + coloroffset) + 6);
+			color1 = leveldata.slice( (color1 + coloroffset), (color1 + coloroffset) + 6);
+
+		};
+		
+	//Parsing the terrain data:
+	
+		terrainbegin = leveldata.search("terrain",dimensionend);
+		terrain = leveldata.slice(terrainbegin);
+		terrain = terrain.split("|");
+		
+		for ( let x = 0; x < terrain.length; x++ ) {
+		
+			if ( terrain[x].includes("terrain-pos-") === true ) {
+			
+				terrain[x] = terrain[x].slice(12);
+			
+			} else {
+			
+				terrain.splice(x,1);
+				skipdeobfuscation = 1;
+				x--;
+			
+			};
+		
+		if (skipdeobfuscation == 0) {
+			
+		//Deobfuscating the terrain data:
+			
+			for ( var y = 0; y < terrain[x].length; y++ ) {
+
+				switch (terrain[x][y]) {
+					case "*":
+						for ( var j = 1; terrain[x][y+j] == "*"; j++ ) {
+						};
+						setmultiplier(terrain[x][y+j]);
+						terrain[x] = terrain[x].slice(0,y) + terrain[x].slice(y-j,y).repeat(multiplier) + terrain[x].slice(y+j+1);
+						y--;
+						break;
+					case "~":
+						normal = 0;
+						
+						terraintypes.push( terrain[x].slice(y+1) );
+						
+						if (y > highestlength) {
+						
+							highestlength = y;
+							longestterrain = x;
+						
+						};
+						
+						y = terrain[x].length;
+						break;
+					case "0":
+						terrainraw += "000000";
+						break;
+					case "1":
+						terrainraw += "000001";
+						break;
+					case "2":
+						terrainraw += "000010";
+						break;
+					case "3":
+						terrainraw += "000011";
+						break;
+					case "4":
+						terrainraw += "000100";
+						break;
+					case "5":
+						terrainraw += "000101";
+						break;
+					case "6":
+						terrainraw += "000110";
+						break;
+					case "7":
+						terrainraw += "000111";
+						break;
+					case "8":
+						terrainraw += "001000";
+						break;
+					case "9":
+						terrainraw += "001001";
+						break;
+					case ":":
+						terrainraw += "001010";
+						break;
+					case ";":
+						terrainraw += "001011";
+						break;
+					case "<":
+						terrainraw += "001100";
+						break;
+					case "=":
+						terrainraw += "001101";
+						break;
+					case ">":
+						terrainraw += "001110";
+						break;
+					case "?":
+						terrainraw += "001111";
+						break;
+					case "@":
+						terrainraw += "010000";
+						break;
+					case "A":
+						terrainraw += "010001";
+						break;
+					case "B":
+						terrainraw += "010010";
+						break;
+					case "C":
+						terrainraw += "010011";
+						break;
+					case "D":
+						terrainraw += "010100";
+						break;
+					case "E":
+						terrainraw += "010101";
+						break;
+					case "F":
+						terrainraw += "010110";
+						break;
+					case "G":
+						terrainraw += "010111";
+						break;
+					case "H":
+						terrainraw += "011000";
+						break;
+					case "I":
+						terrainraw += "011001";
+						break;
+					case "J":
+						terrainraw += "011010";
+						break;
+					case "K":
+						terrainraw += "011011";
+						break;
+					case "L":
+						terrainraw += "011100";
+						break;
+					case "M":
+						terrainraw += "011101";
+						break;
+					case "N":
+						terrainraw += "011110";
+						break;
+					case "O":
+						terrainraw += "011111";
+						break;
+					case "P":
+						terrainraw += "100000";
+						break;
+					case "Q":
+						terrainraw += "100001";
+						break;
+					case "R":
+						terrainraw += "100010";
+						break;
+					case "S":
+						terrainraw += "100011";
+						break;
+					case "T":
+						terrainraw += "100100";
+						break;
+					case "U":
+						terrainraw += "100101";
+						break;
+					case "V":
+						terrainraw += "100110";
+						break;
+					case "W":
+						terrainraw += "100111";
+						break;
+					case "X":
+						terrainraw += "101000";
+						break;
+					case "Y":
+						terrainraw += "101001";
+						break;
+					case "Z":
+						terrainraw += "101010";
+						break;
+					case "[":
+						terrainraw += "101011";
+						break;
+					case "/":
+						terrainraw += "101100";
+						break;
+					case "]":
+						terrainraw += "101101";
+						break;
+					case "^":
+						terrainraw += "101110";
+						break;
+					case "_":
+						terrainraw += "101111";
+						break;
+					case "`":
+						terrainraw += "110000";
+						break;
+					case "a":
+						terrainraw += "110001";
+						break;
+					case "b":
+						terrainraw += "110010";
+						break;
+					case "c":
+						terrainraw += "110011";
+						break;
+					case "d":
+						terrainraw += "110100";
+						break;
+					case "e":
+						terrainraw += "110101";
+						break;
+					case "f":
+						terrainraw += "110110";
+						break;
+					case "g":
+						terrainraw += "110111";
+						break;
+					case "h":
+						terrainraw += "111000";
+						break;
+					case "i":
+						terrainraw += "111001";
+						break;
+					case "j":
+						terrainraw += "111010";
+						break;
+					case "k":
+						terrainraw += "111011";
+						break;
+					case "l":
+						terrainraw += "111100";
+						break;
+					case "m":
+						terrainraw += "111101";
+						break;
+					case "n":
+						terrainraw += "111110";
+						break;
+					case "o":
+						terrainraw += "111111";
+						break;
+				};
+			
+			};
+		
+		if ( normal > 0 ) {
+		
+		terraintypes.push( "default" );
+						
+			if ( y > highestlength ) {
+						
+				highestlength = y;
+				longestterrain = x;
+						
+			};
+		};
+		
+		normal = 1;
+			
+		rawterrain.push(terrainraw);
+		terrainraw = "";
+		
+		};
+		
+	skipdeobfuscation = 0;
+	};
+	
+//Set up the sides to display the level:
+
+	var dimensionsOverall = dimensions[0] * dimensions[1] + 1;
+
+	for ( var i = 1; i < dimensionsOverall; i++ ) {
+	
+		if ( i % dimensions[1] === 1 ) {
+		
+			leveldisplay.appendChild( document.createElement("hr") );
+		
+		};
+		
+		var div = document.createElement("div");
+		div.style.width = "max-content";
+		div.style.height = "2vw";
+		div.id = "strip" + (dimensionsOverall - i);
+		leveldisplay.appendChild(div);
+	};
+	
+	var sidereset = 1;
+	
+	//Determine the tile type of the longest terrain:
+	
+		if ( document.getElementsByClassName(terraintypes[longestterrain][0]) == undefined ) {
+
+			currenttiletype = "custom" + currentCustom;
+			customTypes.push(terraintypes[longestterrain]);
+			
+			currentCustom++;
+	
+		} else {
+	
+			currenttiletype = terraintypes[longestterrain];
+		
+		};
+	
+//Display the level:
+
+	//Starting with the longest of the terrain datas - to establish all the voids that will ever be in the level.
+	for ( var i = 0; i < rawterrain[longestterrain].length; i++ ) {
+
+		var side = document.getElementById("strip" + sidereset);
+			sidereset++;
+			
+		if ( rawterrain[longestterrain][i] > 0 ) {
+			
+			side.insertAdjacentHTML("beforeend","<div class='tile " + currenttiletype + "' onclick='changetile()' style='background-color:#" + color0 + ";'>&nbsp;</div>");
+			
+		} else {
+			
+			side.insertAdjacentHTML("beforeend","<div class='tile' onclick='changetile()' style='background-color:#" + color0 + ";'>&nbsp;</div>");
+			
+		}
+			
+		if ( sidereset > ( dimensions[0] * dimensions[1] ) ) {
+			
+			sidereset = 1;
+			
+		};
+		
+	};
+	
+	//Clearing the terrain data we've already mapped to prevent the following iterator from using it again.
+	rawterrain[longestterrain] = "";
+	
+	//Said following iterator.
+	for ( let x = 0; x < rawterrain.length; x++ ) {
+	
+		sidereset = 1;
+		let tiletoselect = 0;
+	
+		if ( document.getElementsByClassName(terraintypes[x])[0] == undefined ) {
+
+			currenttiletype = "custom" + currentCustom;
+			customTypes.push(terraintypes[x]);
+
+			currentCustom++;
+	
+		} else {
+	
+			currenttiletype = terraintypes[x];
+		
+		};
+
+	
+		for ( let y = 0; y < rawterrain[x].length; y++ ) {
+		
+			var side = document.getElementById("strip" + sidereset);
+			sidereset++;
+			
+			if ( rawterrain[x][y] > 0 ) {
+			
+				side.getElementsByClassName("tile")[tiletoselect].classList.add(currenttiletype);
+			
+			};
+			
+			if ( sidereset > ( dimensions[0] * dimensions[1] ) ) {
+			
+				sidereset = 1;
+				tiletoselect++;
+			
+			};
+		
+		};
+	
+	};
+
+	//Color-1 - my arch nemesis.
+	if ( document.getElementsByClassName("color-1")[1] != undefined ) {
+	
+		for ( let x = 0; x < document.getElementsByClassName("color-1").length; x++ ) {
+		
+			document.getElementsByClassName("color-1")[x].setAttribute("style", "background-color:#" + color1 + ";" );
+		
+		};
+	
+	};
+	
+	//rotatedZBox - I never really got to know you, honestly.
+	if ( document.getElementsByClassName("rotatedZBox")[1] != undefined ) {
+	
+		for ( let x = 0; x < document.getElementsByClassName("rotatedZBox").length; x++ ) {
+		
+			document.getElementsByClassName("rotatedZBox")[x].setAttribute("style", "background-color:transparent;" );
+		
+		};
+	
+	};
+	
+		
+};
+
+invalid = 0;
+
+};
+</script>
