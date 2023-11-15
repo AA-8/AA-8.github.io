@@ -1,0 +1,5012 @@
+<!DOCTYPE html>
+<html>
+<style>
+body {
+
+	background-color: #222222;
+	color: #DDDDDD;
+	font-family: Comfortaa;
+	
+	overflow: hidden;
+
+}
+td {
+	border: 1px solid #2F5BDF;
+	background-color: black;
+
+	width: 9vh;
+	height: 9vh;
+	transition: width 0.2s ease, height 0.2s ease, background-color 2.5s ease;
+}
+
+h1 {
+
+	font-size: 4vh;
+
+}
+
+/* Neutral movement speed. */
+.piece {
+
+	transition: left 0.6s, bottom 0.6s;
+
+}
+
+/* Slow movement speed. */
+.piece.Child,.piece.Student,.piece.Lizard {
+
+	transition: left 1.2s, bottom 1.2s;
+
+}
+
+/* Fast movement speed. */
+.piece.Angel,.piece.Skater,.piece.Gentleman {
+
+	transition: left 0.3s, bottom 0.3s;
+
+}
+
+.enabled {
+
+	background-image: url("./highlight.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+
+}
+.lightbridge,.duplication {
+
+	background-image: url("./highlightspecial.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+
+}
+.glow {
+
+	background-image: url("./glow.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+
+}
+.Pit {
+
+	opacity:0;
+
+}
+
+.displayImage {
+
+	background-repeat: no-repeat;
+	background-size: 8vh;
+
+	height: 11vh;
+	width: 8vh;
+
+	pointer-events: none;
+
+}
+.selection_box {
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+
+}
+.selection {
+
+	border: 3px solid #666;
+	border-radius: 10px;
+	background-color: #EEE;
+	user-select: none;
+
+	width: 11vh;
+	height: 11vh;
+
+}
+.selection_combine {
+
+	height: 11vh;
+	width: 3vh;
+
+	border: 3px solid #666;
+	border-right: none;
+	border-left: none;
+	background-color: #EEE;
+
+}
+
+#options {
+
+	margin-top: 2vh;
+	margin-bottom: 2vh;
+	height: 8vh;
+	
+	user-select: none;
+
+}
+
+#options img {
+	
+	position: absolute;
+	z-index: 200;
+
+}
+#MainMenu {
+
+	height: 5vh;
+
+}
+#Settings {
+
+	height: 6vh;
+
+}
+#Header {
+
+	height: 6.5vh;
+
+}
+
+#container {
+
+	width: 100%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+}
+
+#board {
+
+	position: absolute;
+	height: 77.1625vh;
+	width: 96.4015vh;
+
+	bottom: 11vh;
+	
+}
+
+#players_info_box {
+
+	border: 3px solid #393939;
+	width: 50vh;
+	height: 76vh;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+
+	position: absolute;
+	bottom: 11.2vh;
+
+	opacity: 0;
+	transition: opacity 0.5s ease;
+	background-color: #222;
+
+}
+
+#players_purchase_box {
+
+	border: 3px solid #393939;
+	width: 50vh;
+	height: 76vh;
+
+	z-index: 200;
+	position: absolute;
+	bottom: 11.2vh;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	
+	background-color: #797979;
+	transition: background-color 0.25s ease, color 0.25s ease, opacity 0.5s ease;
+
+}
+#buy {
+
+	background-color: #797979;
+	color: #393939;
+
+	user-select: none;
+
+	font-size: 5vh;
+	text-align: center;
+
+	border: 3px solid #393939;
+	border-bottom: 3px solid #797979;
+	width: 24vh;
+	height: 6.46vh;
+
+	transition: background-color 0.25s ease, border 0.25s ease;
+
+}
+#sell {
+
+	background-color: #AAA;
+	color: gray;
+
+	user-select: none;
+
+	font-size: 5vh;
+	text-align: center;
+
+	border: 3px solid gray;
+	border-bottom: #797979;
+	width: 24vh;
+	height: 6.46vh;
+
+	transition: background-color 0.25s ease, border 0.25s ease;
+
+}
+#buysellContainer {
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	position: absolute;
+	z-index: 201;
+
+	transition: opacity 0.5s ease;
+
+}
+#powercellsPurchase {
+
+	height: 10.61vh;
+
+	font-size: 4vh;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+	user-select: none;
+
+}
+#CoolerPowercells {
+
+	color: gray;
+	background-color: #D5D5D5;
+
+	width: 30vh;
+	border: 3px solid gray;
+
+}
+#readyPurchase {
+
+	background-color: #797979;
+	color: #393939;
+	text-align: center;
+
+	width: 19vh;
+	border: 3px solid #393939;
+
+}
+
+#timer_player1, #powercells, #horizontal_hud_workaround {
+
+	margin: 2vh auto;
+	font-size: 4vh;
+	text-align: center;
+
+}
+
+#menu_player2 {
+
+	background-color: #797979;
+	color: #DDD;
+
+	order: 1;
+	border: 2px solid #DDD;
+
+}
+
+#horizontal_hud_workaround {
+
+	order: 2;
+
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	
+	width: 90%;
+	height: 100%;
+
+}
+
+#menu_player1 {
+
+	background-color: #DDD;
+	color: #797979;
+
+	order: 3;
+	border: 2px solid #797979;
+
+}
+
+#chess_gamers {
+
+	border: 3px solid gray;
+	width: 100%;
+	height: 90%;
+	order: 1;
+}
+
+#endgameCover {
+
+	background-image: url('./boarddone.png');
+	
+	z-index: 100;
+	position: absolute;
+	
+	top: 0;
+	height: 100%;
+	
+	opacity: 0;
+	transition: opacity 2s;
+
+}
+
+#thisgameswinneris {
+
+	position: absolute;
+	
+	background-color: #DDDDDD;
+	color: #222222;
+	
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+}
+
+/*
+#move_history {
+
+	border: 3px solid gray;
+	width: 30%;
+	height: 90%;
+	order: 2;
+}
+*/
+
+</style>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run Chess - (Almost There)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div id="options" align="center"><a href="./Chess.html"><img src="./MainMenu.png" id="MainMenu"></a></img><img src="./InfiniteMode.png" id="Header"></img><a href=""><img src="./Settings.png" id="Settings"></img></a></div>
+	<div id="container">
+		<div id="board" align="center">
+		<table>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		<tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+		</table>
+		</div>
+		<div id="buysellContainer">
+			<div id="buy" onclick="creditDebit(0)">
+			Buy
+			</div>
+			<div id="sell" onclick="creditDebit(1)">
+			Sell
+			</div>
+		</div>
+		<div id="players_purchase_box">
+			<br style="display:block;content:'';margin-top:2%;">
+			<div class="selection_box">
+				<div style="width:10vh;"><h1 style="margin-left:20%;color:#797979;transition:color 0.25s">500</h1></div>
+				<div class="selection" style="margin-left:4.7%;opacity:0.5;" onclick="sellPurchase('Runner')">
+				<br style="display:block;content:'';margin-top:9%;">
+				<center style="pointer-events:none;"><div style="background-image:url('./Runner_1.png');" class="displayImage"></div></center>
+				</div>
+				<div class="selection" style="opacity:0.5;" onclick="sellPurchase('Angel')">
+				<br style="display:block;content:'';margin-top:10%;">
+				<center style="pointer-events:none;"><div style="background-image:url('./Angel_1.png');" class="displayImage"></div></center>
+				</div>
+				<div class="selection" style="margin-right:4.7%;opacity:0.5;" onclick="sellPurchase('Duplicator')">
+				<br style="display:block;content:'';margin-top:1%;">
+				<center style="pointer-events:none;"><div style="background-image:url('./Duplicator_1.png');" class="displayImage"></div></center>
+				</div>
+			</div>
+			<div class="selection_box">
+				<div style="width:10vh;"><h1 style="opacity:0.25;margin-left:20%;color:#393939;transition:color 0.25s">1,000</h1></div>
+				<div class="selection" style="margin-left:4.7%;" onclick="sellPurchase('Pastafarian')">
+				<br style="display:block;content:'';margin-top:5%;">
+				<center style="pointer-events:none;"><div style="background-image:url('./Pastafarian_1.png');" class="displayImage"></div></center>
+				</div>
+				<div class="selection" onclick="sellPurchase('Bunny')">
+				<br style="display:block;content:'';margin-top:10%;">
+				<center style="pointer-events:none;"><div style="background-image:url('./Bunny_1.png');" class="displayImage"></div></center>
+				</div>
+				<div class="selection" style="margin-right:4.7%;" onclick="sellPurchase('Gentleman')">
+				<br style="display:block;content:'';margin-top:6%;">
+				<center style="pointer-events:none;"><div style="background-image:url('./Gentleman_1.png');" class="displayImage"></div></center>
+				</div>
+			</div>
+			<div class="selection_box">
+				<div style="width:10vh;"><h1 style="opacity:0.25;margin-left:20%;color:#393939;transition:color 0.25s">800</h1></div>
+				<div class="selection" style="margin-left:14.3%;" onclick="sellPurchase('Student')">
+				<br style="display:block;content:'';margin-top:16%;">
+				<center style="pointer-events:none;"><div style="background-image:url('./Student_1.png');" class="displayImage"></div></center>
+				</div>
+				<div class="selection" style="margin-right:15.8%;" onclick="sellPurchase('Lizard')">
+				<br style="display:block;content:'';margin-top:15%;">
+				<center style="pointer-events:none;"><div style="background-image:url('./Lizard_1.png');" class="displayImage"></div></center>
+				</div>
+			</div>
+			<div class="selection_box">
+				<div style="width:10vh;"><h1 style="opacity:0.25;margin-left:20%;color:#393939;transition:color 0.25s">600</h1></div>
+				<div class="selection" style="margin-left:14.3%;" onclick="sellPurchase('Child')">
+				<br style="display:block;content:'';margin-top:9%;">
+				<center style="pointer-events:none;"><div style="background-image:url('./Child_1.png');" class="displayImage"></div></center>
+				</div>
+				<div class="selection" style="margin-right:15.8%;" onclick="sellPurchase('Skater')">
+				<br style="display:block;content:'';margin-top:12.5%;">
+				<center style="pointer-events:none;"><div style="background-image:url('./Skater_1.png');" class="displayImage"></div></center>
+				</div>
+			</div>
+			<div id="powercellsPurchase">
+				<div id="CoolerPowercells" style="margin-top:2%;">
+					<div id="CoolestPowercells" style="margin-left:2vh;margin-top:2vh;">PC: 0</div>
+				</div>
+				<div id="readyPurchase" style="margin-top:2%;" onclick="startRound()">
+					<div style="margin-top:2vh;">Confirm</div>
+				</div>
+			</div>
+		</div>
+		<div id="players_info_box">
+			<div id="menu_player2">
+				<div id="timer_player1">5:00</div>
+			</div>
+			
+			<div id="horizontal_hud_workaround">
+				<div id="chess_gamers">
+					<div id="currentlevel">Level 1</div>
+				</div><!-- <div id="move_history"></div> -->
+			</div>
+			
+			<div id="menu_player1">
+				<div id="powercells">Powercells: 0</div>
+			</div>
+		</div>
+	</div>
+	<div id="endgameCover" style="visibility:hidden;">
+		<div id="thisgameswinneris"></div>
+	</div>
+</body>
+
+<script>
+//Space.
+var EndGame = document.querySelector("#endgameCover");
+var WinStripe = document.querySelector("#thisgameswinneris");
+
+var playersName = "P_1";
+
+//Time.
+var timeLeft_player1 = 300;
+var timeCache_player1 = 60;
+var secondsLeft_player1 = 0;
+var minutesLeft_player1 = 5;
+
+//Contiuum.
+var victories = 1;
+//TO-DO: Set this up.
+var historysVictories;
+
+var intermission = false;
+
+var playerBox = document.querySelector('#players_info_box');
+var purchaseBox = document.querySelector('#players_purchase_box');
+var buysell = document.querySelector('#buysellContainer');
+
+var powercells = 0;
+var powercellCounter = playerBox.querySelector("#powercells");
+var shopPowercells = purchaseBox.querySelector('#CoolestPowercells');
+
+var currentLevel = playerBox.querySelector("#currentlevel");
+
+var timerId;
+var timer = playerBox.querySelector("#timer_player1");
+
+var currentPlayer;
+
+	function countdown() {
+		
+		if (current == 1) {
+		
+			timeLeft_player1--;
+
+			if (secondsLeft_player1 > 0) {
+				secondsLeft_player1--;
+				if (secondsLeft_player1 < 10) {
+					//Skips the checks from 59 seconds to 11 seconds. A devious optimization.
+					if (timeLeft_player1 == 0) {
+			
+						currentPlayer = 0;
+		       			clearInterval(timerId);
+		       			EndGame.style.visibility = "visible";
+		       			EndGame.style.opacity = 1;
+		       			//TO-DO: Loss by timeout.
+		       			WinStripe.innerHTML = "<h1>Time's up! You suck!</h1>";
+						return;
+		       	
+					} else {
+						timer.innerHTML = minutesLeft_player1 + ":0" + secondsLeft_player1;
+					}
+
+				} else {
+					timer.innerHTML = minutesLeft_player1 + ":" + secondsLeft_player1;
+				}
+			} else {
+				secondsLeft_player1 = 59;
+				minutesLeft_player1--;
+				timer.innerHTML = minutesLeft_player1 + ":" + secondsLeft_player1;
+			}
+		
+		}
+
+	}
+
+var intermissionLevels = ["The Heist/15,0x4,25,0,0,16,20,25,25,0x4,21,0,25,25,0x10,1x20,0x14,9,11,0x7,6,5,4,10,",
+"Walk/1x22,24,22,20,19,15,1x5,25x5,1x5,12x5,1x5,2,6,7,9,11,1x23,",
+"A Tale of Two Tunnels/24,20,21,22,1,1,0,23,16,15,0,0,25,0,1,1,25x4,0x4,1,1,0x8,6,19,0x8,4,17,0x8,1,1,0x4,12x4,1,1,0,0,12,0,2,3,10,0,1,1,9,8,7,11,",
+"Chess/1,23,21,16,15,20,16,21,17,1,1,25x8,1,1,0x8,1,1,0x8,1,1,0x8,1,1,0x8,1,1,12x8,1,1,4,8,3,7,2,3,8,10,1,",
+"Bunny Hall Problem/18,0,1,1,18,0,1,1,15,24,0,0,1,1,0,0,1,1,20,0x3,1,1,0,0,1,1,25,25,0,0,1,1,0,0,1,1,0x4,1,1,0,0,1,1,0x4,1,1,0,0,1,1,0x7,12x5,3,2,4,6,5,8,7,10,11,9,",
+"Chokepoint/22,15,23,20,21,18,19,17,15,16,25x5,1x3,0,1x4,0,1,1,0x3,1,1,0x3,1,1,0x3,1,1,0x3,1,1,0x3,1,1,0x3,1,1,0,1x4,0,1x3,12x5,3,2,4,6,5,8,7,10,11,9,",
+"A Last Run/25x4,20,19,25x24,0x4,24,15,0x4,1,0x8,1x3,0x6,1x5,7,12x3,1x7,2,11,1x4,",
+"Two Apples A Day/1x3,20,1x8,25,1x7,0,0,22,15,1,1,15,22,0,0,25x4,1,1,25x4,12x4,1,1,12x4,2,9,0,0,1,1,0,0,9,2,1x7,12,1x8,7,1x3,"];
+
+//Set-up board and game logic.
+var board = document.querySelector('#board');
+var cells = board.querySelectorAll('td');
+
+var activepiece = -1;
+var current = 1;
+var currentClass = "_1";
+var notcurrentClass = "_-1";
+
+var duplicates = [0,0]; //Player 1, player 2. Scalable.
+var leftPieces = [0,0,0,0,0,0,0]; //Pastafarian, Bunny, Gentleman, Student, Lizard, Child, Skater.
+var soldPieces = [0,0,0,0,0,0,0,0]; //Runner/Angel/Duplicator, Pastafarian, etc.
+
+var pastafarianBridgesUsed = 0;
+var bridgeChange = 0;
+var lightbridge = 0;
+
+var VitalPieces = [2,0];
+
+var playersType = [2,1];
+//0 -> Not you.
+//1 -> Bot.
+//2 -> You.
+currentPlayer = playersType[0];
+
+var playerPlayerplayerPlayer = 0;
+var playerSwitcher = 1;
+
+//Winning functions.
+	function sorry() {
+		let allPieces = document.getElementsByClassName("piece");
+		for (let i = 0; i < allPieces.length; i++) {
+
+			numbertile = allPieces[i].id;
+			numbertile = numbertile.substr(5);
+			let cellCoordinates = cells[parseInt(numbertile)].getBoundingClientRect();
+
+			allPieces[i].style.bottom = (window.innerHeight - cellCoordinates.top) - (window.innerHeight * 0.09) + "px";
+			allPieces[i].style.left = cellCoordinates.left - (window.innerHeight * 0.001) + "px";
+
+		}
+		if (intermission == false) {
+			//Update store.
+			if (currentMode == 1) {
+				BuyNow.style.borderBottom = "3px solid #797979";
+				BuyNow.style.backgroundColor = "#797979";
+				SellSellSell.style.borderBottom = "3px solid #393939";
+				SellSellSell.style.backgroundColor = "#AAA";
+				purchaseBox.style.backgroundColor = "#797979";
+				purchaseBox.style.border = "3px solid #393939";
+
+				for (let i = 1; i < 4; i++) {
+					priceTags[i].style.color = "#393939";
+				}
+				priceTags[0].style.color = "#797979";
+				priceTags[1].innerHTML = "1,000";
+				priceTags[2].innerHTML = "800";
+				priceTags[3].innerHTML = "600";
+
+				currentMode = 0;
+			}
+			characters[0].style.opacity = 0.5;
+			characters[1].style.opacity = 0.5;
+			characters[2].style.opacity = 0.5;
+			for (i = 3; i < 10; i++) {
+				if (leftPieces[i-3] == 0) {
+					characters[i].style.opacity = 1;
+				} else {
+					characters[i].style.opacity = 0.5;
+				}
+			}
+			//Update price tags based on amount of powercells.
+			if (powercells < 1000) {
+				priceTags[1].style.opacity = 0.25;
+				if (powercells < 800) {
+					priceTags[2].style.opacity = 0.25;
+					if (powercells < 600) {
+						priceTags[3].style.opacity = 0.25;
+					} else {
+						priceTags[3].style.opacity = 1;
+					}
+				} else {
+					priceTags[2].style.opacity = 1;
+					priceTags[3].style.opacity = 1;
+				}
+			} else {
+				priceTags[1].style.opacity = 1;
+				priceTags[2].style.opacity = 1;
+				priceTags[3].style.opacity = 1;
+			}
+
+			shopPowercells.innerHTML = "PC: " + powercells;
+			soldPieces = [0,0,0,0,0,0,0,0];
+
+			//Display shop.
+			playerBox.style.opacity = 0;
+			purchaseBox.style.opacity = 1;
+			buysell.style.opacity = 1;
+
+			purchaseBox.style.visibility = "visible";
+			buysell.style.visibility = "visible";
+
+			currentLevel.innerHTML = "Level " + victories;
+
+			roundStarted = 0;
+		} else {
+			currentLevel.innerHTML = "Level " + victories + "<br><sup>" + levelName + "</sup>";
+
+			currentPlayer = 2;
+			setTimeout( () => { timerId = setInterval(countdown, 1000); }, 1000);
+
+			colorBoard(lightcolor, "#FD3311");
+		}
+		timeLeft_player1 = 300;
+		timeCache_player1 = 60;
+
+		secondsLeft_player1 = 0;
+		minutesLeft_player1 = 5;
+		timer.innerHTML = "5:00";
+	}
+var boardLocation;
+var boardIncrement = Math.ceil(window.innerWidth * 0.01);
+	function lastOneForWinningISwear() {
+
+		if ( boardLocation - boardIncrement < boardAndBeans ) {
+			board.style.left = boardAndBeans + "px";
+			setTimeout(sorry, 100);
+			return;
+		}
+		boardLocation -= boardIncrement;
+		board.style.left = boardLocation + "px";
+
+		setTimeout(lastOneForWinningISwear, 20);
+
+	}
+var DuplicatorUsed = false;
+var AngelUsed = false;
+
+var randomizedPiece;
+var pitPlace;
+var NothingAhead;
+	function randomizeBoard() {
+
+		duplicatePowerCellCap = 0;
+
+		var maxOpponentValue = victories + 0.5;
+		if (maxOpponentValue > 23.5) {
+			maxOpponentValue = 23.5;
+		}
+
+		//Piece roles:
+		var backLines = ["Runner"];
+		var protection = [];
+		var protectionUsed = 0;
+		var duplicateSide = [];
+		var availablePieces = [];
+		VitalPieces[1] = 1;
+
+		//Randomize the opponent's pieces based on their value and a given value, maxOpponentValue.
+		while (maxOpponentValue > 0) {
+
+			//Only randomize between what can be afforded.
+			if (maxOpponentValue < 5) {
+
+					if (maxOpponentValue > 3.5) {
+						randomizedPiece = Math.floor(Math.random() * 8);
+					} else
+						
+					if (maxOpponentValue > 2) {
+						randomizedPiece = Math.floor(Math.random() * 7);
+					} else
+						
+					if (maxOpponentValue > 1.5) {
+						randomizedPiece = Math.floor(Math.random() * 4);
+					} else
+						
+					if (maxOpponentValue > 1) {
+						randomizedPiece = Math.floor(Math.random() * 2);
+					} else {
+
+						break;
+					}
+
+	
+			} else {
+	
+				randomizedPiece = Math.floor(Math.random() * 9 - AngelUsed);
+	
+			}
+			
+			switch (randomizedPiece) {
+				case 0:
+					availablePieces.push("Skater");
+					maxOpponentValue -= 1.5;
+					break;
+				case 1:
+					availablePieces.push("Child");
+					maxOpponentValue -= 1.5;
+					break;
+				case 2:
+					availablePieces.push("Student");
+					maxOpponentValue -= 2;
+					break;
+				case 3:
+					availablePieces.push("Lizard");
+					maxOpponentValue -= 2;
+					break;
+				case 4:
+					backLines.push("Bunny");
+					maxOpponentValue -= 2.5;
+					break;
+				case 5:
+					availablePieces.push("Pastafarian");
+					maxOpponentValue -= 2.5;
+					break;
+				case 6:
+					duplicateSide.push("Gentleman");
+					maxOpponentValue -= 2.5;
+					break;
+				case 7:
+					if (!DuplicatorUsed) {
+						backLines.push("Duplicator");
+						duplicates[1] = 5;
+						protectionUsed = 5;
+						maxOpponentValue -= 4;
+
+						DuplicatorUsed = true;
+					} else {
+	
+						//The Duplicator gives his extra invitations to the Child(ren).
+						//The alternative is to roll another number, 0 through 6. It's funnier this way.
+						availablePieces.push("Child");
+						maxOpponentValue -= 1.5;
+	
+					}
+					break;
+				case 8:
+					availablePieces.push("Angel");
+					maxOpponentValue -= 5;
+
+					VitalPieces[1]++;
+					AngelUsed = true;
+					break;
+			}
+
+		}
+		AngelUsed = false;
+		DuplicatorUsed = false;
+		
+		//Insert pit generation here.
+		maxOpponentValue = Math.floor(victories * 0.4);
+		if (maxOpponentValue > 16) {
+			maxOpponentValue = 16;
+		}
+
+		var pitPlacePast = [20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59];
+
+		for (let i = 0; i < maxOpponentValue; i++) {
+			pitPlace = Math.floor( Math.random() * 40 );
+
+			if (pitPlacePast[pitPlace] == -1) {
+				for (let j = pitPlace + 1; j < 60; j++) {
+					if (pitPlacePast[j] > 0) {
+						cells[ pitPlacePast[j] ].classList.add ("Pit");
+						pitPlacePast[j] = -1;
+						break;
+					}
+				}
+			} else {
+				cells[ pitPlacePast[pitPlace] ].classList.add ("Pit");
+				pitPlacePast[pitPlace] = -1;
+			}
+		}
+
+	//Place pieces.
+		//Ensure there are no pit pieces.
+		var piecesPlacePast = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
+		for (let k = 0; k < 10; k++) {
+			piecesPlacePast.push( pitPlacePast[k] );
+		}
+
+		var firstTenRemaining = 10;
+		var primaryPiecesUsed = availablePieces.length - 1;
+
+	//Highest priority: place the Gentlemen in positions that won't immediately end your run.
+		var gentlemansRules = [5,6,15];
+		if (duplicateSide.length < 4) {
+			for (let j = 0; j < duplicateSide.length; j++) {
+				if (j < 2) {
+					firstTenRemaining--;
+				}
+				gentlemanTemp = gentlemansRules[j];
+
+				ThePiecePlacer(gentlemanTemp, "_-1", "Gentleman");
+				piecesPlacePast[gentlemanTemp] = -1;
+			}
+		} else {
+			firstTenRemaining = 7;
+			gentlemanTemp = duplicateSide.length - 3;
+
+			for (let j = 0; j < 3; j++) {
+				ThePiecePlacer( gentlemansRules[j], "_-1", "Gentleman");
+				piecesPlacePast[gentlemansRules[j]] = -1;
+			}
+			//Place the remaining Gentleman wherever. It doesn't matter.
+			while (gentlemanTemp > 0) {
+				NothingAhead = false;
+				randomizedPiece = Math.floor( Math.random() * 30 );
+				
+				for (let j = randomizedPiece; j < 30; j++) {
+					if (piecesPlacePast[j] > -1) {
+						if (j < 10) {
+							firstTenRemaining--;
+						}
+						ThePiecePlacer(j, "_-1", "Gentleman");
+						piecesPlacePast[j] = -1;
+
+						NothingAhead = true;
+						break;
+					}
+				}
+				if (NothingAhead == false) {
+					for (let j = randomizedPiece; j > -1; j--) {
+						if (piecesPlacePast[j] > -1) {
+							if (j < 10) {
+								firstTenRemaining--;
+							}
+							ThePiecePlacer(j, "_-1", "Gentleman");
+							piecesPlacePast[j] = -1;
+							break;
+						}
+					}
+				}
+			gentlemanTemp--;
+			}
+		}
+		
+	//Place the backline. Then protect them with our finest soldiers.
+		gentlemanTemp = backLines.length;
+		//It looks big and awful, but I believe it's the most efficient way. And therefore not awful.
+		if (gentlemanTemp <= firstTenRemaining) {
+
+			for (let k = 0; k < gentlemanTemp; k++) {
+				NothingAhead = false;
+				randomizedPiece = Math.floor( Math.random() * 10 );
+
+				for (let j = randomizedPiece; j < 10; j++) {
+					if (piecesPlacePast[j] > -1) {
+						ThePiecePlacer(j, "_-1", backLines[k]);
+						piecesPlacePast[j] = -1;
+
+						if (piecesPlacePast[j + 10] != -1) {
+							if (protectionUsed > 0) {
+								ThePiecePlacer(j + 10, "_-1", "Duplicate");
+								protectionUsed--;
+
+								piecesPlacePast[j + 10] = -1;
+							} else {
+							if (primaryPiecesUsed > -1) {
+								ThePiecePlacer(j + 10, "_-1", availablePieces[primaryPiecesUsed]);
+								primaryPiecesUsed--;
+
+								piecesPlacePast[j + 10] = -1;
+							}
+							}
+						}
+
+						NothingAhead = true;
+						break;
+					}
+				}
+				if (NothingAhead == false) {
+					for (let j = randomizedPiece; j > -1; j--) {
+						if (piecesPlacePast[j] > -1) {
+							ThePiecePlacer(j, "_-1", backLines[k]);
+							piecesPlacePast[j] = -1;
+
+							if (piecesPlacePast[j + 10] != -1) {
+								if (protectionUsed > 0) {
+									ThePiecePlacer(j + 10, "_-1", "Duplicate");
+									protectionUsed--;
+
+									piecesPlacePast[j + 10] = -1;
+								} else {
+								if (primaryPiecesUsed > -1) {
+									ThePiecePlacer(j + 10, "_-1", availablePieces[primaryPiecesUsed]);
+									primaryPiecesUsed--;
+
+									piecesPlacePast[j + 10] = -1;
+								}
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+
+		} else {
+		
+			for (let k = 0; k < firstTenRemaining; k++) {
+				NothingAhead = false;
+				randomizedPiece = Math.floor( Math.random() * 10 );
+
+				for (let j = randomizedPiece; j < 10; j++) {
+					if (piecesPlacePast[j] != -1) {
+						ThePiecePlacer(j, "_-1", backLines[k]);
+						piecesPlacePast[j] = -1;
+						
+						if (piecesPlacePast[j + 10] != -1) {
+							if (protectionUsed > 0) {
+								ThePiecePlacer(j + 10, "_-1", "Duplicate");
+								protectionUsed--;
+
+								piecesPlacePast[j + 10] = -1;
+							} else {
+							if (primaryPiecesUsed > -1) {
+								ThePiecePlacer(j + 10, "_-1", availablePieces[primaryPiecesUsed]);
+								primaryPiecesUsed--;
+
+								piecesPlacePast[j + 10] = -1;
+							}
+							}
+						}
+
+						NothingAhead = true;
+						break;
+					}
+				}
+				if (NothingAhead == false) {
+					for (let j = randomizedPiece; j > -1; j--) {
+						if (piecesPlacePast[j] != -1) {
+							ThePiecePlacer(j, "_-1", backLines[k]);
+							piecesPlacePast[j] = -1;
+
+							if (piecesPlacePast[j + 10] != -1) {
+								if (protectionUsed > 0) {
+									ThePiecePlacer(j + 10, "_-1", "Duplicate");
+									protectionUsed--;
+
+									piecesPlacePast[j + 10] = -1;
+								} else {
+								if (primaryPiecesUsed > -1) {
+									ThePiecePlacer(j + 10, "_-1", availablePieces[primaryPiecesUsed]);
+									primaryPiecesUsed--;
+
+									piecesPlacePast[j + 10] = -1;
+								}
+								}
+							}
+							break;
+						}
+					}
+				}
+			}
+			for (let k = firstTenRemaining; k < gentlemanTemp; k++) {
+				NothingAhead = false;
+				randomizedPiece = Math.floor( Math.random() * 20 ) + 10;
+				for (let j = randomizedPiece; j < 30; j++) {
+					if (piecesPlacePast[j] > -1) {
+						ThePiecePlacer(j, "_-1", backLines[k]);
+						piecesPlacePast[j] = -1;
+						NothingAhead = true;
+						break;
+					}
+				}
+				if (NothingAhead == false) {
+					for (let j = randomizedPiece; j > -1; j--) {
+						if (piecesPlacePast[j] > -1) {
+							ThePiecePlacer(j, "_-1", backLines[k]);
+							piecesPlacePast[j] = -1;
+							break;
+						}
+					}
+				}
+			}
+		
+		}
+		
+		//Place the remaining Duplicates, should there be any spares.
+		while (protectionUsed > 0) {
+			randomizedPiece = Math.floor( Math.random() * 20 ) + 10;
+			
+			for (let j = randomizedPiece; j < 30; j++) {
+				if (piecesPlacePast[j] > -1) {
+					ThePiecePlacer(j, "_-1", "Duplicate");
+					piecesPlacePast[j] = -1;
+					NothingAhead = true;
+					break;
+				}
+			}
+			if (NothingAhead == false) {
+				for (let j = randomizedPiece; j > -1; j--) {
+					if (piecesPlacePast[j] > -1) {
+						ThePiecePlacer(j, "_-1", "Duplicate");
+						piecesPlacePast[j] = -1;
+						break;
+					}
+				}
+			}
+			protectionUsed--;
+		}
+		
+		//Place the rest of the pieces.
+		for (let k = primaryPiecesUsed; k > -1; k--) {
+			NothingAhead = false;
+			randomizedPiece = Math.floor( Math.random() * 30 );
+			for (let j = randomizedPiece; j < 30; j++) {
+				if (piecesPlacePast[j] > -1) {
+					ThePiecePlacer(j, "_-1", availablePieces[k]);
+					piecesPlacePast[j] = -1;
+					NothingAhead = true;
+					break;
+				}
+			}
+			if (NothingAhead == false) {
+				for (let j = randomizedPiece; j > -1; j--) {
+					if (piecesPlacePast[j] > -1) {
+						ThePiecePlacer(j, "_-1", availablePieces[k]);
+						piecesPlacePast[j] = -1;
+						break;
+					}
+				}
+			}
+		}
+		//It's over.
+		VitalPieces[0] = 2;
+		duplicates[0] = 5;
+		ThePiecePlacer(65, "_1" , "Duplicate");
+		ThePiecePlacer(66, "_1" , "Duplicate");
+		ThePiecePlacer(67, "_1" , "Duplicate");
+		ThePiecePlacer(68, "_1" , "Duplicate");
+		ThePiecePlacer(69, "_1" , "Duplicate");
+		ThePiecePlacer(76, "_1" , "Duplicator");
+		ThePiecePlacer(71, "_1" , "Runner");
+		ThePiecePlacer(78, "_1" , "Angel");
+		if (leftPieces[0] > 0) {
+			ThePiecePlacer(79, "_1" , "Pastafarian");
+		}
+		if (leftPieces[1] > 0) {
+			ThePiecePlacer(75, "_1" , "Bunny");
+		}
+		if (leftPieces[2] > 0) {
+			ThePiecePlacer(73, "_1" , "Gentleman");
+		}
+		if (leftPieces[3] > 0) {
+			ThePiecePlacer(77, "_1" , "Student");
+		}
+		if (leftPieces[4] > 0) {
+			ThePiecePlacer(72, "_1" , "Lizard");
+		}
+		if (leftPieces[5] > 0) {
+			ThePiecePlacer(74, "_1" , "Child");
+		}
+		if (leftPieces[6] > 0) {
+			ThePiecePlacer(70, "_1" , "Skater");
+		}
+	}
+var pitPrison;
+	function ILied() {
+		//Clear the remaining pits.
+		for (i = 0; i < pitPrison.length; i++) {
+			cells[ pitPrison[i] ].removeAttribute("class");
+		}
+
+		//Set the board state to an intermission level every 5 victories.
+		if (victories % 5 == 0) {
+			intermission = true;
+			boardImportation( intermissionLevels[ Math.floor(Math.random() * 8) ] );
+
+			for (let z = 0; z < 80; z++) {
+				cells[z].style.border = "1px solid #DB1100";
+			}
+		} else {
+			if (victories % 5 == 1) {
+				intermission = false;
+
+				for (let z = 0; z < 80; z++) {
+					cells[z].style.border = "1px solid #2F5BDF";
+				}
+			}
+			randomizeBoard();
+		}
+
+		lastOneForWinningISwear();
+	}
+	function dinner() {
+
+		boardLocation -= boardIncrement;
+		board.style.left = boardLocation + "px";
+
+		if (boardLocation < (window.innerHeight * -0.97) ) {
+			boardLocation = window.innerWidth + (window.innerHeight * 0.97);
+			setTimeout(ILied, 40);
+			return;
+		}
+		setTimeout(dinner, 20);
+
+	}
+var currentRow;
+	function chicken() {
+
+	//Clear previous row.
+		var previousRow = currentRow - 10;
+		for (let i = previousRow; i < currentRow; i++) {
+			//Not pit.
+			if (cells[i].classList.length != 2) {
+				cells[i].removeAttribute("class");
+			} else {
+				pitPrison.push(i);
+			}
+		}
+
+	//Fill in next row.
+		if (currentRow > 79) {
+			boardLocation = boardAndBeans;
+			setTimeout(dinner, 100);
+			return;
+		}
+		var futureRow = currentRow + 10;
+		for (let i = currentRow; i < futureRow; i++) {
+			//If piece.
+			if (cells[i].classList.length > 1) {
+				var pieceToRemove = document.querySelector("#piece" + i);
+				pieceToRemove.remove();
+			}
+			//Add glow.
+			cells[i].classList.add("glow");
+		}
+	
+	//Call itself for the next row.
+		currentRow += 10;
+		setTimeout(chicken, 100);
+
+	}
+	function winner() {
+		pitPrison = [];
+		for (let i = 0; i < 10; i++) {
+			//If piece.
+			if (cells[i].classList.length > 1) {
+				var pieceToRemove = document.querySelector("#piece" + i);
+				pieceToRemove.remove();
+			}
+			//Add glow.
+			cells[i].classList.add("glow");
+		}
+		currentRow = 10;
+		setTimeout(chicken, 100);
+	}
+
+var tempVARforBoardWriting1 = 0;
+var tempVARforBoardWriting2 = 0;
+
+//CPU related variables. Obviously.
+var CPUCurrentBoard = [];
+var CPUWriteableBoard = [];
+
+var CPUOriginalTeam;
+
+var CPUCurrentMoveWeight = 0;
+var CPUBestMoveWeight = [];
+var CPUBestSummed = -100;
+
+var CPUIsSpecialMove = 0; //0 - No. | 1 - Duplicator summoning ritual. | 2 - Pastafarian bridge.
+
+var CPUMoveHistory = [];
+var CPUpossibleMoves = [];
+
+var CPUDecision = 0;
+
+//Unused.
+var CPUDepth = 0; //Measured in turns.
+var CPUDesiredDepth = 6;
+
+	function AI_Apply_Weight(base, destination) {
+
+		CPUCurrentMoveWeight = 0;
+
+		//Summoning ritual.
+		if (CPUIsSpecialMove == 1) {
+
+			CPUCurrentMoveWeight += 0.25;
+
+		} else {
+
+		//Pushing forwards.
+		if (current == -1) {
+			CPUCurrentMoveWeight += (destination - base) / 1000;
+		} else {
+			CPUCurrentMoveWeight += (base - destination) / 1000;
+		}
+		
+		//Capture.
+		if (CPUWriteableBoard[destination][1] == notcurrentClass) {
+
+			switch ( CPUWriteableBoard[destination][0] ) {
+
+				case "Duplicate":
+					CPUCurrentMoveWeight += 0.25;
+					break;
+				case "Skater":
+				case "Child":
+					CPUCurrentMoveWeight += 1.5;
+					break;
+				case "Lizard":
+				case "Student":
+					CPUCurrentMoveWeight += 2;
+					break;
+				case "Gentleman":
+				case "Bunny":
+				case "Pastafarian":
+				case "broken3":
+				case "broken2":
+				case "broken1":
+					CPUCurrentMoveWeight += 2.5;
+					break;
+				case "Duplicator":
+					CPUCurrentMoveWeight += 4;
+					break;
+				case "Runner":
+				case "Angel":
+					if (current == 1) {
+						if (VitalPieces[1] == 1) {
+							CPUCurrentMoveWeight += 100;
+						} else {
+							CPUCurrentMoveWeight += 5;
+						}
+					} else {
+						if (VitalPieces[0] == 1) {
+							CPUCurrentMoveWeight += 100;
+						} else {
+							CPUCurrentMoveWeight += 5;
+						}
+					}
+					break;
+
+			}
+		
+		}
+
+		}
+
+		//Compare to previous best.
+		if (CPUCurrentMoveWeight >= CPUBestMoveWeight[0]) {
+
+			CPUBestMoveWeight[0] = CPUCurrentMoveWeight;
+
+			switch (CPUIsSpecialMove) {
+
+				case 0: //Default move.
+				case 1: //Summoning ritual.
+					CPUMoveHistory[0] = [base, destination];
+					break;
+				case 2: //Lightbridge.
+					CPUMoveHistory[0] = [(base + 1) * 90, destination];
+					break;
+
+			}
+
+		}
+		
+		if (current == CPUOriginalTeam) {
+
+			//Update the AI's view of the board - enabling it to visualize responses.
+			switch (CPUIsSpecialMove) {
+
+				case 0: //Default move.
+					CPUWriteableBoard[destination] = CPUWriteableBoard[base];
+					CPUWriteableBoard[base] = [0];
+					
+					CPUMoveHistory[0] = [base, destination];
+					break;
+				case 1: //Summoning ritual. TO-DO: If I make this work more than a move ahead, make sure it keeps updating the amount of duplicates.
+					CPUWriteableBoard[destination] = ["Duplicate", currentClass];
+
+					CPUMoveHistory[0] = [88, destination];
+
+					CPUIsSpecialMove = 0;
+					break;
+				case 2: //Lightbridge. TO-DO: Reduce the broken state of these hypothetical Pastafarians so the AI knows it regenerates.
+					//Only do the TO-DO if I ever make this AI work more than a move ahead.
+					CPUWriteableBoard[destination] = ["broken2", currentClass];
+					CPUWriteableBoard[base] = [0];
+					
+					CPUMoveHistory[0] = [(base + 1) * 90, destination];
+
+					CPUIsSpecialMove = 0;
+					break;
+
+			}
+
+			//Switch teams to view opponent's possible responses.
+			current = -1 * current;
+			currentClass = "_" + current;
+			notcurrentClass = "_" + current * -1;
+
+			AI_Player();
+			return;
+
+		}
+		CPUIsSpecialMove = 0;
+
+	}
+
+/*Check move. Weight = (Destination - Current tile) / 1000. Check if it captures anything. Apply the appropriate weight for what it captures.
+  Apply same process for enemy pieces. Compare resulting score to highest seen. If it's higher, clear PossibleMoves and push current move.*/
+	//Priority: Free capture > Good Trade > Move From Danger (Capture > Move) > Push
+	function AI_Player() {
+
+		CPUBestMoveWeight.unshift(-110);
+		CPUMoveHistory.unshift(0);
+
+		for (let TileToInvestigate = 0; TileToInvestigate < CPUWriteableBoard.length; TileToInvestigate++) {
+
+			if ( CPUWriteableBoard[TileToInvestigate][0] != 0 && CPUWriteableBoard[TileToInvestigate][1] == currentClass ) {
+
+				let horizontaloffset = (TileToInvestigate % 10) % 2;
+				let startinglane = TileToInvestigate - (TileToInvestigate % 10);
+
+				switch ( CPUWriteableBoard[TileToInvestigate][0] ) {
+
+					case "Runner":
+					//Jog
+						//Rightwards
+						for (let i = 1; ( TileToInvestigate + i ) < ( 10 + startinglane ) && i < 3; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + i);
+								}
+								i = 10;
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + i);
+							}
+						}
+						//Leftwards
+						for (let i = 1; ( TileToInvestigate - i ) > startinglane - 1 && i < 3; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - i);
+								}
+								i = 10;
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - i);
+							}
+						}
+						//Upwards
+						for (let i = 1; ( TileToInvestigate - 10*i ) > -1 && i < 3; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 10*i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 10*i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10*i);
+								}
+								i = 10;
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10*i);
+							}
+						}
+						//Downwards
+						for (let i = 1; ( TileToInvestigate + 10*i ) < 80 && i < 3; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 10*i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 10*i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10*i);
+								}
+								i = 10;
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10*i);
+							}
+						}
+						//Rightupwards
+						for (let i = 1; ( TileToInvestigate + i ) < ( startinglane + 10 ) && (TileToInvestigate - 9*i) > -1 && i < 3; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 9*i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 9*i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9*i);
+								}
+								i = 10;
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9*i);
+							}
+						}
+						//Leftupwards
+						for (let i = 1; ( TileToInvestigate - i ) > ( startinglane - 1 ) && (TileToInvestigate - 11*i) > -1 && i < 3; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 11*i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 11*i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11*i);
+								}
+								i = 10;
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11*i);
+							}
+						}
+						//Rightdownwards
+						for (let i = 1; ( TileToInvestigate + i ) < ( startinglane + 10 ) && (TileToInvestigate + 11*i) < 80 && i < 3; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 11*i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 11*i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11*i);
+								}
+								i = 10;
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11*i);
+							}
+						}
+						//Leftdownwards
+						for (let i = 1; ( TileToInvestigate - i ) > ( startinglane - 1 ) && (TileToInvestigate + 9*i) < 80 && i < 3; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 9*i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 9*i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9*i);
+								}
+								i = 10;
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9*i);
+							}
+						}
+						break;
+					case "Angel":
+						//All Directions
+						if ( (TileToInvestigate - 11) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 11 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 11 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11);
+							}
+						}
+						if ( (TileToInvestigate - 10) > -1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+							}
+						}
+						if ( (TileToInvestigate - 9) > -1 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 9 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 9 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9);
+							}
+						}
+						if ( (TileToInvestigate - 1) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+							}
+						}
+						if ( (TileToInvestigate + 1) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+							}
+						}
+						if ( (TileToInvestigate + 11) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 11 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 11 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11);
+							}
+						}
+						if ( (TileToInvestigate + 10) < 80 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+							}
+						}
+						if ( (TileToInvestigate + 9) < 80 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 9 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 9 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9);
+							}
+						}
+						//Dash
+						if ( (TileToInvestigate - 33) > -1 && TileToInvestigate > startinglane + 2 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 33 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 33 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 33);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 33);
+							}
+						}
+						if ( (TileToInvestigate - 30) > -1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 30 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 30 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 30);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 30);
+							}
+						}
+						if ( (TileToInvestigate - 27) > -1 && TileToInvestigate < startinglane + 7 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 27 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 27 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 27);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 27);
+							}
+						}
+						if ( (TileToInvestigate - 3) > -1 && TileToInvestigate > startinglane + 2 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 3 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 3 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 3);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 3);
+							}
+						}
+						if ( (TileToInvestigate + 3) > -1 && TileToInvestigate < startinglane + 7 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 3 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 3 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 3);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 3);
+							}
+						}
+						if ( (TileToInvestigate + 33) < 80 && TileToInvestigate < startinglane + 7 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 33 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 33 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 33);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 33);
+							}
+						}
+						if ( (TileToInvestigate + 30) < 80 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 30 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 30 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 30);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 30);
+							}
+						}
+						if ( (TileToInvestigate + 27) < 80 && TileToInvestigate > startinglane + 2 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 27 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 27 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 27);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 27);
+							}
+						}
+						break;
+						
+					case "Skater":
+						//Horizontal Skate Rightwards.
+						for (let i = 1; ( TileToInvestigate + i ) < ( 10 + startinglane ); i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + i ][0] == 0 ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + i);
+							} else {
+								i = 10;
+							}
+						}
+						//Horizontal Skate Leftwards.
+						for (let i = 1; ( TileToInvestigate - i ) > startinglane - 1; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - i ][0] == 0 ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - i);
+							} else {
+								i = 10;
+							}
+						}
+						//Vertical Skate Upwards.
+						for (let i = 1; ( TileToInvestigate - 10*i ) > -1 ; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 10*i ][0] == 0 ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10*i);
+							} else {
+								i = 10;
+							}
+						}
+						//Vertical Skate Downwards.
+						for (let i = 1; ( TileToInvestigate + 10*i ) < 80 ; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 10*i ][0] == 0 ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10*i);
+							} else {
+								i = 10;
+							}
+						}
+						//Diagonal Skate Rightupwards.
+						for (let i = 1; ( TileToInvestigate + i ) < ( startinglane + 10 ) && (TileToInvestigate - 9*i) > -1; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 9*i ][0] == 0 ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9*i);
+							} else {
+								i = 10;
+							}
+						}
+						//Diagonal Skate Leftupwards.
+						for (let i = 1; ( TileToInvestigate - i ) > ( startinglane - 1 ) && (TileToInvestigate - 11*i) > -1; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 11*i ][0] == 0 ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11*i);
+							} else {
+								i = 10;
+							}
+						}
+						//Diagonal Skate Rightdownwards.
+						for (let i = 1; ( TileToInvestigate + i ) < ( startinglane + 10 ) && (TileToInvestigate + 11*i) < 80; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 11*i ][0] == 0 ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11*i);
+							} else {
+								i = 10;
+							}
+						}
+						//Diagonal Skate Leftdownwards.
+						for (let i = 1; ( TileToInvestigate - i ) > ( startinglane - 1 ) && (TileToInvestigate + 9*i) < 80; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 9*i ][0] == 0 ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9*i);
+							} else {
+								i = 10;
+							}
+						}
+						//All Directions
+						if ( (TileToInvestigate - 11) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 11 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 11 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11);
+							}
+						}
+						if ( (TileToInvestigate - 10) > -1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+							}
+						}
+						if ( (TileToInvestigate - 9) > -1 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 9 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 9 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9);
+							}
+						}
+						if ( (TileToInvestigate - 1) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+							}
+						}
+						if ( (TileToInvestigate + 1) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+							}
+						}
+						if ( (TileToInvestigate + 11) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 11 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 11 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11);
+							}
+						}
+						if ( (TileToInvestigate + 10) < 80 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+							}
+						}
+						if ( (TileToInvestigate + 9) < 80 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 9 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 9 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9);
+							}
+						}
+						break;
+					
+					case "Lizard":
+						//Horizontal Walk Rightwards.
+						for (let i = 1; ( TileToInvestigate + i ) < ( 10 + startinglane ); i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + i);
+								}
+								i = 10;
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + i);
+							}
+						}
+						//Horizontal Walk Leftwards.
+						for (let i = 1; ( TileToInvestigate - i ) > startinglane - 1; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - i);
+								}
+								i = 10;
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - i);
+							}
+						}
+						//Jump Two Spaces.
+						if ( (TileToInvestigate - 20) > -1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 20 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 20 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 20);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 20);
+							}
+						}
+						if ( (TileToInvestigate + 20) < 80 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 20 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 20 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 20);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 20);
+							}
+						}
+						//Jump Three Spaces.
+						if ( (TileToInvestigate - 30) > -1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 30 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 30 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 30);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 30);
+							}
+						}
+						if ( (TileToInvestigate + 30) < 80 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 30 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 30 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 30);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 30);
+							}
+						}
+						break;
+
+					case "Bunny":
+						//Vertical Bounce.
+						for (let i = 0; (TileToInvestigate % 20) + i < 80; i += 20) {
+							if ( CPUWriteableBoard[ (TileToInvestigate % 20) + i ][0] != 0 ) {
+								if ( CPUWriteableBoard[ (TileToInvestigate % 20) + i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, (TileToInvestigate % 20) + i);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, (TileToInvestigate % 20) + i);
+							}
+						}
+						//Horizontal Bounce.
+						for (let i = 0; ( horizontaloffset + startinglane ) + i < ( 10 + startinglane ); i += 2) {
+							if ( CPUWriteableBoard[ ( horizontaloffset + startinglane ) + i ][0] != 0 ) {
+								if (  CPUWriteableBoard[( horizontaloffset + startinglane ) + i ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, ( horizontaloffset + startinglane ) + i);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, ( horizontaloffset + startinglane ) + i);
+							}
+						}
+						//Cardinals.
+						if ( (TileToInvestigate - 10) > -1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+							}
+						}
+						if ( (TileToInvestigate + 10) < 80 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+							}
+						}
+						if ( (TileToInvestigate - 1) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+							}
+						}
+						if ( (TileToInvestigate + 1) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+							}
+						}
+						break;
+						
+					case "Child":
+						//Grid Float.
+						if ( (TileToInvestigate - 22) > -1 && TileToInvestigate > startinglane + 1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 22 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 22 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 22);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 22);
+							}
+						}
+						if ( (TileToInvestigate - 20) > -1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 20 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 20 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 20);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 20);
+							}
+						}
+						if ( (TileToInvestigate - 18) > -1 && TileToInvestigate < startinglane + 8 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 18 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 18 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 18);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 18);
+							}
+						}
+						if ( (TileToInvestigate - 2) > -1 && TileToInvestigate > startinglane + 1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 2 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 2 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 2);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 2);
+							}
+						}
+						if ( (TileToInvestigate + 2) > -1 && TileToInvestigate < startinglane + 8 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 2 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 2 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 2);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 2);
+							}
+						}
+						if ( (TileToInvestigate + 18) < 80 && TileToInvestigate > startinglane + 1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 18 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 18 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 18);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 18);
+							}
+						}
+						if ( (TileToInvestigate + 20) < 80 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 20 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 20 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 20);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 20);
+							}
+						}
+						if ( (TileToInvestigate + 22) < 80 && TileToInvestigate < startinglane + 8 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 22 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 22 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 22);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 22);
+							}
+						}
+						break;
+						
+					case "Gentleman":
+						//Cardinals.
+						if ( (TileToInvestigate - 10) > -1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+							}
+						}
+						if ( (TileToInvestigate + 10) < 80 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+							}
+						}
+						if ( (TileToInvestigate - 1) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+							}
+						}
+						if ( (TileToInvestigate + 1) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+							}
+						}
+						//Horizontal Magnet Rightwards.
+						for (let i = 1; ( TileToInvestigate + i ) < ( 10 + startinglane ); i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + i ][1] == notcurrentClass ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + i);
+								i = 10;
+							}
+						}
+						//Horizontal Magnet Leftwards.
+						for (let i = 1; ( TileToInvestigate - i ) > startinglane - 1; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - i ][1] == (  notcurrentClass  ) ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - i);
+								i = 10;
+							}
+						}
+						//Vertical Magnet PL_Upwards.
+						for (let i = 1; ( TileToInvestigate - 10*i ) > -1 ; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 10*i ][1] == notcurrentClass ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10*i);
+								i = 10;
+							}
+						}
+						//Vertical Magnet Downwards.
+						for (let i = 1; ( TileToInvestigate + 10*i ) < 80 ; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 10*i ][1] == notcurrentClass ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10*i);
+								i = 10;
+							}
+						}
+						//Diagonal Magnet Rightupwards.
+						for (let i = 1; ( TileToInvestigate + i ) < ( startinglane + 10 ) && (TileToInvestigate - 9*i) > -1; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 9*i ][1] == notcurrentClass ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9*i);
+								i = 10;
+							}
+						}
+						//Diagonal Magnet Leftupwards.
+						for (let i = 1; ( TileToInvestigate - i ) > ( startinglane - 1 ) && (TileToInvestigate - 11*i) > -1; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 11*i ][1] == notcurrentClass ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11*i);
+								i = 10;
+							}
+						}
+						//Diagonal Magnet Rightdownwards.
+						for (let i = 1; ( TileToInvestigate + i ) < ( startinglane + 10 ) && (TileToInvestigate + 11*i) < 80; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 11*i ][1] == notcurrentClass ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11*i);
+								i = 10;
+							}
+						}
+						//Diagonal Magnet Leftdownwards.
+						for (let i = 1; ( TileToInvestigate - i ) > ( startinglane - 1 ) && (TileToInvestigate + 9*i) < 80; i++) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 9*i ][1] == notcurrentClass ) {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9*i);
+								i = 10;
+							}
+						}
+						break;
+						
+					case "Duplicator":
+						//Cardinals.
+						if ( (TileToInvestigate - 10) > -1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+							}
+						}
+						if ( (TileToInvestigate + 10) < 80 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+							}
+						}
+						if ( (TileToInvestigate - 1) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+							}
+						}
+						if ( (TileToInvestigate + 1) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+							}
+						}
+						//Summon Duplicates.
+						if (current == 1 && duplicates[0] < 5 || current == -1 && duplicates[1] < 5) {
+							if ( (TileToInvestigate - 11) > -1 && TileToInvestigate > startinglane && CPUWriteableBoard[ TileToInvestigate - 11 ][0] == 0 ) {
+								CPUIsSpecialMove = 1;
+								AI_Apply_Weight(88, TileToInvestigate - 11);
+							}
+							if ( (TileToInvestigate - 9) > -1 && TileToInvestigate < (startinglane + 9) && CPUWriteableBoard[ TileToInvestigate - 9 ][0] == 0) {
+								CPUIsSpecialMove = 1;
+								AI_Apply_Weight(88, TileToInvestigate - 9);
+							}
+							if ( (TileToInvestigate + 11) < 80 && TileToInvestigate < (startinglane + 9) && CPUWriteableBoard[ TileToInvestigate + 11 ][0] == 0 ) {
+								CPUIsSpecialMove = 1;
+								AI_Apply_Weight(88, TileToInvestigate + 11);
+							}
+							if ( (TileToInvestigate + 9) < 80 && TileToInvestigate > startinglane && CPUWriteableBoard[ TileToInvestigate + 9 ][0] == 0) {
+								CPUIsSpecialMove = 1;
+								AI_Apply_Weight(88, TileToInvestigate + 9);
+							}
+						}
+						break;
+					
+					case "Duplicate":
+						//Conditional Cardinals + Diagonals. (Only forwards and sideways movement).
+						if ( current == 1 ) {
+							if ( (TileToInvestigate - 11) > -1 && TileToInvestigate > startinglane ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 11 ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate - 11 ][1] == notcurrentClass ) {
+										AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11);
+									}
+								} else {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11);
+								}
+							}
+							if ( (TileToInvestigate - 10) > -1 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 10 ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate - 10 ][1] == notcurrentClass ) {
+										AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+									}
+								} else {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+								}
+							}
+							if ( (TileToInvestigate - 9) > -1 && TileToInvestigate < startinglane + 9 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 9 ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate - 9 ][1] == notcurrentClass ) {
+										AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9);
+									}
+								} else {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9);
+								}
+							}
+						} else {
+							if ( (TileToInvestigate + 11) < 80 && TileToInvestigate < startinglane + 9 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 11 ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate + 11 ][1] == notcurrentClass ) {
+										AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11);
+									}
+								} else {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11);
+								}
+							}
+							if ( (TileToInvestigate + 10) < 80 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 10 ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate + 10 ][1] == notcurrentClass ) {
+										AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+									}
+								} else {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+								}
+							}
+							if ( (TileToInvestigate + 9) < 80 && TileToInvestigate > startinglane ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 9 ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate + 9 ][1] == notcurrentClass ) {
+										AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9);
+									}
+								} else {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9);
+								}
+							}
+						}
+						if ( (TileToInvestigate - 1) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+							}
+						}
+						if ( (TileToInvestigate + 1) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+							}
+						}
+						break;
+						
+					case "Pastafarian":
+						//Light-Bridge (only usable when not broken):
+						//Horizontal Rightwards.
+						if ( ( TileToInvestigate + 1 ) < ( 10 + startinglane ) && CPUWriteableBoard[ TileToInvestigate + 1 ].length < 2 ) {
+							for (let i = 2; ( TileToInvestigate + i ) < ( 10 + startinglane ) && ( i < 5 ); i++) {
+								if ( CPUWriteableBoard[ TileToInvestigate + i ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate + i ][0] == "Pit" ) {
+									//Do nothing.
+									} else {
+										if ( CPUWriteableBoard[ TileToInvestigate + i ][1] == notcurrentClass ) {
+											CPUIsSpecialMove = 2;
+											AI_Apply_Weight(TileToInvestigate, TileToInvestigate + i);
+										}
+										i = 6;
+									}
+								} else {
+									CPUIsSpecialMove = 2;
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + i);
+								}
+							}
+						}
+						//Horizontal Leftwards.
+						if ( ( TileToInvestigate - 1 ) > ( startinglane - 1 ) && CPUWriteableBoard[ TileToInvestigate - 1 ].length < 2 ) {
+							for (let i = 2; ( TileToInvestigate - i ) > ( startinglane - 1 ) && ( i < 5 ); i++) {
+								if ( CPUWriteableBoard[ TileToInvestigate - i ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate - i ][0] == "Pit" ) {
+									//Do nothing.
+									} else {
+										if ( CPUWriteableBoard[ TileToInvestigate - i ][1] == notcurrentClass ) {
+											CPUIsSpecialMove = 2;
+											AI_Apply_Weight(TileToInvestigate, TileToInvestigate - i);
+										}
+
+										i = 6;
+									}
+								} else {
+									CPUIsSpecialMove = 2;
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - i);
+								}
+							}
+						}
+						//Vertical Upwards.
+						if ( ( TileToInvestigate - 10 ) > -1 && CPUWriteableBoard[ TileToInvestigate - 10 ].length < 2 ) {
+							for (let i = 2; ( TileToInvestigate - 10*i ) > -1 && ( i < 5 ); i++) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 10*i ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate - 10*i ][0] == "Pit" ) {
+									//Do nothing.
+									} else {
+										if ( CPUWriteableBoard[ TileToInvestigate - 10*i ][1] == notcurrentClass ) {
+											CPUIsSpecialMove = 2;
+											AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10*i);
+										}
+										i = 6;
+									}
+								} else {
+									CPUIsSpecialMove = 2;
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10*i);
+								}
+							}
+						}
+						//Vertical Downwards.
+						if ( ( TileToInvestigate + 10 ) < 80 && CPUWriteableBoard[ TileToInvestigate + 10 ].length < 2 ) {
+							for (let i = 2; ( TileToInvestigate + 10*i ) < 80 && ( i < 5 ); i++) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 10*i ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate + 10*i ][0] == "Pit" ) {
+									//Do nothing.
+									} else {
+										if ( CPUWriteableBoard[ TileToInvestigate + 10*i ][1] == notcurrentClass ) {
+											CPUIsSpecialMove = 2;
+											AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10*i);
+										}
+
+										i = 6;
+									}
+								} else {
+									CPUIsSpecialMove = 2;
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10*i);
+								}
+							}
+						}
+						//Diagonal Rightupwards.
+						if ( ( TileToInvestigate + 1 ) < ( startinglane + 10 ) && ( TileToInvestigate - 9 ) > -1 && CPUWriteableBoard[ TileToInvestigate - 9 ].length < 2 ) {
+							for (let i = 2; ( TileToInvestigate + i ) < ( startinglane + 10 ) && ( TileToInvestigate - 9*i ) > -1 && ( i < 5 ); i++) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 9*i ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate - 9*i ][0] == "Pit" ) {
+									//Do nothing.
+									} else {
+										if ( CPUWriteableBoard[ TileToInvestigate - 9*i ][1] == notcurrentClass ) {
+											CPUIsSpecialMove = 2;
+											AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9*i);
+										}
+										i = 6;
+									}
+								} else {
+									CPUIsSpecialMove = 2;
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9*i);
+								}
+							}
+						}
+						//Diagonal Leftupwards.
+						if ((TileToInvestigate - 1) > (startinglane - 1) && (TileToInvestigate - 11) > -1 && CPUWriteableBoard[TileToInvestigate - 11].length < 2) {
+							for (let i = 2; (TileToInvestigate - i) > (startinglane - 1) && (TileToInvestigate - 11*i) > -1 && (i < 5); i++) {
+								if (CPUWriteableBoard[TileToInvestigate - 11*i][0] != 0) {
+									if (CPUWriteableBoard[TileToInvestigate - 11*i][0] == "Pit") {
+									// Do nothing.
+									} else {
+										if (CPUWriteableBoard[TileToInvestigate - 11*i][1] == notcurrentClass) {
+											CPUIsSpecialMove = 2;
+											AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11*i);
+										}
+										i = 6;
+									}
+								} else {
+									CPUIsSpecialMove = 2;
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11*i);
+								}
+							}
+						}
+						//Diagonal Rightdownwards.
+						if ((TileToInvestigate + 1) < (startinglane + 10) && (TileToInvestigate + 11) < 80 && CPUWriteableBoard[TileToInvestigate + 11].length < 2) {
+							for (let i = 2; (TileToInvestigate + i) < (startinglane + 10) && (TileToInvestigate + 11 * i) < 80 && (i < 5); i++) {
+								if (CPUWriteableBoard[TileToInvestigate + 11*i][0] != 0) {
+									if (CPUWriteableBoard[TileToInvestigate + 11*i][0] == "Pit") {
+									// Do nothing.
+									} else {
+										if (CPUWriteableBoard[TileToInvestigate + 11*i][1] == notcurrentClass) {
+											CPUIsSpecialMove = 2;
+											AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11*i);
+										}
+										i = 6;
+									}
+								} else {
+									CPUIsSpecialMove = 2;
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11*i);
+								}
+							}
+						}
+						//Diagonal Leftdownwards.
+						if ((TileToInvestigate - 1) > (startinglane - 1) && (TileToInvestigate + 9) < 80 && CPUWriteableBoard[TileToInvestigate + 9].length < 2) {
+							for (let i = 2; (TileToInvestigate - i) > (startinglane - 1) && (TileToInvestigate + 9*i) < 80 && (i < 5); i++) {
+								if (CPUWriteableBoard[TileToInvestigate + 9*i][0] != 0) {
+									if (CPUWriteableBoard[TileToInvestigate + 9*i][0] == "Pit") {
+									// Do nothing.
+									} else {
+										if (CPUWriteableBoard[TileToInvestigate + 9*i][1] == notcurrentClass) {
+											CPUIsSpecialMove = 2;
+											AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9*i);
+										}
+										i = 6;
+									}
+								} else {
+									CPUIsSpecialMove = 2;
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9*i);
+								}
+							}
+						}
+					case "broken2":
+						//All Directions
+						if ( (TileToInvestigate - 11) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 11 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 11 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 11);
+							}
+						}
+						if ( (TileToInvestigate - 10) > -1 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10);
+							}
+						}
+						if ( (TileToInvestigate - 9) > -1 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 9 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 9 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 9);
+							}
+						}
+						if ( (TileToInvestigate - 1) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+							}
+						}
+						if ( (TileToInvestigate + 1) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+							}
+						}
+						if ( (TileToInvestigate + 11) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 11 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 11 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 11);
+							}
+						}
+						if ( (TileToInvestigate + 10) < 80 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 10 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 10 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10);
+							}
+						}
+						if ( (TileToInvestigate + 9) < 80 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 9 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 9 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 9);
+							}
+						}
+						break;
+						
+					case "Student":
+						//Strafe.
+						if ( (TileToInvestigate - 1) > -1 && TileToInvestigate > startinglane ) {
+							if ( CPUWriteableBoard[ TileToInvestigate - 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 1);
+							}
+						}
+						if ( (TileToInvestigate + 1) < 80 && TileToInvestigate < startinglane + 9 ) {
+							if ( CPUWriteableBoard[ TileToInvestigate + 1 ][0] != 0 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 1 ][1] == notcurrentClass ) {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+								}
+							} else {
+								AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 1);
+							}
+						}
+						//Jump.
+						for (let i = 1; i < 5; i++) {
+							if ( (TileToInvestigate + 10*i) < 80 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate + 10*i ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate + 10*i ][1] == notcurrentClass ) {
+										AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10*i);
+									}
+								} else {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate + 10*i);
+								}
+							} else {
+								i = 5;
+							}
+						}
+						for (let i = 1; i < 5; i++) {
+							if ( (TileToInvestigate - 10*i) > -1 ) {
+								if ( CPUWriteableBoard[ TileToInvestigate - 10*i ][0] != 0 ) {
+									if ( CPUWriteableBoard[ TileToInvestigate - 10*i ][1] == notcurrentClass ) {
+										AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10*i);
+									}
+								} else {
+									AI_Apply_Weight(TileToInvestigate, TileToInvestigate - 10*i);
+								}
+							} else {
+								i = 5;
+							}
+						}
+						break;
+						
+				}
+			
+			}
+		
+		}
+		
+		//End weight summation.
+		//The one thing this script has in common with The Biggest Loser.
+
+		if (current == CPUOriginalTeam) {
+
+			return Math.floor( Math.random() * CPUpossibleMoves.length );
+
+		} else {
+
+			if (CPUBestSummed < CPUBestMoveWeight[1] - CPUBestMoveWeight[0]) {
+				console.log("Previous best weight:");
+				console.log(CPUBestSummed);
+				console.log("Move and weight of [1]:");
+				console.log(CPUMoveHistory[1]);
+				console.log(CPUBestMoveWeight[1]);
+				console.log("Move and weight of [0]:");
+				console.log(CPUBestMoveWeight[0]);
+				console.log(CPUMoveHistory[0]);
+				console.log("The whole damn board:");
+				console.log(CPUWriteableBoard);
+				console.log("-");
+
+				CPUBestSummed = CPUBestMoveWeight[1] - CPUBestMoveWeight[0];
+				
+				CPUpossibleMoves = [];
+				CPUpossibleMoves.push( CPUMoveHistory[1] );
+
+			} else {
+
+				if (CPUBestSummed == CPUBestMoveWeight[1] - CPUBestMoveWeight[0]) {
+
+					CPUpossibleMoves.push( CPUMoveHistory[1] );
+
+				}
+
+			}
+
+			CPUBestMoveWeight.shift();
+			CPUMoveHistory.shift();
+			
+			CPUBestMoveWeight[0] = 0;
+
+			//Copies the array by iterating through each element, since otherwise it only copies the reference to the element.
+			CPUWriteableBoard = [];
+			for (let i = 0; i < 80; i++) {
+				CPUWriteableBoard.push(CPUCurrentBoard[i]);
+			}
+			
+			current = -1 * current;
+			currentClass = "_" + current;
+			notcurrentClass = "_" + current * -1;
+
+			return;
+
+		}
+
+	}
+
+	function endTurn() {
+
+		//Set all Pastafarians' light-bridge status.
+		if (pastafarianBridgesUsed > 0) {
+		
+		//Cycle through 3 different states of broken over the course of 2 (technically 1.5) moves.
+			
+			//The check for "broken1" is separate since it will only remove the class.
+			brokenDegradation = board.getElementsByClassName("broken1");
+
+			if (brokenDegradation.length > 0) {
+
+				brokenDegradation[0].classList.remove("broken1");
+				pastafarianBridgesUsed--;
+				bridgeChange++;
+
+			}
+			
+			for (let i = 2; i < 4; i++) {
+				
+				var brokenDegradation = board.getElementsByClassName("broken" + i);
+				
+				if (brokenDegradation.length > 0) {
+				
+					let currentBroken = brokenDegradation[0];
+					
+					//Decrement the stage of broken by 1.
+					currentBroken.classList.remove("broken" + i);
+					currentBroken.classList.add("broken" + (i - 1));
+					
+					bridgeChange++;
+
+				}
+				
+				//Do not bother with the remaining checks if all the Pastafarians have been checked.
+				if (bridgeChange == pastafarianBridgesUsed) {
+
+					i = 4;
+					
+				}
+			}
+			
+		bridgeChange = 0;
+		
+		}
+		
+		//Increment timer of the current player.
+		//Me from probably a year later: I'm using this for the lose condition checking. It's more efficient than having two "if current == 1" statements.
+		if (current == 1) {
+		
+			//"Lose condition checking"
+			if ( VitalPieces[1] == 0 ) {
+
+				//TO-DO: Win.
+				currentPlayer = 0;
+               		clearInterval(timerId);
+               		victories++;
+
+               		colorBoard("#000", "#000");
+               		setTimeout(winner, 2000);
+				return;
+
+			}
+			if (timeCache_player1 > 0) {
+				timeCache_player1--;
+
+				timeLeft_player1++;
+
+				if (secondsLeft_player1 < 59) {
+					secondsLeft_player1++;
+					if (secondsLeft_player1 < 10) {
+						timer.innerHTML = minutesLeft_player1 + ":0" + secondsLeft_player1;
+
+					} else {
+						timer.innerHTML = minutesLeft_player1 + ":" + secondsLeft_player1;
+					}
+				} else {
+					secondsLeft_player1 = 0;
+					minutesLeft_player1++;
+					timer.innerHTML = minutesLeft_player1 + ":0" + secondsLeft_player1;
+				}
+				
+			}
+			
+		
+		} else {
+
+			if ( VitalPieces[0] == 0 ) {
+
+				currentPlayer = 0;
+               		clearInterval(timerId);
+               		EndGame.style.visibility = "visible";
+               		EndGame.style.opacity = 1;
+               		//TO-DO: Lose.
+               		WinStripe.innerHTML = "<h1>Checkmate! You suck!</h1>";
+
+               		victories++;
+				return;
+
+			}
+		
+		}
+
+		//Swap the current player.
+		current = -1 * current;
+		currentClass = "_" + current;
+		notcurrentClass = "_" + current * -1;
+
+		//Switch the player type to that of the second player.
+		playerPlayerplayerPlayer += playerSwitcher;
+		currentPlayer = playersType[playerPlayerplayerPlayer];
+		
+		playerSwitcher *= -1;
+
+		if (currentPlayer == 1) {
+		//If the player is a CPU:
+
+			CPUpossibleMoves = [];
+			CPUBestMoveWeight = [];
+			CPUMoveHistory = [];
+
+			CPUBestSummed = -110;
+
+		//Using the current board state, figure out which pieces can be captured. Apply the lowest resulting weight to every non-capturing move (that isn't the captured piece).
+
+		//Create an array representation of the board.
+			CPUCurrentBoard = [];
+			CPUWriteableBoard = [];
+
+			for (let i = 0; i < cells.length; i++) {
+
+				tempVARforBoardWriting1 = 0;
+				tempVARforBoardWriting2 = 0;
+				
+				let currentPiece = cells[i].classList;
+				for (let j = 0; j < currentPiece.length; j++) {
+					if (currentPiece[j].length > 3) {
+						tempVARforBoardWriting1 = currentPiece[j];
+					} else {
+						tempVARforBoardWriting2 = currentPiece[j];
+					}
+				}
+
+				if (tempVARforBoardWriting1 == 0) {
+					CPUCurrentBoard.push([tempVARforBoardWriting2]);
+				} else {
+					CPUCurrentBoard.push([tempVARforBoardWriting1,tempVARforBoardWriting2]);
+				}
+
+			}
+
+			//Copies the array by iterating through each element, since otherwise it only copies the reference to the element.
+			for (let i = 0; i < 80; i++) {
+				CPUWriteableBoard.push(CPUCurrentBoard[i]);
+			}
+
+			//Set AI player's team.
+			CPUOriginalTeam = current;
+
+			//Decide.
+			CPUDecision = AI_Player(0);
+
+			//Act.
+			
+			//If the move is a light-bridge move:
+			if (CPUpossibleMoves[CPUDecision][0] > 88) {
+				CPUpossibleMoves[CPUDecision][0] /= 90;
+				CPUpossibleMoves[CPUDecision][0] -= 1;
+				
+				pastafarianBridgesUsed++;
+				lightbridge = 1;
+			}
+
+			activepiece = CPUpossibleMoves[CPUDecision][0];
+			BustAMove(CPUpossibleMoves[CPUDecision][1]);
+			return;
+			
+
+		}
+
+	}
+
+//He places the piece.
+
+	function ThePiecePlacer(tile, team, type) {
+
+		//Sets the piece for the board logic.
+		cells[tile].classList.add (team, type);
+
+		//Calculates the appropriate z-order for...
+		let zorder = Math.floor(tile / 10) + 2;
+
+		//... the visual display of the piece.
+		document.body.insertAdjacentHTML("beforeend","<div id='piece" + tile + "' style='position:absolute;pointer-events:none;z-index:" + zorder + "' class='piece " + type + " " + team + "'><img src='./" + type + team + ".png' style='width:10vh;'></img></div>");
+
+		let pieceToMove = document.querySelector("#piece" + tile);
+		let cellCoordinates = cells[tile].getBoundingClientRect();
+
+		pieceToMove.style.bottom = (window.innerHeight - cellCoordinates.top) - (window.innerHeight * 0.09) + "px";
+		pieceToMove.style.left = cellCoordinates.left - (window.innerHeight * 0.001) + "px";
+
+	}
+
+var duplicatePowerCellCap = 0;
+
+//Function for making a move. This had to be separate from the main cell() function to enable the AI to independently make moves. More precisely, to prevent you.
+
+	function BustAMove(target) {
+	
+		//Clear the selected tile first if the move is a capture.
+		if ( cells[target].classList.contains( notcurrentClass ) ) {
+		
+			var CapturedPiece = cells[target].classList[1];
+
+			if (current == 1) {
+
+				switch (CapturedPiece) {
+				
+					case "Duplicate":
+						if (duplicatePowerCellCap < 5) {
+							powercells += 25;
+							duplicatePowerCellCap++;
+						}
+						//Keep Duplicate records up to date.
+						duplicates[1]--;
+						break;
+					case "Angel":
+					case "Runner":
+						powercells += 500;
+						//Keep vital records up to date.
+						VitalPieces[1]--;
+						break;
+					case "Duplicator":
+						powercells += 500;
+						//Remove every Duplicate if the Duplicator is captured.
+						enemyduplicates = board.getElementsByClassName("Duplicate _-1");
+						enemyduplicatesVisual = document.getElementsByClassName("piece Duplicate _-1");
+						for (let i = 0; i < enemyduplicates.length;) {
+
+							enemyduplicates[i].removeAttribute("class");
+							enemyduplicatesVisual[i].remove();
+
+						}
+						break;
+					case "Skater":
+					case "Child":
+						powercells += 150;
+						break;
+					case "Lizard":
+					case "Student":
+						powercells += 200;
+						break;
+					case "Gentleman":
+					case "Bunny":
+					case "Pastafarian":
+						powercells += 250;
+						break;
+
+				}
+
+				powercellCounter.innerHTML = "Powercells: " + powercells;
+
+			} else {
+				
+				if (intermission == false) {
+
+					switch (CapturedPiece) {
+						case "Duplicate":
+							duplicates[0]--;
+							break;
+						case "Angel":
+						case "Runner":
+							VitalPieces[0]--;
+							break;
+						case "Duplicator":
+							enemyduplicates = board.getElementsByClassName("Duplicate _1");
+							enemyduplicatesVisual = document.getElementsByClassName("piece Duplicate _1");
+							for (let i = 0; i < enemyduplicates.length;) {
+
+								enemyduplicates[i].removeAttribute("class");
+								enemyduplicatesVisual[i].remove();
+
+							}
+							break;
+						case "Pastafarian":
+							leftPieces[0] = 0;
+							break;
+						case "Bunny":
+							leftPieces[1] = 0;
+							break;
+						case "Gentleman":
+							leftPieces[2] = 0;
+							break;
+						case "Student":
+							leftPieces[3] = 0;
+							break;
+						case "Lizard":
+							leftPieces[4] = 0;
+							break;
+						case "Child":
+							leftPieces[5] = 0;
+							break;
+						case "Skater":
+							leftPieces[6] = 0;
+							break;
+					}
+
+				} else {
+
+					switch (CapturedPiece) {
+						case "Duplicate":
+							duplicates[0]--;
+							break;
+						case "Angel":
+						case "Runner":
+							VitalPieces[0]--;
+							break;
+						case "Duplicator":
+							enemyduplicates = board.getElementsByClassName("Duplicate _1");
+							enemyduplicatesVisual = document.getElementsByClassName("piece Duplicate _1");
+							for (let i = 0; i < enemyduplicates.length;) {
+
+								enemyduplicates[i].removeAttribute("class");
+								enemyduplicatesVisual[i].remove();
+
+							}
+							break;
+					}
+
+				}
+
+			}
+
+			//Decrement pastafarianBridgesUsed by 1 if a pastafarianBridgeUsing Pastafarian dies. It's impossible to capture a Pastafarian that's on any broken level except 2,
+			//since levels 1 and 3 are spent on the opponent's turns.
+			if ( cells[target].classList.contains("broken2") ) {
+			
+				pastafarianBridgesUsed--;
+			
+			}
+
+			cells[target].removeAttribute("class");
+			
+			var pieceToRemove = document.querySelector("#piece" + target);
+			pieceToRemove.remove();
+	
+		}
+		
+		//You will soon.
+		if (activepiece > 80) {
+		
+			ThePiecePlacer(target, currentClass, "Duplicate");
+			if (current == 1) {
+				duplicates[0]++;
+			} else {
+				duplicates[1]++;
+			}
+			
+			activepiece = -1;
+			endTurn();
+			
+			return true;
+		
+		}
+		
+		//Move the piece visually.
+		var pieceToReplace = document.querySelector("#piece" + activepiece);
+		let cellCoordinates = cells[target].getBoundingClientRect();
+	
+		pieceToReplace.style.bottom = (window.innerHeight - cellCoordinates.top) - (window.innerHeight * 0.09) + "px";
+		pieceToReplace.style.left = cellCoordinates.left - (window.innerHeight * 0.001) + "px";
+		
+		let zorder = Math.floor(target / 10) + 2;
+		pieceToReplace.style.zIndex = zorder;
+		
+		pieceToReplace.id = "piece" + target;
+		
+		//Move the piece internally.
+		cells[target].classList.add ( ...Array.from(cells[activepiece].classList) );
+		cells[activepiece].removeAttribute("class");
+		activepiece = -1;
+		
+		if (lightbridge == 1) {
+
+			cells[target].classList.add("broken3");
+			lightbridge = 0;
+		
+		}
+		
+		endTurn();
+		
+		return true;
+		
+	}
+
+//Main board functionality.
+
+	function cell(){
+		
+		if (currentPlayer < 2) {
+
+		//TO-DO: Add a board mark-up feature.
+			return;
+
+		}
+
+		TargetCell = event.target.id;
+
+		//Set available moves. (Given that you select one of your pieces).
+		if ( event.target.classList.contains(currentClass) ) {
+
+			//Clear any left-over valid moves from the last piece - if there are any.
+			removeenabled = board.getElementsByClassName("enabled");
+			removeduplication = board.getElementsByClassName("duplication");
+			removelightbridge = board.getElementsByClassName("lightbridge");
+		
+			for (let i = 0; i < removeenabled.length;) {
+			
+				removeenabled[i].classList.remove("enabled");
+			
+			}
+			
+			for (let i = 0; i < removeduplication.length;) {
+			
+				removeduplication[i].classList.remove("duplication");
+			
+			}
+			
+			for (let i = 0; i < removelightbridge.length;) {
+			
+				removelightbridge[i].classList.remove("lightbridge");
+			
+			}
+		
+			//Check if you have clicked on the same piece.
+			if ( activepiece == parseInt(TargetCell) ) {
+			
+				//If true: cancel current selection.
+				activepiece = -1;
+			
+			} else {
+			
+				//Else: set active piece as selected.
+				activepiece = parseInt(TargetCell);
+			
+			}
+			
+			//Cancel selection: part 2.
+			if ( activepiece > -1 ) {
+
+				let horizontaloffset = (activepiece % 10) % 2;
+				let startinglane = activepiece - (activepiece % 10);
+
+				//Set valid moves based on piece.
+				switch ( event.target.classList[1] ) {
+
+					case "Runner":
+					//Jog
+						//Rightwards
+						for (let i = 1; ( activepiece + i ) < ( 10 + startinglane ) && i < 3; i++) {
+							if ( cells[ activepiece + i ].classList.length > 0 ) {
+								if ( cells[ activepiece + i ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + i ].classList.add("enabled");
+								}
+								i = 10;
+							} else {
+								cells[ activepiece + i ].classList.add("enabled");
+							}
+						}
+						//Leftwards
+						for (let i = 1; ( activepiece - i ) > startinglane - 1 && i < 3; i++) {
+							if ( cells[ activepiece - i ].classList.length > 0 ) {
+								if ( cells[ activepiece - i ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - i ].classList.add("enabled");
+								}
+								i = 10;
+							} else {
+								cells[ activepiece - i ].classList.add("enabled");
+							}
+						}
+						//Upwards
+						for (let i = 1; ( activepiece - 10*i ) > -1 && i < 3; i++) {
+							if ( cells[ activepiece - 10*i ].classList.length > 0 ) {
+								if ( cells[ activepiece - 10*i ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 10*i ].classList.add("enabled");
+								}
+								i = 10;
+							} else {
+								cells[ activepiece - 10*i ].classList.add("enabled");
+							}
+						}
+						//Downwards
+						for (let i = 1; ( activepiece + 10*i ) < 80 && i < 3; i++) {
+							if ( cells[ activepiece + 10*i ].classList.length > 0 ) {
+								if ( cells[ activepiece + 10*i ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 10*i ].classList.add("enabled");
+								}
+								i = 10;
+							} else {
+								cells[ activepiece + 10*i ].classList.add("enabled");
+							}
+						}
+						//Rightupwards
+						for (let i = 1; ( activepiece + i ) < ( startinglane + 10 ) && (activepiece - 9*i) > -1 && i < 3; i++) {
+							if ( cells[ activepiece - 9*i ].classList.length > 0 ) {
+								if ( cells[ activepiece - 9*i ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 9*i ].classList.add("enabled");
+								}
+								i = 10;
+							} else {
+								cells[ activepiece - 9*i ].classList.add("enabled");
+							}
+						}
+						//Leftupwards
+						for (let i = 1; ( activepiece - i ) > ( startinglane - 1 ) && (activepiece - 11*i) > -1 && i < 3; i++) {
+							if ( cells[ activepiece - 11*i ].classList.length > 0 ) {
+								if ( cells[ activepiece - 11*i ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 11*i ].classList.add("enabled");
+								}
+								i = 10;
+							} else {
+								cells[ activepiece - 11*i ].classList.add("enabled");
+							}
+						}
+						//Rightdownwards
+						for (let i = 1; ( activepiece + i ) < ( startinglane + 10 ) && (activepiece + 11*i) < 80 && i < 3; i++) {
+							if ( cells[ activepiece + 11*i ].classList.length > 0 ) {
+								if ( cells[ activepiece + 11*i ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 11*i ].classList.add("enabled");
+								}
+								i = 10;
+							} else {
+								cells[ activepiece + 11*i ].classList.add("enabled");
+							}
+						}
+						//Leftdownwards
+						for (let i = 1; ( activepiece - i ) > ( startinglane - 1 ) && (activepiece + 9*i) < 80 && i < 3; i++) {
+							if ( cells[ activepiece + 9*i ].classList.length > 0 ) {
+								if ( cells[ activepiece + 9*i ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 9*i ].classList.add("enabled");
+								}
+								i = 10;
+							} else {
+								cells[ activepiece +	 9*i ].classList.add("enabled");
+							}
+						}
+						break;
+						
+					case "Skater":
+						//Horizontal Skate Rightwards.
+						for (let i = 1; ( activepiece + i ) < ( 10 + startinglane ); i++) {
+							if ( cells[ activepiece + i ].classList.length < 1 ) {
+								cells[ activepiece + i ].classList.add("enabled");
+							} else {
+								i = 10;
+							}
+						}
+						//Horizontal Skate Leftwards.
+						for (let i = 1; ( activepiece - i ) > startinglane - 1; i++) {
+							if ( cells[ activepiece - i ].classList.length < 1 ) {
+								cells[ activepiece - i ].classList.add("enabled");
+							} else {
+								i = 10;
+							}
+						}
+						//Vertical Skate Upwards.
+						for (let i = 1; ( activepiece - 10*i ) > -1 ; i++) {
+							if ( cells[ activepiece - 10*i ].classList.length < 1 ) {
+								cells[ activepiece - 10*i ].classList.add("enabled");
+							} else {
+								i = 10;
+							}
+						}
+						//Vertical Skate Downwards.
+						for (let i = 1; ( activepiece + 10*i ) < 80 ; i++) {
+							if ( cells[ activepiece + 10*i ].classList.length < 1 ) {
+								cells[ activepiece + 10*i ].classList.add("enabled");
+							} else {
+								i = 10;
+							}
+						}
+						//Diagonal Skate Rightupwards.
+						for (let i = 1; ( activepiece + i ) < ( startinglane + 10 ) && (activepiece - 9*i) > -1; i++) {
+							if ( cells[ activepiece - 9*i ].classList.length < 1 ) {
+								cells[ activepiece - 9*i ].classList.add("enabled");
+							} else {
+								i = 10;
+							}
+						}
+						//Diagonal Skate Leftupwards.
+						for (let i = 1; ( activepiece - i ) > ( startinglane - 1 ) && (activepiece - 11*i) > -1; i++) {
+							if ( cells[ activepiece - 11*i ].classList.length < 1 ) {
+								cells[ activepiece - 11*i ].classList.add("enabled");
+							} else {
+								i = 10;
+							}
+						}
+						//Diagonal Skate Rightdownwards.
+						for (let i = 1; ( activepiece + i ) < ( startinglane + 10 ) && (activepiece + 11*i) < 80; i++) {
+							if ( cells[ activepiece + 11*i ].classList.length < 1 ) {
+								cells[ activepiece + 11*i ].classList.add("enabled");
+							} else {
+								i = 10;
+							}
+						}
+						//Diagonal Skate Leftdownwards.
+						for (let i = 1; ( activepiece - i ) > ( startinglane - 1 ) && (activepiece + 9*i) < 80; i++) {
+							if ( cells[ activepiece + 9*i ].classList.length < 1 ) {
+								cells[ activepiece + 9*i ].classList.add("enabled");
+							} else {
+								i = 10;
+							}
+						}
+						//All Directions
+						if ( (activepiece - 11) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 11 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 11 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 11 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 11 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 10) > -1 ) {
+							if ( cells[ activepiece - 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 9) > -1 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece - 9 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 9 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 9 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 9 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 1) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 1) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 11) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 11 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 11 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 11 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 11 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 10) < 80 ) {
+							if ( cells[ activepiece + 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 9) < 80 && activepiece > startinglane ) {
+							if ( cells[ activepiece + 9 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 9 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 9 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 9 ].classList.add("enabled");
+							}
+						}
+						break;
+					
+					case "Lizard":
+						//To test: Is it faster to cut out the second if-statement?
+							//Answer: no. Checking for classList.length > 1 is extremely taxing.
+						//Horizontal Walk Rightwards.
+						for (let i = 1; ( activepiece + i ) < ( 10 + startinglane ); i++) {
+							if ( cells[ activepiece + i ].classList.length > 0 ) {
+								if ( cells[ activepiece + i ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + i ].classList.add("enabled");
+								}
+								i = 10;
+							} else {
+								cells[ activepiece + i ].classList.add("enabled");
+							}
+						}
+						//Horizontal Walk Leftwards.
+						for (let i = 1; ( activepiece - i ) > startinglane - 1; i++) {
+							if ( cells[ activepiece - i ].classList.length > 0 ) {
+								if ( cells[ activepiece - i ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - i ].classList.add("enabled");
+								}
+								i = 10;
+							} else {
+								cells[ activepiece - i ].classList.add("enabled");
+							}
+						}
+						//Jump Two Spaces.
+						if ( (activepiece - 20) > -1 ) {
+							if ( cells[ activepiece - 20 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 20 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 20 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 20 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 20) < 80 ) {
+							if ( cells[ activepiece + 20 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 20 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 20 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 20 ].classList.add("enabled");
+							}
+						}
+						//Jump Three Spaces.
+						if ( (activepiece - 30) > -1 ) {
+							if ( cells[ activepiece - 30 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 30 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 30 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 30 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 30) < 80 ) {
+							if ( cells[ activepiece + 30 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 30 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 30 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 30 ].classList.add("enabled");
+							}
+						}
+						break;
+
+					case "Bunny":
+						//Vertical Bounce.
+						for (let i = 0; (activepiece % 20) + i < 80; i += 20) {
+							if ( cells[ (activepiece % 20) + i ].classList.length > 0 ) {
+								if ( cells[ (activepiece % 20) + i ].classList.contains( notcurrentClass ) ) {
+									cells[ (activepiece % 20) + i ].classList.add("enabled");
+								}
+							} else {
+								cells[ (activepiece % 20) + i ].classList.add("enabled");
+							}
+						}
+						//Horizontal Bounce.
+						for (let i = 0; ( horizontaloffset + startinglane ) + i < ( 10 + startinglane ); i += 2) {
+							if ( cells[ ( horizontaloffset + startinglane ) + i ].classList.length > 0 ) {
+								if (  cells[( horizontaloffset + startinglane ) + i ].classList.contains( notcurrentClass ) ) {
+									cells[  ( horizontaloffset + startinglane ) + i ].classList.add("enabled");
+								}
+							} else {
+								cells[  ( horizontaloffset + startinglane ) + i ].classList.add("enabled");
+							}
+						}
+						//Cardinals.
+						if ( (activepiece - 10) > -1 ) {
+							if ( cells[ activepiece - 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 10) < 80 ) {
+							if ( cells[ activepiece + 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 1) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 1) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 1 ].classList.add("enabled");
+							}
+						}
+						break;
+						
+					case "Child":
+						//Grid Float.
+						if ( (activepiece - 22) > -1 && activepiece > startinglane + 1 ) {
+							if ( cells[ activepiece - 22 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 22 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 22 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 22 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 20) > -1 ) {
+							if ( cells[ activepiece - 20 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 20 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 20 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 20 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 18) > -1 && activepiece < startinglane + 8 ) {
+							if ( cells[ activepiece - 18 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 18 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 18 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 18 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 2) > -1 && activepiece > startinglane + 1 ) {
+							if ( cells[ activepiece - 2 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 2 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 2 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 2 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 2) > -1 && activepiece < startinglane + 8 ) {
+							if ( cells[ activepiece + 2 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 2 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 2 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 2 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 18) < 80 && activepiece > startinglane + 1 ) {
+							if ( cells[ activepiece + 18 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 18 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 18 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 18 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 20) < 80 ) {
+							if ( cells[ activepiece + 20 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 20 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 20 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 20 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 22) < 80 && activepiece < startinglane + 8 ) {
+							if ( cells[ activepiece + 22 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 22 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 22 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 22 ].classList.add("enabled");
+							}
+						}
+						break;
+						
+					case "Gentleman":
+						//Cardinals.
+						if ( (activepiece - 10) > -1 ) {
+							if ( cells[ activepiece - 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 10) < 80 ) {
+							if ( cells[ activepiece + 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 1) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 1) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 1 ].classList.add("enabled");
+							}
+						}
+						//Horizontal Magnet Rightwards.
+						for (let i = 1; ( activepiece + i ) < ( 10 + startinglane ); i++) {
+							if ( cells[ activepiece + i ].classList.contains( notcurrentClass ) ) {
+								cells[ activepiece + i ].classList.add("enabled");
+								i = 10;
+							}
+						}
+						//Horizontal Magnet Leftwards.
+						for (let i = 1; ( activepiece - i ) > startinglane - 1; i++) {
+							if ( cells[ activepiece - i ].classList.contains(  notcurrentClass  ) ) {
+								cells[ activepiece - i ].classList.add("enabled");	
+								i = 10;
+							}
+						}
+						//Vertical Magnet PL_Upwards.
+						for (let i = 1; ( activepiece - 10*i ) > -1 ; i++) {
+							if ( cells[ activepiece - 10*i ].classList.contains( notcurrentClass ) ) {
+								cells[ activepiece - 10*i ].classList.add("enabled");
+								i = 10;
+							}
+						}
+						//Vertical Magnet Downwards.
+						for (let i = 1; ( activepiece + 10*i ) < 80 ; i++) {
+							if ( cells[ activepiece + 10*i ].classList.contains( notcurrentClass ) ) {
+								cells[ activepiece + 10*i ].classList.add("enabled");
+								i = 10;
+							}
+						}
+						//Diagonal Magnet Rightupwards.
+						for (let i = 1; ( activepiece + i ) < ( startinglane + 10 ) && (activepiece - 9*i) > -1; i++) {
+							if ( cells[ activepiece - 9*i ].classList.contains( notcurrentClass ) ) {
+								cells[ activepiece - 9*i ].classList.add("enabled");
+								i = 10;
+							}
+						}
+						//Diagonal Magnet Leftupwards.
+						for (let i = 1; ( activepiece - i ) > ( startinglane - 1 ) && (activepiece - 11*i) > -1; i++) {
+							if ( cells[ activepiece - 11*i ].classList.contains( notcurrentClass ) ) {
+								cells[ activepiece - 11*i ].classList.add("enabled");
+								i = 10;
+							}
+						}
+						//Diagonal Magnet Rightdownwards.
+						for (let i = 1; ( activepiece + i ) < ( startinglane + 10 ) && (activepiece + 11*i) < 80; i++) {
+							if ( cells[ activepiece + 11*i ].classList.contains( notcurrentClass ) ) {
+								cells[ activepiece + 11*i ].classList.add("enabled");
+								i = 10;
+							}
+						}
+						//Diagonal Magnet Leftdownwards.
+						for (let i = 1; ( activepiece - i ) > ( startinglane - 1 ) && (activepiece + 9*i) < 80; i++) {
+							if ( cells[ activepiece + 9*i ].classList.contains( notcurrentClass ) ) {
+								cells[ activepiece + 9*i ].classList.add("enabled");
+								i = 10;
+							}
+						}
+						break;
+						
+					case "Duplicator":
+						//Cardinals.
+						if ( (activepiece - 10) > -1 ) {
+							if ( cells[ activepiece - 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 10) < 80 ) {
+							if ( cells[ activepiece + 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 1) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 1) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 1 ].classList.add("enabled");
+							}
+						}
+						//Summon Duplicates.
+						if (current == 1 && duplicates[0] < 5 || current == -1 && duplicates[1] < 5) {
+							if ( (activepiece - 11) > -1 && activepiece > startinglane && cells[ activepiece - 11 ].classList.length == 0 ) {
+								cells[ activepiece - 11 ].classList.add("duplication");
+							}
+							if ( (activepiece - 9) > -1 && activepiece < (startinglane + 9) && cells[ activepiece - 9 ].classList.length == 0) {
+								cells[ activepiece - 9 ].classList.add("duplication");
+							}
+							if ( (activepiece + 11) < 80 && activepiece < (startinglane + 9) && cells[ activepiece + 11 ].classList.length == 0 ) {
+								cells[ activepiece + 11 ].classList.add("duplication");
+							}
+							if ( (activepiece + 9) < 80 && activepiece > startinglane && cells[ activepiece + 9 ].classList.length == 0) {
+								cells[ activepiece + 9 ].classList.add("duplication");
+							}
+						}
+						break;
+					
+					case "Duplicate":
+						//Conditional Cardinals + Diagonals. (Only forwards and sideways movement).
+						if ( current == 1 ) {
+							if ( (activepiece - 11) > -1 && activepiece > startinglane ) {
+								if ( cells[ activepiece - 11 ].classList.length > 0 ) {
+									if ( cells[ activepiece - 11 ].classList.contains( notcurrentClass ) ) {
+										cells[ activepiece - 11 ].classList.add("enabled");
+									}
+								} else {
+									cells[ activepiece - 11 ].classList.add("enabled");
+								}
+							}
+							if ( (activepiece - 10) > -1 ) {
+								if ( cells[ activepiece - 10 ].classList.length > 0 ) {
+									if ( cells[ activepiece - 10 ].classList.contains( notcurrentClass ) ) {
+										cells[ activepiece - 10 ].classList.add("enabled");
+									}
+								} else {
+									cells[ activepiece - 10 ].classList.add("enabled");
+								}
+							}
+							if ( (activepiece - 9) > -1 && activepiece < startinglane + 9 ) {
+								if ( cells[ activepiece - 9 ].classList.length > 0 ) {
+									if ( cells[ activepiece - 9 ].classList.contains( notcurrentClass ) ) {
+										cells[ activepiece - 9 ].classList.add("enabled");
+									}
+								} else {
+									cells[ activepiece - 9 ].classList.add("enabled");
+								}
+							}
+						} else {
+							if ( (activepiece + 11) < 80 && activepiece < startinglane + 9 ) {
+								if ( cells[ activepiece + 11 ].classList.length > 0 ) {
+									if ( cells[ activepiece + 11 ].classList.contains( notcurrentClass ) ) {
+										cells[ activepiece + 11 ].classList.add("enabled");
+									}
+								} else {
+									cells[ activepiece + 11 ].classList.add("enabled");
+								}
+							}
+							if ( (activepiece + 10) < 80 ) {
+								if ( cells[ activepiece + 10 ].classList.length > 0 ) {
+									if ( cells[ activepiece + 10 ].classList.contains( notcurrentClass ) ) {
+										cells[ activepiece + 10 ].classList.add("enabled");
+									}
+								} else {
+									cells[ activepiece + 10 ].classList.add("enabled");
+								}
+							}
+							if ( (activepiece + 9) < 80 && activepiece > startinglane ) {
+								if ( cells[ activepiece + 9 ].classList.length > 0 ) {
+									if ( cells[ activepiece + 9 ].classList.contains( notcurrentClass ) ) {
+										cells[ activepiece + 9 ].classList.add("enabled");
+									}
+								} else {
+									cells[ activepiece + 9 ].classList.add("enabled");
+								}
+							}
+						}
+						if ( (activepiece - 1) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 1) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 1 ].classList.add("enabled");
+							}
+						}
+						break;
+						
+					case "Pastafarian":
+						//Light-Bridge (only usable when not broken):
+						if ( !cells[activepiece].classList.contains("broken1") ) {
+						//Horizontal Rightwards.
+						if ( ( activepiece + 1 ) < ( 10 + startinglane ) && cells[ activepiece + 1 ].classList.length < 2 ) {
+							for (let i = 2; ( activepiece + i ) < ( 10 + startinglane ) && ( i < 5 ); i++) {
+								if ( cells[ activepiece + i ].classList.length > 0 ) {
+									if ( cells[ activepiece + i ].classList.contains("Pit") ) {
+									//Do nothing.
+									} else {
+										if ( cells[ activepiece + i ].classList.contains( notcurrentClass ) ) {
+											cells[ activepiece + i ].classList.add("lightbridge");
+										}
+										i = 6;
+									}
+								} else {
+									cells[ activepiece + i ].classList.add("lightbridge");
+								}
+							}
+						}
+						//Horizontal Leftwards.
+						if ( ( activepiece - 1 ) > ( startinglane - 1 ) && cells[ activepiece - 1 ].classList.length < 2 ) {
+							for (let i = 2; ( activepiece - i ) > ( startinglane - 1 ) && ( i < 5 ); i++) {
+								if ( cells[ activepiece - i ].classList.length > 0 ) {
+									if ( cells[ activepiece - i ].classList.contains("Pit") ) {
+									//Do nothing.
+									} else {
+										if ( cells[ activepiece - i ].classList.contains( notcurrentClass ) ) {
+											cells[ activepiece - i ].classList.add("lightbridge");
+										}
+
+										i = 6;
+									}
+								} else {
+									cells[ activepiece - i ].classList.add("lightbridge");
+								}
+							}
+						}
+						//Vertical Upwards.
+						if ( ( activepiece - 10 ) > -1 && cells[ activepiece - 10 ].classList.length < 2 ) {
+							for (let i = 2; ( activepiece - 10*i ) > -1 && ( i < 5 ); i++) {
+								if ( cells[ activepiece - 10*i ].classList.length > 0 ) {
+									if ( cells[ activepiece - 10*i ].classList.contains("Pit") ) {
+									//Do nothing.
+									} else {
+										if ( cells[ activepiece - 10*i ].classList.contains( notcurrentClass ) ) {
+											cells[ activepiece - 10*i ].classList.add("lightbridge");
+										}
+										i = 6;
+									}
+								} else {
+									cells[ activepiece - 10*i ].classList.add("lightbridge");
+								}
+							}
+						}
+						//Vertical Downwards.
+						if ( ( activepiece + 10 ) < 80 && cells[ activepiece + 10 ].classList.length < 2 ) {
+							for (let i = 2; ( activepiece + 10*i ) < 80 && ( i < 5 ); i++) {
+								if ( cells[ activepiece + 10*i ].classList.length > 0 ) {
+									if ( cells[ activepiece + 10*i ].classList.contains("Pit") ) {
+									//Do nothing.
+									} else {
+										if ( cells[ activepiece + 10*i ].classList.contains( notcurrentClass ) ) {
+											cells[ activepiece + 10*i ].classList.add("lightbridge");
+										}
+
+										i = 6;
+									}
+								} else {
+									cells[ activepiece + 10*i ].classList.add("lightbridge");
+								}
+							}
+						}
+						//Diagonal Rightupwards.
+						if ( ( activepiece + 1 ) < ( startinglane + 10 ) && ( activepiece - 9 ) > -1 && cells[ activepiece - 9 ].classList.length < 2 ) {
+							for (let i = 2; ( activepiece + i ) < ( startinglane + 10 ) && ( activepiece - 9*i ) > -1 && ( i < 5 ); i++) {
+								if ( cells[ activepiece - 9*i ].classList.length > 0 ) {
+									if ( cells[ activepiece - 9*i ].classList.contains("Pit") ) {
+									//Do nothing.
+									} else {
+										if ( cells[ activepiece - 9*i ].classList.contains( notcurrentClass ) ) {
+											cells[ activepiece - 9*i ].classList.add("lightbridge");
+										}
+										i = 6;
+									}
+								} else {
+									cells[ activepiece - 9*i ].classList.add("lightbridge");
+								}
+							}
+						}
+						//Diagonal Leftupwards.
+						if ((activepiece - 1) > (startinglane - 1) && (activepiece - 11) > -1 && cells[activepiece - 11].classList.length < 2) {
+							for (let i = 2; (activepiece - i) > (startinglane - 1) && (activepiece - 11*i) > -1 && (i < 5); i++) {
+								if (cells[activepiece - 11*i].classList.length > 0) {
+									if (cells[activepiece - 11*i].classList.contains("Pit")) {
+									// Do nothing.
+									} else {
+										if (cells[activepiece - 11*i].classList.contains(notcurrentClass)) {
+											cells[activepiece - 11*i].classList.add("lightbridge");
+										}
+										i = 6;
+									}
+								} else {
+									cells[activepiece - 11*i].classList.add("lightbridge");
+								}
+							}
+						}
+						//Diagonal Rightdownwards.
+						if ((activepiece + 1) < (startinglane + 10) && (activepiece + 11) < 80 && cells[activepiece + 11].classList.length < 2) {
+							for (let i = 2; (activepiece + i) < (startinglane + 10) && (activepiece + 11 * i) < 80 && (i < 5); i++) {
+								if (cells[activepiece + 11*i].classList.length > 0) {
+									if (cells[activepiece + 11*i].classList.contains("Pit")) {
+									// Do nothing.
+									} else {
+										if (cells[activepiece + 11*i].classList.contains(notcurrentClass)) {
+											cells[activepiece + 11*i].classList.add("lightbridge");
+										}
+										i = 6;
+									}
+								} else {
+									cells[activepiece + 11*i].classList.add("lightbridge");
+								}
+							}
+						}
+						//Diagonal Leftdownwards.
+						if ((activepiece - 1) > (startinglane - 1) && (activepiece + 9) < 80 && cells[activepiece + 9].classList.length < 2) {
+							for (let i = 2; (activepiece - i) > (startinglane - 1) && (activepiece + 9*i) < 80 && (i < 5); i++) {
+								if (cells[activepiece + 9*i].classList.length > 0) {
+									if (cells[activepiece + 9*i].classList.contains("Pit")) {
+									// Do nothing.
+									} else {
+										if (cells[activepiece + 9*i].classList.contains(notcurrentClass)) {
+											cells[activepiece + 9*i].classList.add("lightbridge");
+										}
+										i = 6;
+									}
+								} else {
+									cells[activepiece + 9*i].classList.add("lightbridge");
+								}
+							}
+						}
+						}
+						//All Directions
+						if ( (activepiece - 11) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 11 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 11 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 11 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 11 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 10) > -1 ) {
+							if ( cells[ activepiece - 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 9) > -1 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece - 9 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 9 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 9 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 9 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 1) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 1) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 11) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 11 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 11 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 11 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 11 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 10) < 80 ) {
+							if ( cells[ activepiece + 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 9) < 80 && activepiece > startinglane ) {
+							if ( cells[ activepiece + 9 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 9 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 9 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 9 ].classList.add("enabled");
+							}
+						}
+						break;
+						
+					case "Student":
+						//Strafe.
+						if ( (activepiece - 1) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 1) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 1 ].classList.add("enabled");
+							}
+						}
+						//Jump.
+						for (let i = 1; i < 5; i++) {
+							if ( (activepiece + 10*i) < 80 ) {
+								if ( cells[ activepiece + 10*i ].classList.length > 0 ) {
+									if ( cells[ activepiece + 10*i ].classList.contains( notcurrentClass ) ) {
+										cells[ activepiece + 10*i ].classList.add("enabled");
+									}
+								} else {
+									cells[ activepiece + 10*i ].classList.add("enabled");
+								}
+							} else {
+								i = 5;
+							}
+						}
+						for (let i = 1; i < 5; i++) {
+							if ( (activepiece - 10*i) > -1 ) {
+								if ( cells[ activepiece - 10*i ].classList.length > 0 ) {
+									if ( cells[ activepiece - 10*i ].classList.contains( notcurrentClass ) ) {
+										cells[ activepiece - 10*i ].classList.add("enabled");
+									}
+								} else {
+									cells[ activepiece - 10*i ].classList.add("enabled");
+								}
+							} else {
+								i = 5;
+							}
+						}
+						break;
+						
+					case "Angel":
+						//All Directions
+						if ( (activepiece - 11) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 11 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 11 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 11 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 11 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 10) > -1 ) {
+							if ( cells[ activepiece - 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 9) > -1 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece - 9 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 9 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 9 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 9 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 1) > -1 && activepiece > startinglane ) {
+							if ( cells[ activepiece - 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 1) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 1 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 1 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 1 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 1 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 11) < 80 && activepiece < startinglane + 9 ) {
+							if ( cells[ activepiece + 11 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 11 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 11 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 11 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 10) < 80 ) {
+							if ( cells[ activepiece + 10 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 10 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 10 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 10 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 9) < 80 && activepiece > startinglane ) {
+							if ( cells[ activepiece + 9 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 9 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 9 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 9 ].classList.add("enabled");
+							}
+						}
+						//Dash
+						if ( (activepiece - 33) > -1 && activepiece > startinglane + 2 ) {
+							if ( cells[ activepiece - 33 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 33 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 33 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 33 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 30) > -1 ) {
+							if ( cells[ activepiece - 30 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 30 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 30 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 30 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 27) > -1 && activepiece < startinglane + 7 ) {
+							if ( cells[ activepiece - 27 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 27 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 27 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 27 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece - 3) > -1 && activepiece > startinglane + 2 ) {
+							if ( cells[ activepiece - 3 ].classList.length > 0 ) {
+								if ( cells[ activepiece - 3 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece - 3 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece - 3 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 3) > -1 && activepiece < startinglane + 7 ) {
+							if ( cells[ activepiece + 3 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 3 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 3 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 3 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 33) < 80 && activepiece < startinglane + 7 ) {
+							if ( cells[ activepiece + 33 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 33 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 33 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 33 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 30) < 80 ) {
+							if ( cells[ activepiece + 30 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 30 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 30 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 30 ].classList.add("enabled");
+							}
+						}
+						if ( (activepiece + 27) < 80 && activepiece > startinglane + 2 ) {
+							if ( cells[ activepiece + 27 ].classList.length > 0 ) {
+								if ( cells[ activepiece + 27 ].classList.contains( notcurrentClass ) ) {
+									cells[ activepiece + 27 ].classList.add("enabled");
+								}
+							} else {
+								cells[ activepiece + 27 ].classList.add("enabled");
+							}
+						}
+						break;
+						
+				}
+				
+			}
+
+		return;
+		
+		}
+		
+		//Move selections.
+		
+		//More efficient to simplify further checks for lightbridge usage down to a variable. Light-bridge is mostly just an ordinary move.
+		if ( event.target.classList.contains("lightbridge") ) {
+
+			lightbridge = 1;
+			pastafarianBridgesUsed++;
+			
+		}
+		
+		//Move selected piece. (When clicking on a valid move).
+		if ( event.target.classList.contains("enabled") || lightbridge == 1 ) {
+		
+			//Clear all highlighted moves from the board. Again.
+			removeenabled = board.getElementsByClassName("enabled");
+			removeduplication = board.getElementsByClassName("duplication");
+			removelightbridge = board.getElementsByClassName("lightbridge");
+		
+			for (let i = 0; i < removeenabled.length;) {
+			
+				removeenabled[i].classList.remove("enabled");
+			
+			}
+			
+			for (let i = 0; i < removeduplication.length;) {
+			
+				removeduplication[i].classList.remove("duplication");
+			
+			}
+			
+			for (let i = 0; i < removelightbridge.length;) {
+			
+				removelightbridge[i].classList.remove("lightbridge");
+			
+			}
+		
+			//Bust the move.
+			BustAMove( TargetCell );
+
+			return true;
+		
+		}
+		
+		//Summon duplicate. (When clicking on a valid duplication move).
+		if ( event.target.classList.contains("duplication") ) {
+		
+			//Clear all highlighted moves from the board. Again. Again. (Repeated to ensure that clicking on a non-move doesn't reset the enabled moves.)
+			removeenabled = board.getElementsByClassName("enabled");
+			removeduplication = board.getElementsByClassName("duplication");
+		
+			for (let i = 0; i < removeenabled.length;) {
+			
+				removeenabled[i].classList.remove("enabled");
+			
+			}
+			
+			for (let i = 0; i < removeduplication.length;) {
+			
+				removeduplication[i].classList.remove("duplication");
+			
+			}
+		
+			activepiece = 88;
+			BustAMove( TargetCell );
+
+			return true;
+		
+		}
+	
+	}
+       
+	//Board colors.
+	var lightcolor = "#F4F4F4";
+	var darkcolor = "#4F7BFF";
+       
+  	function colorBoard(color1, color2) {
+
+  		let row = -1;
+    		for (var currentCell = 0; currentCell < 10; currentCell++) {
+    			row = -row;
+    			if (row == 1) {
+    				var currentColor = color1;
+    			} else {
+    				var currentColor = color2;
+    			}
+
+    		for (let i = currentCell; i < 80; i += 11) {
+    			cells[i].style.backgroundColor = currentColor;
+    			if (i % 10 == 9) {
+    				i -= 10;
+    			}
+   		}
+
+   		}
+
+	}
+
+   	//colorBoard();
+
+   	//Initialize cell functionality.
+   	function initializeBoard() {
+
+   		for (var i = 0; i < cells.length; i++) {
+			cells[i].setAttribute ("onclick", "cell();");
+			cells[i].id = i;
+		}
+
+		let topCell = cells[30].getBoundingClientRect();
+		let bottomCell = cells[49].getBoundingClientRect();
+
+		let BoardLEFT = topCell.left - (window.innerWidth * 0.0045);
+		let BoardRIGHT = bottomCell.right - (window.innerWidth * 0.004);
+
+		WinStripe.style.left = BoardLEFT + "px";
+		WinStripe.style.top = topCell.top + "px";
+		WinStripe.style.width = (BoardRIGHT - BoardLEFT) + "px";
+		WinStripe.style.height = (bottomCell.bottom - topCell.top) + "px";
+
+		EndGame.style.width = ( BoardRIGHT / window.innerWidth * 100 ) + "%";
+
+	}
+
+	var MainMenu = document.querySelector('#MainMenu');
+	var Settings = document.querySelector('#Settings');
+	var Header = document.querySelector('#Header');
+
+	MainMenu.style.left = (window.innerWidth * 0.01) + "px";
+	Header.style.left = (0.5 * window.innerWidth) - (window.innerHeight * 0.22277) + "px";
+	Settings.style.right = (window.innerWidth * 0.01) + "px";
+
+	let boxOfPlayer = playerBox.getBoundingClientRect();
+	var boardAndBeans = (0.5 * window.innerWidth) - (window.innerHeight * 0.7470075);
+	var boardAndBuy = boardAndBeans + "px";
+	buysell.style.right = boardAndBuy;
+	buysell.style.top = boxOfPlayer.top + "px";
+	buysell.style.width = (window.innerHeight * 0.5) + 6 + "px";
+	purchaseBox.style.height = (0.696 * window.innerHeight - 3) + "px";
+	purchaseBox.style.right = boardAndBuy;
+
+	playerBox.style.right = boardAndBuy;
+	board.style.left = boardAndBuy;
+
+	//For the visual display of pieces to remain consistent across time and space.
+	function manualResize() {
+
+		let boxOfPlayer = playerBox.getBoundingClientRect();
+		boardAndBeans = (0.5 * window.innerWidth) - (window.innerHeight * 0.7470075);
+		boardAndBuy = boardAndBeans + "px";
+		buysell.style.right = boardAndBuy;
+		buysell.style.top = boxOfPlayer.top + "px";
+		buysell.style.width = (window.innerHeight * 0.5) + 6 + "px";
+		purchaseBox.style.height = (0.696 * window.innerHeight - 3) + "px";
+		purchaseBox.style.right = boardAndBuy;
+
+		purchaseBox.style.visibility = "visible";
+		buysell.style.visibility = "visible";
+
+		playerBox.style.right = boardAndBuy;
+		board.style.left = boardAndBuy;
+
+		let allPieces = document.getElementsByClassName("piece");
+
+		for (let i = 0; i < allPieces.length; i++) {
+
+			numbertile = allPieces[i].id;
+			numbertile = numbertile.substr(5);
+			let cellCoordinates = cells[parseInt(numbertile)].getBoundingClientRect();
+
+			allPieces[i].style.bottom = (window.innerHeight - cellCoordinates.top) - (window.innerHeight * 0.09) + "px";
+			allPieces[i].style.left = cellCoordinates.left - (window.innerHeight * 0.001) + "px";
+
+		}
+
+		let topCell = cells[30].getBoundingClientRect();
+		let bottomCell = cells[49].getBoundingClientRect();
+		
+		let BoardLEFT = topCell.left - (document.body.clientWidth * 0.0045);
+		let BoardRIGHT = bottomCell.right - (document.body.clientWidth * 0.004);
+
+		WinStripe.style.left = BoardLEFT + "px";
+		WinStripe.style.top = topCell.top + "px";
+		WinStripe.style.width = (BoardRIGHT - BoardLEFT) + "px";
+		WinStripe.style.height = (bottomCell.bottom - topCell.top) + "px";
+
+		EndGame.style.width = ( BoardRIGHT / document.body.clientWidth * 100 ) + "%";
+	
+	}
+	
+	//Fun fact: I stole this part.
+	var globalResizeTimer = null;
+	window.addEventListener('resize', function() {
+
+		var clientWidth = window.innerWidth;
+		var clientHeight = window.innerHeight;
+
+		if (globalResizeTimer != null) {
+			window.clearTimeout(globalResizeTimer);
+		}
+		globalResizeTimer = window.setTimeout(function() {
+			manualResize();
+		}, 400);
+
+		MainMenu.style.left = (clientWidth * 0.01) + "px";
+		Header.style.left = (0.5 * window.innerWidth) - (window.innerHeight * 0.22277) + "px";
+		Settings.style.right = (clientWidth * 0.01) + "px";
+
+		boardIncrement = Math.ceil(window.innerWidth * 0.01);
+
+		purchaseBox.style.visibility = "hidden";
+		buysell.style.visibility = "hidden";
+
+	});
+
+var BuyNow = document.querySelector("#buy");
+var SellSellSell = document.querySelector("#sell");
+var priceTags = purchaseBox.querySelectorAll("h1");
+
+var characters = purchaseBox.querySelectorAll(".selection");
+
+var currentMode = 0;
+	//TO-DO: If I ever add a buyback system, I can make this function significantly more efficient by just inverting the selection each time.
+	function creditDebit(toWhat) {
+
+		if (currentMode == toWhat) {
+			return;
+		}
+
+		//Sell
+		if (toWhat == 1) {
+			if (soldPieces[0] == 0) {
+				characters[0].style.opacity = 1;
+				characters[1].style.opacity = 1;
+				characters[2].style.opacity = 1;
+			} else {
+				characters[0].style.opacity = 0.5;
+				characters[1].style.opacity = 0.5;
+				characters[2].style.opacity = 0.5;
+			}
+			for (i = 3; i < 10; i++) {
+				if (soldPieces[i-2] == 1 || leftPieces[i-3] == 0) {
+					characters[i].style.opacity = 0.5;
+				} else {
+					characters[i].style.opacity = 1;
+				}
+			}
+
+			BuyNow.style.borderBottom = "3px solid gray";
+			BuyNow.style.backgroundColor = "#595959";
+			SellSellSell.style.borderBottom = "3px solid #D5D5D5";
+			SellSellSell.style.backgroundColor = "#D5D5D5";
+			purchaseBox.style.backgroundColor = "#D5D5D5";
+			purchaseBox.style.border = "3px solid gray";
+
+			for (let i = 0; i < 4; i++) {
+				priceTags[i].style.color = "gray";
+			}
+			priceTags[1].innerHTML = "250";
+			priceTags[2].innerHTML = "200";
+			priceTags[3].innerHTML = "150";
+			priceTags[1].style.opacity = 1;
+			priceTags[2].style.opacity = 1;
+			priceTags[3].style.opacity = 1;
+
+			currentMode = 1;
+		//Buy
+		} else {
+			characters[0].style.opacity = 0.5;
+			characters[1].style.opacity = 0.5;
+			characters[2].style.opacity = 0.5;
+			for (i = 3; i < 10; i++) {
+				if (leftPieces[i-3] == 1 || soldPieces[i-2] == 1) {
+					characters[i].style.opacity = 0.5;
+				} else {
+					characters[i].style.opacity = 1;
+				}
+			}
+
+			BuyNow.style.borderBottom = "3px solid #797979";
+			BuyNow.style.backgroundColor = "#797979";
+			SellSellSell.style.borderBottom = "3px solid #393939";
+			SellSellSell.style.backgroundColor = "#AAA";
+			purchaseBox.style.backgroundColor = "#797979";
+			purchaseBox.style.border = "3px solid #393939";
+
+			for (let i = 1; i < 4; i++) {
+				priceTags[i].style.color = "#393939";
+			}
+			priceTags[0].style.color = "#797979";
+			priceTags[1].innerHTML = "1,000";
+			priceTags[2].innerHTML = "800";
+			priceTags[3].innerHTML = "600";
+			//Update price tags based on amount of powercells.
+			if (powercells < 1000) {
+				priceTags[1].style.opacity = 0.25;
+				if (powercells < 800) {
+					priceTags[2].style.opacity = 0.25;
+					if (powercells < 600) {
+						priceTags[3].style.opacity = 0.25;
+					} else {
+						priceTags[3].style.opacity = 1;
+					}
+				} else {
+					priceTags[2].style.opacity = 1;
+					priceTags[3].style.opacity = 1;
+				}
+			} else {
+				priceTags[1].style.opacity = 1;
+				priceTags[2].style.opacity = 1;
+				priceTags[3].style.opacity = 1;
+			}
+
+			currentMode = 0;
+		}
+
+	}
+	function sellPurchase(piece) {
+
+		//Purchase
+		if (currentMode == 0) {
+
+			switch (piece) {
+				case "Pastafarian":
+					if (leftPieces[0] == 0) {
+						if (powercells > 999) {
+							powercells -= 1000;
+							shopPowercells.innerHTML = "PC: " + powercells;
+
+							ThePiecePlacer(79, "_1" , "Pastafarian");
+
+							characters[3].style.opacity = 0.5;
+							leftPieces[0] = 1;
+						}
+					}
+					break;
+				case "Bunny":
+					if (leftPieces[1] == 0) {
+						if (powercells > 999) {
+							powercells -= 1000;
+							shopPowercells.innerHTML = "PC: " + powercells;
+							ThePiecePlacer(75, "_1" , "Bunny");
+							characters[4].style.opacity = 0.5;
+							leftPieces[1] = 1;
+						}
+					}
+					break;
+				case "Gentleman":
+					if (leftPieces[2] == 0) {
+						if (powercells > 999) {
+							powercells -= 1000;
+							shopPowercells.innerHTML = "PC: " + powercells;
+							ThePiecePlacer(73, "_1" , "Gentleman");
+							characters[5].style.opacity = 0.5;
+							leftPieces[2] = 1;
+						}
+					}
+					break;
+
+				case "Student":
+					if (leftPieces[3] == 0) {
+						if (powercells > 799) {
+							powercells -= 800;
+							shopPowercells.innerHTML = "PC: " + powercells;
+							ThePiecePlacer(77, "_1" , "Student");
+							characters[6].style.opacity = 0.5;
+							leftPieces[3] = 1;
+						}
+					}
+					break;
+				case "Lizard":
+					if (leftPieces[4] == 0) {
+						if (powercells > 799) {
+							powercells -= 800;
+							shopPowercells.innerHTML = "PC: " + powercells;
+							ThePiecePlacer(72, "_1" , "Lizard");
+							characters[7].style.opacity = 0.5;
+							leftPieces[4] = 1;
+						}
+					}
+					break;
+
+				case "Child":
+					if (leftPieces[5] == 0) {
+						if (powercells > 599) {
+							powercells -= 600;
+							shopPowercells.innerHTML = "PC: " + powercells;
+							ThePiecePlacer(74, "_1" , "Child");
+							characters[8].style.opacity = 0.5;
+							leftPieces[5] = 1;
+						}
+					}
+					break;
+				case "Skater":
+					if (leftPieces[6] == 0) {
+						if (powercells > 599) {
+							powercells -= 600;
+							shopPowercells.innerHTML = "PC: " + powercells;
+							ThePiecePlacer(70, "_1" , "Skater");
+							characters[9].style.opacity = 0.5;
+							leftPieces[6] = 1;
+						}
+					}
+					break;
+			}
+			//Update price tags based on amount of powercells.
+			if (powercells < 1000) {
+				priceTags[1].style.opacity = 0.25;
+				if (powercells < 800) {
+					priceTags[2].style.opacity = 0.25;
+					if (powercells < 600) {
+						priceTags[3].style.opacity = 0.25;
+					} else {
+						priceTags[3].style.opacity = 1;
+					}
+				} else {
+					priceTags[2].style.opacity = 1;
+					priceTags[3].style.opacity = 1;
+				}
+			} else {
+				priceTags[1].style.opacity = 1;
+				priceTags[2].style.opacity = 1;
+				priceTags[3].style.opacity = 1;
+			}
+
+		//Sell
+		} else {
+
+			switch (piece) {
+				case "Runner":
+					if (soldPieces[0] == 0) {
+						VitalPieces[0]--;
+						powercells += 500;
+						shopPowercells.innerHTML = "PC: " + powercells;
+
+						var pieceToRemove = document.querySelector("#piece71");
+						pieceToRemove.remove();
+						cells[71].removeAttribute("class");
+
+						characters[0].style.opacity = 0.5;
+						characters[1].style.opacity = 0.5;
+						characters[2].style.opacity = 0.5;
+						soldPieces[0] = 1;
+					}
+					break;
+				case "Angel":
+					if (soldPieces[0] == 0) {
+						VitalPieces[0]--;
+						powercells += 500;
+						shopPowercells.innerHTML = "PC: " + powercells;
+
+						var pieceToRemove = document.querySelector("#piece78");
+						pieceToRemove.remove();
+						cells[78].removeAttribute("class");
+
+						characters[0].style.opacity = 0.5;
+						characters[1].style.opacity = 0.5;
+						characters[2].style.opacity = 0.5;
+						soldPieces[0] = 1;
+					}
+					break;
+				case "Duplicator":
+					if (soldPieces[0] == 0) {
+						powercells += 500;
+						shopPowercells.innerHTML = "PC: " + powercells;
+
+						var pieceToRemove = document.querySelector("#piece76");
+						pieceToRemove.remove();
+						cells[76].removeAttribute("class");
+						for (i = 65; i < 70; i++) {
+							var pieceToRemove = document.querySelector("#piece" + i);
+							pieceToRemove.remove();
+							cells[i].removeAttribute("class");
+						}
+
+						characters[0].style.opacity = 0.5;
+						characters[1].style.opacity = 0.5;
+						characters[2].style.opacity = 0.5;
+						soldPieces[0] = 1;
+					}
+					break;
+
+				case "Pastafarian":
+					if (soldPieces[1] == 0 && leftPieces[0] == 1) {
+						powercells += 250;
+						shopPowercells.innerHTML = "PC: " + powercells;
+
+						var pieceToRemove = document.querySelector("#piece79");
+						pieceToRemove.remove();
+						cells[79].removeAttribute("class");
+
+						characters[3].style.opacity = 0.5;
+						soldPieces[1] = 1;
+					}
+					break;
+				case "Bunny":
+					if (soldPieces[2] == 0 && leftPieces[1] == 1) {
+						powercells += 250;
+						shopPowercells.innerHTML = "PC: " + powercells;
+
+						var pieceToRemove = document.querySelector("#piece75");
+						pieceToRemove.remove();
+						cells[75].removeAttribute("class");
+
+						characters[4].style.opacity = 0.5;
+						soldPieces[2] = 1;
+					}
+					break;
+				case "Gentleman":
+					if (soldPieces[3] == 0 && leftPieces[2] == 1) {
+						powercells += 250;
+						shopPowercells.innerHTML = "PC: " + powercells;
+
+						var pieceToRemove = document.querySelector("#piece73");
+						pieceToRemove.remove();
+						cells[73].removeAttribute("class");
+
+						characters[5].style.opacity = 0.5;
+						soldPieces[3] = 1;
+					}
+					break;
+
+				case "Student":
+					if (soldPieces[4] == 0 && leftPieces[3] == 1) {
+						powercells += 200;
+						shopPowercells.innerHTML = "PC: " + powercells;
+
+						var pieceToRemove = document.querySelector("#piece77");
+						pieceToRemove.remove();
+						cells[77].removeAttribute("class");
+
+						characters[6].style.opacity = 0.5;
+						soldPieces[4] = 1;
+					}
+					break;
+				case "Lizard":
+					if (soldPieces[5] == 0 && leftPieces[4] == 1) {
+						powercells += 200;
+						shopPowercells.innerHTML = "PC: " + powercells;
+
+						var pieceToRemove = document.querySelector("#piece72");
+						pieceToRemove.remove();
+						cells[72].removeAttribute("class");
+
+						characters[7].style.opacity = 0.5;
+						soldPieces[5] = 1;
+					}
+					break;
+
+				case "Child":
+					if (soldPieces[6] == 0 && leftPieces[5] == 1) {
+						powercells += 150;
+						shopPowercells.innerHTML = "PC: " + powercells;
+
+						var pieceToRemove = document.querySelector("#piece74");
+						pieceToRemove.remove();
+						cells[74].removeAttribute("class");
+
+						characters[8].style.opacity = 0.5;
+						soldPieces[6] = 1;
+					}
+					break;
+				case "Skater":
+					if (soldPieces[7] == 0 && leftPieces[6] == 1) {
+						powercells += 150;
+						shopPowercells.innerHTML = "PC: " + powercells;
+
+						var pieceToRemove = document.querySelector("#piece70");
+						pieceToRemove.remove();
+						cells[70].removeAttribute("class");
+
+						characters[9].style.opacity = 0.5;
+						soldPieces[7] = 1;
+					}
+					break;
+			}
+
+		}
+
+	}
+	var roundStarted = 0;
+	function startRound() {
+
+		if (roundStarted == 0) {
+			powercellCounter.innerHTML = "Powercells: " + powercells;
+
+			playerBox.style.opacity = 1;
+			purchaseBox.style.opacity = 0;
+			buysell.style.opacity = 0;
+
+			setTimeout( () => { purchaseBox.style.visibility = "hidden"; }, 500);
+			setTimeout( () => { buysell.style.visibility = "hidden"; }, 500);
+
+			currentPlayer = 2;
+
+			setTimeout( () => { timerId = setInterval(countdown, 1000); }, 1000);
+
+			colorBoard(lightcolor, darkcolor);
+			roundStarted = 1;
+		}
+
+	}
+	var levelName;
+	function boardImportation(inputBoard) {
+
+		var sequencePiece = 0;
+		var sequencePlace = 0;
+		VitalPieces[0] = 0;
+		VitalPieces[1] = 0;
+		duplicates[0] = 0;
+		duplicates[1] = 0;
+
+		//Identify the level name.
+		for (let a = 0; a < inputBoard.length; a++) {
+			if (inputBoard[a] == "/") {
+				levelName = inputBoard.substring(0, a);
+				var importBoard = inputBoard.substring(a + 1);
+			}
+		}
+
+		//Begin the input examination.
+		for (let y = 1; y < importBoard.length; y++) {
+
+			if (importBoard[y] == ",") {
+				if (sequencePiece < 9) {
+					sequencePiece = parseInt(importBoard[y - 1]);
+				}
+
+				if (sequencePiece < 14) {
+					switch (sequencePiece) {
+						case 0:
+							break;
+						case 1:
+							cells[sequencePlace].classList.add("Pit");
+							break;
+						case 12:
+							ThePiecePlacer(sequencePlace, "_1" , "Duplicate");
+							duplicates[0]++;
+							break;
+						case 3:
+							ThePiecePlacer(sequencePlace, "_1" , "Skater");
+							break;
+						case 4:
+							ThePiecePlacer(sequencePlace, "_1" , "Lizard");
+							break;
+						case 5:
+							ThePiecePlacer(sequencePlace, "_1" , "Bunny");
+							break;
+						case 6:
+							ThePiecePlacer(sequencePlace, "_1" , "Gentleman");
+							break;
+						case 7:
+							ThePiecePlacer(sequencePlace, "_1" , "Duplicator");
+							break;
+						case 8:
+							ThePiecePlacer(sequencePlace, "_1" , "Child");
+							break;
+						case 9:
+							ThePiecePlacer(sequencePlace, "_1" , "Pastafarian");
+							break;
+						case 10:
+							ThePiecePlacer(sequencePlace, "_1" , "Student");
+							break;
+						case 2:
+							ThePiecePlacer(sequencePlace, "_1" , "Runner");
+							VitalPieces[0]++;
+							break;
+						case 11:
+							ThePiecePlacer(sequencePlace, "_1" , "Angel");
+							VitalPieces[0]++;
+							break;
+					}
+				} else {
+					switch (sequencePiece) {
+						case 25:
+							ThePiecePlacer(sequencePlace, "_-1" , "Duplicate");
+							duplicates[1]++;
+							break;
+						case 16:
+							ThePiecePlacer(sequencePlace, "_-1" , "Skater");
+							break;
+						case 17:
+							ThePiecePlacer(sequencePlace, "_-1" , "Lizard");
+							break;
+						case 18:
+							ThePiecePlacer(sequencePlace, "_-1" , "Bunny");
+							break;
+						case 19:
+							ThePiecePlacer(sequencePlace, "_-1" , "Gentleman");
+							break;
+						case 20:
+							ThePiecePlacer(sequencePlace, "_-1" , "Duplicator");
+							break;
+						case 21:
+							ThePiecePlacer(sequencePlace, "_-1" , "Child");
+							break;
+						case 22:
+							ThePiecePlacer(sequencePlace, "_-1" , "Pastafarian");
+							break;
+						case 23:
+							ThePiecePlacer(sequencePlace, "_-1" , "Student");
+							break;
+						case 15:
+							ThePiecePlacer(sequencePlace, "_-1" , "Runner");
+							VitalPieces[1]++;
+							break;
+						case 24:
+							ThePiecePlacer(sequencePlace, "_-1" , "Angel");
+							VitalPieces[1]++;
+							break;
+					}
+				}
+
+				sequencePiece = 0;
+
+				sequencePlace++;
+				y++;
+
+			} else {
+			var intBoard = parseInt(importBoard[y]);
+			if ( !isNaN(intBoard) ) {
+				sequencePiece = ( parseInt(importBoard[y - 1]) * 10 ) + intBoard;
+			} else {
+
+			if (importBoard[y] == "x") {
+
+				//Identify what we're repeating:
+				if (sequencePiece < 9) {
+					sequencePiece = parseInt(importBoard[y - 1]);
+				}
+
+				//Identify how many times the tile repeats.
+				intBoard = parseInt(importBoard[y + 2]);
+				if ( !isNaN(intBoard) ) {
+					var repeatCount = ( parseInt(importBoard[y + 1]) * 10 ) + intBoard;
+
+					y++;
+				} else {
+					var repeatCount = parseInt(importBoard[y + 1]);
+				}
+
+				//If its literally nothing (or metaphorically nothing), a separate routine is more efficient.
+				if (sequencePiece < 14) {
+					switch (sequencePiece) {
+						case 0: //"Pit".
+							sequencePlace += repeatCount;
+							break;
+						case 1: //Pit.
+							for (let x = 0; x < repeatCount; x++) {
+								cells[sequencePlace].classList.add ("Pit");
+								sequencePlace++;
+							}
+							break;
+						case 12:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Duplicate");
+								sequencePlace++;
+
+								duplicates[0]++;
+							}
+							break;
+						case 3:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Skater");
+								sequencePlace++;
+							}
+							break;
+						case 4:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Lizard");
+								sequencePlace++;
+							}
+							break;
+						case 5:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Bunny");
+								sequencePlace++;
+							}
+							break;
+						case 6:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Gentleman");
+								sequencePlace++;
+							}
+							break;
+						case 7:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Duplicator");
+								sequencePlace++;
+							}
+							break;
+						case 8:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Child");
+								sequencePlace++;
+							}
+							break;
+						case 9:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Pastafarian");
+								sequencePlace++;
+							}
+							break;
+						case 10:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Student");
+								sequencePlace++;
+							}
+							break;
+						case 2:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Runner");
+								sequencePlace++;
+
+								VitalPieces[0]++;
+							}
+							break;
+						case 11:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_1" , "Angel");
+								sequencePlace++;
+
+								VitalPieces[0]++;
+							}
+							break;
+					}
+				} else {
+					switch (sequencePiece) {
+						case 25:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Duplicate");
+								sequencePlace++;
+
+								duplicates[1]++;
+							}
+							break;
+						case 16:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Skater");
+								sequencePlace++;
+							}
+							break;
+						case 17:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Lizard");
+								sequencePlace++;
+							}
+							break;
+						case 18:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Bunny");
+								sequencePlace++;
+							}
+							break;
+						case 19:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Gentleman");
+								sequencePlace++;
+							}
+							break;
+						case 20:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Duplicator");
+								sequencePlace++;
+							}
+							break;
+						case 21:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Child");
+								sequencePlace++;
+							}
+							break;
+						case 22:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Pastafarian");
+								sequencePlace++;
+							}
+							break;
+						case 23:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Student");
+								sequencePlace++;
+							}
+							break;
+						case 15:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Runner");
+								sequencePlace++;
+
+								VitalPieces[1]++;
+							}
+							break;
+						case 24:
+							for (let x = 0; x < repeatCount; x++) {
+								ThePiecePlacer(sequencePlace, "_-1" , "Angel");
+								sequencePlace++;
+
+								VitalPieces[1]++;
+							}
+							break;
+					}
+				}
+
+				sequencePiece = 0;
+				y += 3;
+
+			}
+			}
+			}
+
+		}
+
+	}
+
+	randomizeBoard();
+	initializeBoard();
+	currentPlayer = 0;
+
+</script>
+
+</html>
