@@ -16,6 +16,7 @@
 <p>SECONDARY Tile Types (include "~" at beginning; separate with comma; no spaces):</p>
 <input type="text" id="secondaryTileTypes" value="~ice" />
 <p>Note: The default tile is represented by "0". (No quotation marks).</p>
+<p>Secondary to Primary Ratio: 1 to <input type="text" id="primarySecondary" value="1" /></p>
 <hr>
 <p>Number of Sides:</p>
 <p>Minimum: <input type="text" id="minimumSides" value="3" /></p>
@@ -25,6 +26,7 @@
 <p>Note: Any non-numeric value will result in a progressive increase from 0.</p>
 <hr>
 <br><button onclick="saveSettings()">Save Settings</button>
+<sub>(Don't forget to hit this button before you):</sub>
 <br><br><button onclick="GenerateLevels()">Generate Levels</button>
 <h1>your'e leve;s</h1>
 <div id="levels"></div>
@@ -38,6 +40,7 @@ var TunnelsToGenerate = 10;
 
 var PrimaryTypes = ["0"];
 var SecondaryTypes = ["~ice"];
+var PrimarySecondaryRatio;
 
 var MinimumSides = 3;
 var MaximumSides = 14;
@@ -51,6 +54,8 @@ function saveSettings() {
 
 	PrimaryTypes = document.getElementById("primaryTileTypes").value.split(",");
 	SecondaryTypes = document.getElementById("secondaryTileTypes").value.split(",");
+	PrimarySecondaryRatio = parseFloat(document.getElementById("primarySecondary").value);
+	PrimarySecondaryRatio = 1 - Math.sqrt(1 - ( 1 / (PrimarySecondaryRatio + 1) ));
 
 	MinimumSides = parseInt(document.getElementById("minimumSides").value);
 	MaximumSides = parseInt(document.getElementById("maximumSides").value);
@@ -110,8 +115,9 @@ function Randomize() {
 		HolesPercentage = (TunnelsGenerated / TunnelsToGenerate) * 0.7;
 	}
     //The chance for a secondary tile to appear is rolled twice - so the square root of the generated ratio is used.
-//1 - Math.sqrt(1 - (Math.random() * 0.5));
-    var PrimarySecondaryRatio = 1 - Math.sqrt(1 - (0.5));
+	if ( isNaN(PrimarySecondaryRatio) ) {
+		PrimarySecondaryRatio = 1 - Math.sqrt(1 - ( Math.random() * 0.5 ));
+	}
 //Generate the primary and secondary types of tiles to use. "0" is the default tile.
 	//Primary tiles.
 	var primaryTiles = PrimaryTypes[Math.floor(Math.random() * PrimaryTypes.length)];
@@ -667,39 +673,4 @@ function TranslatorLevelSecondary(tile) {
 	        break;
 		}
 }
-/*public function getLevelZeroIndexed(param1:int) : String
-      {
-         var _loc7_ = 30;
-         if (_loc1_ < 70) {
-            _loc7_ = 100 - _loc1_;
-         }
-         var _loc8_ = Math.floor((120 - _loc7_) / 10);
-         var _loc12_ = TranslatorHex( Math.floor(Math.random() * 7) + _loc8_ );
-	     var _loc2_ = TranslatorHex( Math.floor(Math.random() * 16) );
-	     var _loc3_ = TranslatorHex( Math.floor(Math.random() * 14) + 2 );
-	     var _loc4_ = TranslatorHex( Math.floor(Math.random() * 16) );
-	     var _loc5_ = TranslatorHex( Math.floor(Math.random() * 7) + 9 - _loc8_ );
-	     var _loc6_ = TranslatorHex( Math.floor(Math.random() * 16) );
-		 if (_loc7_ > 48) {
-			_loc8_ = _loc7_ - 47;
-		} else {
-			_loc8_ = 1;
-		}
-		 var _loc13_ = 64 - _loc8_;
-         var _loc10_ = 0;
-         var _loc9_ = 246 - _loc7_ * 2;
-         var _loc11_ = "o";
-         while(_loc10_ < _loc9_) {
-           if(Math.random() * 100 > _loc7_)
-           {
-              _loc11_ += "0";
-           }
-           else
-           {
-              _loc11_ += TranslatorLayout(Math.floor(Math.random() * _loc13_) + _loc8_);
-           }
-           _loc10_++;
-         }
-         return "id-0|layout-tunnel4,4|color-0x" + _loc12_ + "" + _loc2_ + "" + _loc3_ + "" + _loc4_ + "" + _loc5_ + "" + _loc6_ + "|spawn-0|terrain-pos-" + _loc11_;
-      }*/
 </script>
