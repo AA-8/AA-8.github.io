@@ -9,7 +9,7 @@
 <html>
 <body>
 <p>Amount of Levels: <input type="text" id="levelAmount" value="10" /></p>
-<p>Starting ID: <input type="text" id="levelID" value="1000" /></p>
+<p>Starting ID: <input type="text" id="levelID" value="0" /></p>
 <hr>
 <p>PRIMARY Tile Types (include "~" at beginning; separate with comma; no spaces):</p>
 <input type="text" id="primaryTileTypes" value="0" />
@@ -23,8 +23,8 @@
 <p>Minimum: <input type="text" id="minimumSides" value="3" /></p>
 <p>Maximum: <input type="text" id="maximumSides" value="16" /></p>
 <hr>
-<p>Hole Frequency (0 to 1.0): <input type="text" id="holesPercentage" value="NaN" /></p>
-<p>Platform Fill (0 to 1.0): <input type="text" id="difficulty" value="NaN" /></p>
+<p>Hole Frequency (0 to 1.0): <input type="text" id="holesPercentage" value="Progressive" /></p>
+<p>Platform Fill (0 to 1.0): <input type="text" id="difficulty" value="Progressive" /></p>
 <p>Note: Any non-numeric value will result in a progressive increase from 0.</p>
 <hr>
 <br><button onclick="saveSettings()">Save Settings</button>
@@ -67,10 +67,15 @@ function saveSettings() {
 	MaximumSides = parseInt(document.getElementById("maximumSides").value);
 	if (isNaN(MinimumSides) || MinimumSides < 3) {
 		MinimumSides = 3;
+		document.getElementById("minimumSides").value = "3";
 	}
 	if (isNaN(MaximumSides) || MaximumSides < 3) {
-		MaximumSides = 16;
+		MaximumSides = 3;
 	}
+	if (MinimumSides > MaximumSides) {
+		MaximumSides = MinimumSides;
+	}
+	document.getElementById("maximumSides").value = String(MaximumSides);
 	MaximumSides -= (MinimumSides - 1);
 
 	HolesPercentage = parseFloat(document.getElementById("holesPercentage").value);
@@ -85,8 +90,8 @@ function saveSettings() {
 		DifficultyScaling = false;
 
 		DifficultyRange = 1 - DifficultyRange;
-		DifficultyRange = DifficultyRange * 60 + 3;
-		DifficultyAdd = 64 - DifficultyRange;
+		DifficultyRange = DifficultyRange * 63;
+		DifficultyAdd = Math.floor(63 - DifficultyRange);
 	}
 	else {
 		DifficultyScaling = true;
@@ -140,8 +145,11 @@ function Randomize() {
 	}
 	//By default: progressive difficulty. Again.
 	if ( DifficultyScaling ) {
-		DifficultyRange = scaling * 60 + 3;
-		DifficultyAdd = 64 - DifficultyRange;
+		DifficultyRange = scaling * 63;
+		if (DifficultyRange < 3) {
+			DifficultyRange = 3;
+		}
+		DifficultyAdd = Math.floor(63 - DifficultyRange);
 	}
     //The chance for a secondary tile to appear is rolled twice - so the square root of the generated ratio is used.
 	if ( isNaN(PrimarySecondaryRatio) ) {
@@ -183,13 +191,13 @@ function Randomize() {
     var typeUsed = 99;
     var roll;
 
-    var initalGeneration;
+    var initialGeneration;
 
     var _loc10_ = 0;
 	if (amountOfSecondaries == 0) {
 		while (_loc10_ < levelLength) {
 			if (Math.random() > HolesPercentage || GapsGenerated == GapOverload) {
-				PrimarySoFar += TranslatorLevel( Math.floor(Math.random() * DifficultyRange) + DifficultyAdd );
+				PrimarySoFar += TranslatorLevel( Math.ceil(Math.random() * DifficultyRange) + DifficultyAdd );
 				GapsGenerated = 0;
 			} else {
 				PrimarySoFar += "0";
@@ -216,15 +224,15 @@ function Randomize() {
 
             } else {
 
-                initalGeneration = Math.floor(Math.random() * DifficultyRange) + DifficultyAdd;
+                initialGeneration = Math.ceil(Math.random() * DifficultyRange) + DifficultyAdd;
                 if (Math.random() > PrimarySecondaryRatio) {
                     //Primary.
-                    PrimarySoFar += TranslatorLevel( initalGeneration );
+                    PrimarySoFar += TranslatorLevel( initialGeneration );
                     PrimariesGenerated++;
                 } else {
                     //Secondary.
                     typeUsed = Math.floor( Math.random() * amountOfSecondaries );
-			        SecondarySoFar[typeUsed] += TranslatorLevel( initalGeneration );
+			        SecondarySoFar[typeUsed] += TranslatorLevel( initialGeneration );
 
                     PrimarySoFar += "0";
                     SecondariesGenerated++;
@@ -241,7 +249,7 @@ function Randomize() {
                                 roll++;
                             }
                         }
-                        SecondarySoFar[roll] += TranslatorLevelSecondary( initalGeneration );
+                        SecondarySoFar[roll] += TranslatorLevelSecondary( initialGeneration );
 
                         for (let i = 0; i < amountOfSecondaries; i++) {
 			                if (i != typeUsed && i != roll) {
