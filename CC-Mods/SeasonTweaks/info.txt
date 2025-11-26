@@ -1,0 +1,12 @@
+{
+	"Name": "Holiday Tweaks",
+	"ID": "a16holidaytweaks",
+	"Author": "A-16",
+	"Description": "Major holidays, minor tweaks. Does not affect April Fools or Christmas.",
+	"ModVersion": 2,
+	"GameVersion": 2.053,
+	"Date": "04/17/2777",
+	"Dependencies": [],
+	"Disabled": 1,
+	"AllowSteamAchievs": 1
+}
