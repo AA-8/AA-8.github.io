@@ -101,3 +101,8 @@ Game.registerMod("a16holidaytweaks",{
 
 	}
 });
+
+//Inform user of the egg drop rate boost.
+ModLanguage('EN',{
+	"Unlock <b>%1 eggs</b>.": "Unlock <b>%1 eggs</b>.<div class=\"line\"></div>Owning this achievement makes eggs drop more frequently <b>up to %1 eggs</b> in future playthroughs.",
+});
