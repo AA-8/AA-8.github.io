@@ -70,6 +70,10 @@ Game.registerMod("a16holidaytweaks",{
 
 		Game.DropEgg = eval("(" + EggDrop + ")");
 
+		//Inform user of the egg drop rate boost. (Temporarily).
+		Game.Achievements["Egging on"].ddesc += "<div class=\"line\"></div>Owning this achievement makes eggs drop more frequently <b>up to 7 eggs</b> in future playthroughs.";
+		Game.Achievements["Mass Easteria"].ddesc += "<div class=\"line\"></div>Owning this achievement makes eggs drop more frequently <b>up to 14 eggs</b> in future playthroughs.";
+
 		//
 		// Halloween cookies can be obtained through Wrath Cookies.
 		//
@@ -102,7 +106,8 @@ Game.registerMod("a16holidaytweaks",{
 	}
 });
 
-//Inform user of the egg drop rate boost.
+//Inform user of the egg drop rate boost. (Permanently).
 ModLanguage('EN',{
-	"Unlock <b>%1 eggs</b>.": "Unlock <b>%1 eggs</b>.<div class=\"line\"></div>Owning this achievement makes eggs drop more frequently <b>up to %1 eggs</b> in future playthroughs.",
+	"[Achievement desc 167]Egging on": "Unlock <b>7 eggs</b>.<div class=\"line\"></div>Owning this achievement makes eggs drop more frequently <b>up to 7 eggs</b> in future playthroughs.",
+	"[Achievement desc 168]Mass Easteria": "Unlock <b>14 eggs</b>.<div class=\"line\"></div>Owning this achievement makes eggs drop more frequently <b>up to 14 eggs</b> in future playthroughs."
 });
