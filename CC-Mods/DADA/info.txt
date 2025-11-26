@@ -1,0 +1,12 @@
+{
+	"Name": "Display Achievement Descriptions Always",
+	"ID": "a16showunearneddescriptions",
+	"Author": "A-16",
+	"Description": "Never again go to the wiki when you forget what that achievement between Resurrection and Sacrifice is.",
+	"ModVersion": 1,
+	"GameVersion": 2.053,
+	"Date": "10/10/2025",
+	"Dependencies": [],
+	"Disabled": 1,
+	"AllowSteamAchievs": 1
+}
