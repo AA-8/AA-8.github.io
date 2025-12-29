@@ -78,7 +78,7 @@ Game.registerMod("a16showunearneddescriptions", {
 			function() {
 				return false; //Never show this description before earning it.
 			};
-		var i = [44,45,115,150,210,250,281,341,354,400,476,494,557,619,136,191,295];
+		var i = [50,51,117,152,211,251,282,342,355,401,477,495,558,620,137,192,296];
 		for (var ii = 0; ii < 17; ii++) {
 			Game.AchievementsById[i[ii]].descriptionCondition = 
 				function() {
