@@ -13,16 +13,6 @@ function inRect(x,y,rect)
 	return false;
 }
 
-if (Game.version < 2.058) {
-	Game.registerMod("a16holidaytweaks",{
-		init:function() {
-			var HolidayIcons = [[12,10],[13,8],[20,3],[0,12]];
-			var HolidayIcon = HolidayIcons[Math.floor(Math.random()*4)];
-			Game.Notify(`Holiday Tweaks has been updated to <b>v2.058.</b>`,`<b>v2.053</b> can be found at "https://aa-8.github.io/CC-Mods/SeasonTweaks/2.053/main.js".`,HolidayIcon);
-		}
-	});
-}
-else {
 Game.registerMod("a16holidaytweaks",{
 	init:function() {
 
@@ -76,9 +66,13 @@ Game.registerMod("a16holidaytweaks",{
 		//
 
 		var EggDrop = String(Game.DropEgg);
-		EggDrop = EggDrop.replace("if (Game.HasAchiev('Hide & seek champion", "var eggs=0;\n\t\t\tfor (var i in Game.easterEggs) { if (Game.HasUnlocked(Game.easterEggs[i])) eggs++; }\n\t\t\tif (Game.HasAchiev('Egging on') && eggs < 8) failRate*=0.8;\n\t\t\tif (Game.HasAchiev('Mass Easteria') && eggs < 15) failRate*=0.8;\n\t\t\tif (Game.HasAchiev('Hide & seek champion");
+		EggDrop = EggDrop.replace("if (Game.HasAchiev('Hide & seek champion", "var eggs=0;\n\t\t\tfor (var i in Game.easterEggs) { if (Game.HasUnlocked(Game.easterEggs[i])) eggs++; }\n\t\t\tif (Game.HasAchiev('Egging on') && eggs < 8) failRate*=0.7;\n\t\t\tif (Game.HasAchiev('Mass Easteria') && eggs < 15) failRate*=0.7;\n\t\t\tif (Game.HasAchiev('Hide & seek champion");
 
 		Game.DropEgg = eval("(" + EggDrop + ")");
+
+		//Inform user of the egg drop rate boost. (Temporarily).
+		Game.Achievements["Egging on"].ddesc += "<div class=\"line\"></div>Owning this achievement makes eggs drop more frequently <b>up to 7 eggs</b> in future playthroughs.";
+		Game.Achievements["Mass Easteria"].ddesc += "<div class=\"line\"></div>Owning this achievement makes eggs drop more frequently <b>up to 14 eggs</b> in future playthroughs.";
 
 		//
 		// Halloween cookies can be obtained through Wrath Cookies.
@@ -88,19 +82,19 @@ Game.registerMod("a16holidaytweaks",{
 		var WrinklerUpdate = String(Game.UpdateWrinklers);
 
 		var HalloweenDropBegin = WrinklerUpdate.indexOf("if (Game.season=='halloween')");
-		var SpookyDropFunctionBegin = WrinklerUpdate.indexOf("if (Game.HasAchiev('Spooky cookies'",HalloweenDropBegin);
+		var SpookyDropFunctionBegin = WrinklerUpdate.indexOf("'Spooky cookies')) failRate=0.8",HalloweenDropBegin) + 32;
 		var SpookyDropFunctionEnd = WrinklerUpdate.indexOf("\n\t\t\t\t\t\t}",SpookyDropFunctionBegin) + 8;
 		var HalloweenDropEnd = SpookyDropFunctionEnd + 6;
 
-		//The failRate multiplier for "Spooky cookies" was set to 0.8 when it technically should have been 0.842105... epic fail ?
-		var SpookyDropFunction = "function(failRate)\n{\t\t\t\t\t\t\tif (Game.season!='halloween') return\n\t\t\t\t\t\t" + WrinklerUpdate.slice(SpookyDropFunctionBegin,SpookyDropFunctionEnd);
+		//Minor reformatting; changed Spooky Cookies to just multiply the failRate instead of setting it. Rest assured, the value is calculated to be (very closely approximately) the same as vanilla when popping wrinklers.
+		var SpookyDropFunction = "function(failRate)\n{\t\t\t\t\t\t\tif (Game.season!='halloween') return\n\t\t\t\t\t\t\tif (Game.HasAchiev('Spooky cookies')) failRate *= 0.842105;\n\t\t\t\t\t\t" + WrinklerUpdate.slice(SpookyDropFunctionBegin,SpookyDropFunctionEnd);
 		//"me" isn't going to exist outside of the wrinkler.
 		SpookyDropFunction = SpookyDropFunction.replace("\t\t\t\t\t\t\tif (me.type==1) failRate*=0.9;","");
 
 		Game.DropSpooky = eval("(" + SpookyDropFunction + ")");
 
 		//It isn't technically necessary to replace the original script with the new DropSpooky function, but it would potentially, maybe, possibly make 1 person's life a bit easier.
-		var WrinklerUpdateReplacement = WrinklerUpdate.slice(0,HalloweenDropBegin) + "var failRate = 0.95;\n\t\t\t\t\t\tif (me.type==1) failRate*=0.9;\n\t\t\t\t\t\tGame.DropSpooky(failRate);\n\t\t\t\t" + WrinklerUpdate.slice(HalloweenDropEnd);
+		var WrinklerUpdateReplacement = WrinklerUpdate.slice(0,HalloweenDropBegin) + "var failRate = 0.95;\n\t\t\t\t\t\tif (me.type==1) failRate*=0.9;\n\t\t\t\t\t\tGame.DropSpooky(failRate);\n\t\t\t\t\t" + WrinklerUpdate.slice(HalloweenDropEnd);
 		Game.UpdateWrinklers = eval("(" + WrinklerUpdateReplacement + ")");
 
 		//Add DropSpooky to wrath cookies:
@@ -112,13 +106,8 @@ Game.registerMod("a16holidaytweaks",{
 	}
 });
 
-//Inform user of the egg drop rate boost.
+//Inform user of the egg drop rate boost. (Permanently).
 ModLanguage('EN',{
 	"[Achievement desc 167]Egging on": "Unlock <b>7 eggs</b>.<div class=\"line\"></div>Owning this achievement makes eggs drop more frequently <b>up to 7 eggs</b> in future playthroughs.",
 	"[Achievement desc 168]Mass Easteria": "Unlock <b>14 eggs</b>.<div class=\"line\"></div>Owning this achievement makes eggs drop more frequently <b>up to 14 eggs</b> in future playthroughs."
 });
-
-if (!App) {
-	LocalizeUpgradesAndAchievs();
-}
-}
